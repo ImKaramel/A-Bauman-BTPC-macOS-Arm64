@@ -1,0 +1,17 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build dummy code and Run",
+            "command": "/bin/sh", // Could be any other shell command
+            "args": ["-c", "rm -Rf target && mkdir -p target && ./btpc64macOS < dummy.pas > target/dummyExec && chmod +x target/dummyExec && ./target/dummyExec"],
+            "type": "shell"
+        },
+        {
+            "label": "Build dummy code and disassemble",
+            "command": "/bin/sh", // Could be any other shell command
+            "args": ["-c", "rm -Rf target && mkdir -p target && ./btpc64macOS < dummy.pas > target/dummyExec && chmod +x target/dummyExec && otool -tvV target/dummyExec > target/dummyExec.asm"],
+            "type": "shell"
+        }
+    ]
+}
