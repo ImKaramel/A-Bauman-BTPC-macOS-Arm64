@@ -3032,11 +3032,9 @@ begin
     OCPushEAX;
    end;
    OPLdC:begin
-    if (Value>=-128) and (Value<=127) then begin
-     EmitByte($6a); EmitByte(Value); { PUSH BYTE Value }
-    end else begin
-     EmitByte($68); EmitInt32(Value); { PUSH DWORD Value }
-    end;
+    WriteLine('mov x0, #');
+    WriteInt(Value);
+    WriteLine('str x0, [sp, #-16]!')
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -3112,14 +3110,10 @@ begin
    end;
    OPStG:begin
     OCPopEAX;
-    Value:=Value*2;
-    if (Value>=-128) and (Value<=127) then begin
-     EmitByte($48); EmitByte($89); EmitByte($45); EmitByte(Value); { MOV DWORD PTR [EBP+BYTE Value],EAX }
-    end else begin
-     EmitByte($48); EmitByte($89); EmitByte($85); EmitInt32(Value);
-      {mistake in comment: MOV EAX,DWORD PTR [EBP+DWORD Value] }
-     {!}{changed to actual code: mov    QWORD PTR [rbp+0x12345678],rax}
-    end;
+    Value:=Value*4;
+    WriteLine('ldr x0, [sp], #16');
+    WriteLine('str x0, [x28, #]');
+    WriteInt(Value);
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -3149,13 +3143,10 @@ begin
     PC:=PC+1;
    end;
    OPAddC:begin
-    if (Value>=-128) and (Value<=127) then begin
-     EmitByte($48); EmitByte($83); EmitByte($04); EmitByte($24); EmitByte(Value);
-      { ADD DWORD PTR [ESP],BYTE Value }
-    end else begin
-     EmitByte($48); EmitByte($81); EmitByte($04); EmitByte($24); EmitInt32(Value);
-      { ADD DWORD PTR [ESP],DWORD Value }
-    end;
+    WriteLine('ldr x0, [sp], #16');
+    WriteLine('add x0, x0, #');
+    WriteInt(Value);
+    WriteLine('str x0, [sp, #-16]!');
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -3204,21 +3195,10 @@ begin
     PC:=PC+1;
    end;
    OPAdjS:begin
-    Value:=Value*2;
-    if Value>0 then begin
-     if (Value>=-128) and (Value<=127) then begin
-      EmitByte($48); EmitByte($83); EmitByte($c4); EmitByte(Value); { ADD ESP,BYTE Value }
-     end else begin
-      EmitByte($48); EmitByte($81); EmitByte($c4); EmitInt32(Value); { ADD ESP,DWORD Value }
-     end;
-    end else if Value<0 then begin
-     Value:=-Value;
-     if (Value>=-128) and (Value<=127) then begin
-      EmitByte($48); EmitByte($83); EmitByte($ec); EmitByte(Value); { SUB ESP,BYTE Value }
-     end else begin
-      EmitByte($48); EmitByte($81); EmitByte($ec); EmitInt32(Value); { SUB ESP,DWORD Value }
-     end;
-    end;
+    Value:=Value*4;
+    WriteLine('mov x28, sp');
+    WriteLine('sub sp, sp, #');
+    WriteInt(Value);
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
