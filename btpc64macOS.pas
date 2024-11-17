@@ -3148,19 +3148,9 @@ begin
     PC:=PC+1;
    end;
    OPMulC:begin
-    if Value=(-1) then begin
-     OCNegDWordPtrESP;
-    end else if (Value>=-128) and (Value<=127) then begin
-     OCPopEAX;
-     EmitByte($48); EmitByte($6b); EmitByte($c0); EmitByte(Value); { IMUL EAX,BYTE s }
-     LastOutputCodeValue:=locNone;
-     OCPushEAX;
-    end else begin
-     OCPopEAX;
-     EmitByte($48); EmitByte($69); EmitByte($c0); EmitInt32(Value); { IMUL EAX,DWORD s }
-     LastOutputCodeValue:=locNone;
-     OCPushEAX;
-    end;
+    WriteLn('ldr x0, [sp], #16');
+    WriteLn('mul x0, x0, #', Value);
+    WriteLn('str x0, [sp, #-16]!');
     PC:=PC+1;
    end;
    OPJmp:begin
