@@ -1930,16 +1930,16 @@ var OutputCodeData:array[1:OutputCodeDataMaximalSize] of char;
 
 procedure EmitChar(c:char);
 begin
- OutputCodeDataSize:=OutputCodeDataSize+1;
- if OutputCodeDataSize>OutputCodeDataMaximalSize then begin
-  Error(146);
- end;
- OutputCodeData[OutputCodeDataSize]:=c;
+//  OutputCodeDataSize:=OutputCodeDataSize+1;
+//  if OutputCodeDataSize>OutputCodeDataMaximalSize then begin
+//   Error(146);
+//  end;
+//  OutputCodeData[OutputCodeDataSize]:=c;
 end;
 
 procedure EmitByte(B:integer);
 begin
- EmitChar(chr(B));
+// EmitChar(chr(B));
 end;
 
 procedure EmitInt16(i..integer);
@@ -2003,7 +2003,7 @@ procedure WriteOutputCode;
 var i:integer;
 begin
  for i:=1 to OutputCodeDataSize do begin
-  write(OutputCodeData[i]);
+  //write(OutputCodeData[i]);
  end;
 end;
 

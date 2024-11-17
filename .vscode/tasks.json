@@ -8,38 +8,38 @@
             "type": "shell"
         },
         {
-            "label": "Build dummy code",
+            "label": "Build dummy code for x86",
             "command": "/bin/sh",
-            "args": ["-c", "mkdir -p target && ./btpc64macOS < dummy.pas > target/dummyExec && chmod +x target/dummyExec"],
+            "args": ["-c", "mkdir -p target && ./btpc64macOS < dummy.pas > target/dummyX86Exec && chmod +x target/dummyX86Exec"],
             "type": "shell",
             "dependsOn": [
                 "Clean target"
             ]
         },
         {
-            "label": "Run dummy code",
+            "label": "Run dummy code built for x86",
             "command": "/bin/sh",
-            "args": ["-c", "target/dummyExec"],
+            "args": ["-c", "target/dummyX86Exec"],
             "type": "shell",
             "dependsOn": [
                 "Build dummy code"
             ]
         },
         {
-            "label": "Disassemble dummy code (full)",
+            "label": "Disassemble dummy code built for x86 (full)",
             "command": "/bin/sh",
-            "args": ["-c", "otool -tvV target/dummyExec > target/dummyExec.full.asm"],
+            "args": ["-c", "otool -tvV target/dummyX86Exec > target/dummyX86Exec.full.asm"],
             "type": "shell",
             "dependsOn": [
                 "Build dummy code"
             ]
         },
         {
-            "label": "Disassemble dummy code (short)",
+            "label": "Disassemble dummy code built for x86 (short)",
             "command": "/bin/sh",
-            "args": ["-c", "cat target/dummyExec.full.asm | sed -n '/^ProgramEntryPoint:$/,$p' > target/dummyExec.short.asm"],
+            "args": ["-c", "cat target/dummyX86Exec.full.asm | sed -n '/^ProgramEntryPoint:$/,$p' > target/dummyX86Exec.short.asm"],
             "dependsOn": [
-                "Disassemble dummy code (full)"
+                "Disassemble dummy code built for x86 (full)"
             ]
         },
         {
@@ -48,6 +48,22 @@
             "args": ["-c", "mkdir -p target && ./btpc64macOS < btpc64macOSDebug.pas > target/btpc64macOSDebug && chmod +x target/btpc64macOSDebug && ./target/btpc64macOSDebug < dummy.pas > target/dummyExec.opcodes.txt"],
             "dependsOn": [
                 "Clean target"
+            ]
+        },
+        {
+            "label": "Build compiler for aarch64",
+            "command": "/bin/sh",
+            "args": ["-c", "mkdir -p target && ./btpc64macOS < btpc64macOS.pas > target/btpc64macosaarch64 && chmod +x target/btpc64macosaarch64"],
+            "dependsOn": [
+                "Clean target"
+            ]
+        },
+        {
+            "label": "Build dummy code for aarch64",
+            "command": "/bin/sh",
+            "args": ["-c", "./target/btpc64macosaarch64 < dummy.pas > target/dummyAarch64Exec"],
+            "dependsOn": [
+                "Build compiler for aarch64",
             ]
         }
     ]
