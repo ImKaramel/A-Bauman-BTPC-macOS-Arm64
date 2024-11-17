@@ -2859,8 +2859,11 @@ begin
   Code[PC]:=OutputCodeDataSize;
   case Opcode of
    OPAdd:begin
-    OCPopEAX;
-    EmitByte($48); EmitByte($01); EmitByte($04); EmitByte($24); (* ADD DWORD PTR {ESP},EAX *)
+    WriteLn('ldr x0, [sp], #16');
+    WriteLn('ldr x1, [sp], #16');
+    WriteLn('add x0, x0, x1');
+    WriteLn('str x0, [sp, #-16]!');
+  (* ADD DWORD PTR {ESP},EAX *)
     LastOutputCodeValue:=locNone;
    end;
    OPNeg:begin
@@ -3080,13 +3083,9 @@ begin
     PC:=PC+1;
    end;
    OPLdG:begin
-    Value:=Value*2;
-    if (Value>=-128) and (Value<=127) then begin
-     EmitByte($48); EmitByte($8b); EmitByte($45); EmitByte(Value); { MOV EAX,DWORD PTR [EBP+BYTE Value] }
-    end else begin
-     EmitByte($48); EmitByte($8b); EmitByte($85); EmitInt32(Value);
-      { MOV EAX,DWORD PTR [EBP+DWORD Value] }
-    end;
+    Value:=Value*4;
+    WriteLn('mov [x28, #', Value,']', 'x0');
+    WriteLn('str x0, [sp, #-16]!');
     LastOutputCodeValue:=locNone;
     OCPushEAX;
     PC:=PC+1;
