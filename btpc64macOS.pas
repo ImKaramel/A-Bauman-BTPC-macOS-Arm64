@@ -3149,7 +3149,8 @@ begin
    end;
    OPMulC:begin
     WriteLn('ldr x0, [sp], #16');
-    WriteLn('mul x0, x0, #', Value);
+    WriteLn('mov x1, #', Value);
+    WriteLn('mul x0, x0, x1');
     WriteLn('str x0, [sp, #-16]!');
     PC:=PC+1;
    end;
