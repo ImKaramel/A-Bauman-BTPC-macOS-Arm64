@@ -22,7 +22,7 @@
             "args": ["-c", "target/dummyX86Exec"],
             "type": "shell",
             "dependsOn": [
-                "Build dummy code"
+                "Build dummy code for x86"
             ]
         },
         {
@@ -31,7 +31,7 @@
             "args": ["-c", "otool -tvV target/dummyX86Exec > target/dummyX86Exec.full.asm"],
             "type": "shell",
             "dependsOn": [
-                "Build dummy code"
+                "Build dummy code for x86"
             ]
         },
         {
@@ -65,6 +65,6 @@
             "dependsOn": [
                 "Build compiler for aarch64",
             ]
-        }
+        },
     ]
 }
