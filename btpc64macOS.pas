@@ -3110,12 +3110,8 @@ begin
    OPStG:begin
     OCPopEAX;
     Value:=Value*4;
-    if Value = 0 then
-      WriteLn('ldr x0, [x28], #', Value)
-    else if Value > 0 then
-      WriteLn('ldr x0, [sp], #', Value)
-    else 
-      WriteLn('ldr x0, [x28, #', Value, ']');
+    WriteLn('ldr x0, [sp], #', 16);
+    WriteLn('str x0, [x28, #', Value, ']');
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -3196,7 +3192,7 @@ begin
     PC:=PC+1;
    end;
    OPAdjS:begin
-    Value:=Value*4;
+    Value:=Value*(-4);
     WriteLn('mov x28, sp');
     WriteLn('sub sp, sp, #', Value);
     LastOutputCodeValue:=locNone;
