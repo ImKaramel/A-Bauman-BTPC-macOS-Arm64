@@ -3110,7 +3110,12 @@ begin
    OPStG:begin
     OCPopEAX;
     Value:=Value*4;
-    WriteLn('ldr x0, [sp], #16', Value, ']');
+    if Value = 0 then
+      WriteLn('ldr x0, [x28], #', Value)
+    else if Value > 0 then
+      WriteLn('ldr x0, [sp], #', Value)
+    else 
+      WriteLn('ldr x0, [x28, #', Value, ']');
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
