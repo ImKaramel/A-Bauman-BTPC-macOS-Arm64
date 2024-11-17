@@ -3032,9 +3032,8 @@ begin
     OCPushEAX;
    end;
    OPLdC:begin
-    WriteLine('mov x0, #');
-    WriteInt(Value);
-    WriteLine('str x0, [sp, #-16]!')
+    WriteLn('mov x0, #', Value);
+    WriteLn('str x0, [sp, #-16]!');
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -3111,9 +3110,7 @@ begin
    OPStG:begin
     OCPopEAX;
     Value:=Value*4;
-    WriteLine('ldr x0, [sp], #16');
-    WriteLine('str x0, [x28, #]');
-    WriteInt(Value);
+    WriteLn('ldr x0, [sp], #16', Value, ']');
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -3143,10 +3140,9 @@ begin
     PC:=PC+1;
    end;
    OPAddC:begin
-    WriteLine('ldr x0, [sp], #16');
-    WriteLine('add x0, x0, #');
-    WriteInt(Value);
-    WriteLine('str x0, [sp, #-16]!');
+    WriteLn('ldr x0, [sp], #16');
+    WriteLn('add x0, x0, #', Value);
+    WriteLn('str x0, [sp, #-16]!');
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -3196,9 +3192,8 @@ begin
    end;
    OPAdjS:begin
     Value:=Value*4;
-    WriteLine('mov x28, sp');
-    WriteLine('sub sp, sp, #');
-    WriteInt(Value);
+    WriteLn('mov x28, sp');
+    WriteLn('sub sp, sp, #', Value);
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
