@@ -41,6 +41,14 @@
             "dependsOn": [
                 "Disassemble dummy code (full)"
             ]
+        },
+        {
+            "label": "Print opcodes",
+            "command": "/bin/sh",
+            "args": ["-c", "mkdir -p target && ./btpc64macOS < btpc64macOSDebug.pas > target/btpc64macOSDebug && chmod +x target/btpc64macOSDebug && ./target/btpc64macOSDebug < dummy.pas > target/dummyExec.opcodes.txt"],
+            "dependsOn": [
+                "Clean target"
+            ]
         }
     ]
 }
