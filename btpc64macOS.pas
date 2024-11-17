@@ -2852,7 +2852,7 @@ begin
  LastOutputCodeValue:=locNone;
  PC:=0;
  CountJumps:=0;
-
+ WriteLn('mov x28, sp');
  while PC<CodePosition do begin
   Opcode:=Code[PC];
   Value:=Code[PC+1];
@@ -3193,7 +3193,7 @@ begin
    end;
    OPAdjS:begin
     Value:=Value*(-4);
-    WriteLn('mov x28, sp');
+ 
     WriteLn('sub sp, sp, #', Value);
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
