@@ -2660,39 +2660,22 @@ var LastOutputCodeValue,PC:integer;
 
 procedure OCPushEAX;
 begin
- if LastOutputCodeValue=locPopEAX then begin
-  if Code[PC]=OutputCodeDataSize then begin
-   Code[PC]:=Code[PC]-1;
-  end;
-  if OutputCodeDataSize>0 then begin
-   OutputCodeDataSize:=OutputCodeDataSize-1;
-  end;
-  LastOutputCodeValue:=locNone;
- end else begin
-  EmitByte($50);
+  WriteLn('str x0, [sp, #-16]!');
   LastOutputCodeValue:=locPushEAX;
- end;
+//  end;
 end;
 
 procedure OCPopEAX;
 begin
- if LastOutputCodeValue=locPushEAX then begin
-  if Code[PC]=OutputCodeDataSize then begin
-   Code[PC]:=Code[PC]-1;
-  end;
-  if OutputCodeDataSize>0 then begin
-   OutputCodeDataSize:=OutputCodeDataSize-1;
-  end;
-  LastOutputCodeValue:=locNone;
- end else begin
-  EmitByte($58);
+  WriteLn('ldr x0, [sp], #16');
   LastOutputCodeValue:=locPopEAX;
- end;
+//  end;
 end;
 
 procedure OCPopEBX;
 begin
- EmitByte($5b);
+  WriteLn('ldr x1, [sp], #16');
+//  EmitByte($5b);
  LastOutputCodeValue:=locPopEBX;
 end;
 
@@ -2704,13 +2687,16 @@ end;
 
 procedure OCXorEDXEDX;
 begin
- EmitByte($48); EmitByte($31); EmitByte($d2);
+//  EmitByte($48); EmitByt"e($31); EmitByte($d2);
+ WriteLn('eor x0, x0, x0');
  LastOutputCodeValue:=locXorEDXEDX;
 end;
 
 procedure OCIDIVEBX;
 begin
- EmitByte($48); EmitByte($f7); EmitByte($fb);
+  writeLn('sdiv x0, x1, x0 ');
+   
+//  EmitByte($48); EmitByte($f7); EmitByte($fb);
  LastOutputCodeValue:=locIDivEBX;
 end;
 
@@ -2872,13 +2858,14 @@ begin
    OPMul:begin
     OCPopEBX;
     OCPopEAX;
-    OCIMulEBX;
+    WriteLn('mul x0, x0, x1');
+    // OCIMulEBX;
     OCPushEAX;
    end;
    OPDivD:begin
     OCPopEBX;
     OCPopEAX;
-    OCXorEDXEDX;
+    // OCXorEDXEDX;
     OCIDIVEBX;
     OCPushEAX;
    end;
@@ -2890,7 +2877,9 @@ begin
     OCPushEDX;
    end;
    OPDiv2:begin
-    EmitByte($48); EmitByte($d1); EmitByte($3c); EmitByte($24); (* SAR DWORD PTR {ESP},1 *)
+    WriteLn('asr x0, x0, #2');
+    // EmitByte($48); EmitByte($d1); EmitByte($3c); EmitByte($24);
+     (* SAR DWORD PTR {ESP},1 *)
     LastOutputCodeValue:=locNone;
    end;
    OPRem2:begin
@@ -2964,13 +2953,18 @@ begin
     OCPushEAX;
    end;
    OPDupl:begin
-    EmitByte($ff); EmitByte($34); EmitByte($24); // PUSH DWORD PTR [ESP]
+    OCPopEAX;
+    OCPushEAX;
+    OCPushEAX;
+    // writeLn('');
+    // EmitByte($ff); EmitByte($34); EmitByte($24); // PUSH DWORD PTR [ESP]
     LastOutputCodeValue:=locNone;
    end;
    OPSwap:begin
     OCPopEBX;
     OCPopEAX;
-    EmitByte($53); { PUSH EBX }
+    // EmitByte($53); { PUSH EBX }
+    WriteLn('str x1, [sp, #-16]!');
     LastOutputCodeValue:=locNone;
     OCPushEAX;
    end;
@@ -3109,7 +3103,7 @@ begin
    OPStG:begin
     OCPopEAX;
     Value:=Value*4;
-    WriteLn('ldr x0, [sp], #', 16);
+    // WriteLn('ldr x0, [sp], #', 16);
     WriteLn('str x0, [x28, #', Value, ']');
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
