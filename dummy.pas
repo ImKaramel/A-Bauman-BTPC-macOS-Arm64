@@ -1,7 +1,8 @@
 program DummyExample;
- 
 var
-  num1, num2, sum: Integer;
+  num1: Integer;
 begin
-  sum := 1 + 2;
+  num1 := 3;
+  if num1 > 2 then
+    num1 := 7;
 end.
