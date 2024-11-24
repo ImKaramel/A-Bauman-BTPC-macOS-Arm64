@@ -2628,14 +2628,14 @@ const EndingStubSize=5297;
 
 
 const locNone=0;
-      lOCPushX0=1;
-      lOCPopX0=2;
-      lOCPopX1=3;
+      locPushX0=1;
+      locPopX0=2;
+      locPopX1=3;
       locIMulEBX=4;
       locXorEDXEDX=5;
       locIDivEBX=6;
       locPushEDX=7;
-      lOCCmpX1X0=8;
+      locCmpX1X0=8;
       locMovzxEAXAL=9;
       locMovDWordPtrESPEAX=10;
       locJNZJNE0x03=11;
@@ -2661,19 +2661,19 @@ var LastOutputCodeValue,PC:integer;
 procedure OCPushX0;
 begin
   WriteLn('str x0, [sp, #-16]!');
-  LastOutputCodeValue:=lOCPushX0;
+  LastOutputCodeValue:=locPushX0;
 end;
 
 procedure OCPopX0;
 begin
   WriteLn('ldr x0, [sp], #16');
-  LastOutputCodeValue:=lOCPopX0;
+  LastOutputCodeValue:=locPopX0;
 end;
 
 procedure OCPopX1;
 begin
   WriteLn('ldr x1, [sp], #16');
- LastOutputCodeValue:=lOCPopX1;
+ LastOutputCodeValue:=locPopX1;
 end;
 
 procedure OCIMulEBX;
@@ -2703,7 +2703,7 @@ end;
 procedure OCCmpX1X0;
 begin
  writeLn('cmp x1, x0');
- LastOutputCodeValue:=lOCCmpX1X0;
+ LastOutputCodeValue:=locCmpX1X0;
 end;
 
 procedure OCMovzxEAXAL;
@@ -2895,7 +2895,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    EmitByte($0f); EmitByte($94); EmitByte($d0); // SETE AL
+    writeLn('csel x0, #0, #1, eq');
     LastOutputCodeValue:=locNone;
     OCMovzxEAXAL;
     OCPushX0;
@@ -2904,7 +2904,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    EmitByte($0f); EmitByte($95); EmitByte($d0); // SETNE AL
+    writeLn('csel x0, #0, #1, ne');
     LastOutputCodeValue:=locNone;
     OCMovzxEAXAL;
     OCPushX0;
@@ -2913,7 +2913,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    EmitByte($0f); EmitByte($9c); EmitByte($d0); // SETL AL
+    writeLn('csel x0, #0, #1, lt');
     LastOutputCodeValue:=locNone;
     OCMovzxEAXAL;
     OCPushX0;
@@ -2922,7 +2922,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    EmitByte($0f); EmitByte($9e); EmitByte($d0); // SETLE AL
+    writeLn('csel x0, #0, #1, le');
     LastOutputCodeValue:=locNone;
     OCMovzxEAXAL;
     OCPushX0;
@@ -2939,9 +2939,8 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    EmitByte($0f); EmitByte($9d); EmitByte($d0); // SETGE AL
+    writeLn('csel x0, #0, #1, ge');
     LastOutputCodeValue:=locNone;
-    OCMovzxEAXAL;
     OCPushX0;
    end;
    OPDupl:begin
