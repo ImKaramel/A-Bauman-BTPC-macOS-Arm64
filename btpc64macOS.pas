@@ -3066,10 +3066,9 @@ begin
    end;
    OPLdG:begin
     Value:=Value*4;
-    WriteLn('mov [x28, #', Value,']', 'x0');
-    WriteLn('str x0, [sp, #-16]!');
-    LastOutputCodeValue:=locNone;
+    WriteLn('ldr x0, [x28, #', Value,']');
     OCPushX0;
+    LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPStL:begin
@@ -3147,10 +3146,10 @@ begin
    OPJZ:begin
     CountJumps:=CountJumps+1;
     OCPopX0;
-    OCTestEAXEAX;
-    EmitByte($0f); EmitByte($84); { JZ Value }
+    writeLn('cmp x0, 0');
+    writeln('mov x9, #', Value);
+    writeLn('b.eq x9');
     JumpTable[CountJumps]:=OutputCodeDataSize+1;
-    EmitInt32(Value);
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
