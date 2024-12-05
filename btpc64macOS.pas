@@ -2682,7 +2682,7 @@ begin
  LastOutputCodeValue:=locIMulEBX;
 end;
 
-procedure OCXorEDXEDX;
+procedure OCXorX0X0;
 begin
  WriteLn('eor x0, x0, x0');
  LastOutputCodeValue:=locXorEDXEDX;
@@ -2861,7 +2861,8 @@ begin
    OPRemD:begin
     OCPopX1;
     OCPopX0;
-    OCXorEDXEDX;
+    OCXorX0X0
+    EDXEDX;
     OCIDIVX1
   ;
     OCPushEDX;
@@ -2874,7 +2875,8 @@ begin
    OPRem2:begin
     OCPopX1;
     OCPopX0;
-    OCXorEDXEDX;
+    OCXorX0X0
+    EDXEDX;
     OCIDIVX1
   ;
     OCPushEDX;
