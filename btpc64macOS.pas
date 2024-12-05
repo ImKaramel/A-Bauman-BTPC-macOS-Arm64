@@ -2787,11 +2787,7 @@ begin
  LastOutputCodeValue:=locTestEAXEAX;
 end;
 
-procedure OCNegDWordPtrESP;
-begin
- EmitByte($48); EmitByte($f7); EmitByte($1c); EmitByte($24); (* NEG DWORD PTR {ESP} *)
- LastOutputCodeValue:=locNegDWordPtrESP;
-end;
+
 
 procedure OCMovEAXDWordPtrESP;
 begin
@@ -2876,20 +2872,12 @@ begin
     LastOutputCodeValue:=locNone;
    end;
    OPRem2:begin
+    OCPopX1;
     OCPopX0;
-    EmitByte($48); EmitByte($8b); EmitByte($d8); { MOV EBX,EAX }
-    {?}
-    {eax even => eax=0; eax odd => eax=1}
-    EmitByte($25); EmitByte($01); EmitByte($00); EmitByte($00); EmitByte($80); { AND EAX,$80000001 }
-    {7905 = jns $+0x7 = 2 itself + 5 next bytes}
-    {790a = jns $+0xC = 2 itself + 10 next bytes}
-    EmitByte($79); EmitByte($0a); { JNS +$0xC }
-    EmitByte($48); EmitByte($ff); EmitByte($c8); { DEC EAX }
-    EmitByte($48); EmitByte($83); EmitByte($c8); EmitByte($fe); { OR EAX,BYTE -$02 }
-    EmitByte($48); EmitByte($ff); EmitByte($c0); { INC EAX }
-    LastOutputCodeValue:=locNone;
-    OCIMulEBX;
-    OCPushX0;
+    OCXorEDXEDX;
+    OCIDIVX1
+  ;
+    OCPushEDX;
    end;
    OPEqlI:begin
     OCPopX1;
