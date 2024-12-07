@@ -1902,7 +1902,7 @@ begin
   Identifiers[f].Inside:=false;
   EmitOpcode(OPExit,Identifiers[f].ReturnAddress-StackPosition);
  end else begin
-  if FunctionDeclarationIndex>=0 then begin
+  if FunctionDeclarationIndex>=0 then begin 
    Error(143);
   end;
   GetSymbol;
@@ -2787,7 +2787,11 @@ begin
  LastOutputCodeValue:=locTestEAXEAX;
 end;
 
-
+procedure OCNegDWordPtrESP;
+begin
+ EmitByte($48); EmitByte($f7); EmitByte($1c); EmitByte($24); (* NEG DWORD PTR {ESP} *)
+ LastOutputCodeValue:=locNegDWordPtrESP;
+end;
 
 procedure OCMovEAXDWordPtrESP;
 begin
@@ -2861,8 +2865,7 @@ begin
    OPRemD:begin
     OCPopX1;
     OCPopX0;
-    OCXorX0X0
-    EDXEDX;
+    OCXorX0X0;
     OCIDIVX1
   ;
     OCPushEDX;
@@ -2875,8 +2878,7 @@ begin
    OPRem2:begin
     OCPopX1;
     OCPopX0;
-    OCXorX0X0
-    EDXEDX;
+    OCXorX0X0;
     OCIDIVX1
   ;
     OCPushEDX;
@@ -2948,18 +2950,18 @@ begin
    end;
    OPAndB:begin
     OCPopX0;
-    OCTestEAXEAX;
-    {originally it was skipping 3 bytes + 2 itself. now 4 bytes + 2 itself}
-    OCJNZJNE0x06;
-    OCMovDWordPtrESPEAX;
+    OCPopX1;
+    WriteLn('cmp x1, 0');
+    WriteLn('csel x0, 0, x0, eq');
+    OCPushX0;
     LastOutputCodeValue:=locNone;
    end;
    OPOrB:begin
     OCPopX0;
-    EmitByte($48); EmitByte($83); EmitByte($f8); EmitByte($01);  { CMP EAX,1 }
-    LastOutputCodeValue:=locNone;
-    OCJNZJNE0x06;
-    OCMovDWordPtrESPEAX;
+    OCPopX1;
+    WriteLn('cmp x1, 1');
+    WriteLn('csel x0, 1, x0, eq');
+    OCPushX0;
     LastOutputCodeValue:=locNone;
    end;
    OPLoad:begin
