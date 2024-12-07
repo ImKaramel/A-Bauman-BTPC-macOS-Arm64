@@ -2790,7 +2790,7 @@ end;
 procedure OCNegDWordPtrESP;
 begin
   OCPopX0;
-  WriteLn('MVN x0, x0');
+  WriteLn('mvn x0, x0');
   OCPushX0;
  LastOutputCodeValue:=locNegDWordPtrESP;
 end;
