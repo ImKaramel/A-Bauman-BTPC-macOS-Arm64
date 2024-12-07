@@ -2690,7 +2690,7 @@ end;
 
 procedure OCIDIVX1;
 begin
- writeLn('sdiv x0, x1, x0 ');
+ WriteLn('sdiv x0, x1, x0 ');
  LastOutputCodeValue:=locIDivEBX;
 end;
 
@@ -2702,7 +2702,7 @@ end;
 
 procedure OCCmpX1X0;
 begin
- writeLn('cmp x1, x0');
+ WriteLn('cmp x1, x0');
  LastOutputCodeValue:=locCmpX1X0;
 end;
 
@@ -2789,7 +2789,9 @@ end;
 
 procedure OCNegDWordPtrESP;
 begin
- EmitByte($48); EmitByte($f7); EmitByte($1c); EmitByte($24); (* NEG DWORD PTR {ESP} *)
+  OCPopX0;
+  WriteLn('MVN x0, x0');
+  OCPushX0;
  LastOutputCodeValue:=locNegDWordPtrESP;
 end;
 
@@ -2887,7 +2889,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    writeLn('csel x0, #0, #1, eq');
+    WriteLn('csel x0, #0, #1, eq');
     LastOutputCodeValue:=locNone;
     OCMovzxEAXAL;
     OCPushX0;
@@ -2896,7 +2898,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    writeLn('csel x0, #0, #1, ne');
+    WriteLn('csel x0, #0, #1, ne');
     LastOutputCodeValue:=locNone;
     OCMovzxEAXAL;
     OCPushX0;
@@ -2905,7 +2907,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    writeLn('csel x0, #0, #1, lt');
+    WriteLn('csel x0, #0, #1, lt');
     LastOutputCodeValue:=locNone;
     OCMovzxEAXAL;
     OCPushX0;
@@ -2914,7 +2916,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    writeLn('csel x0, #0, #1, le');
+    WriteLn('csel x0, #0, #1, le');
     LastOutputCodeValue:=locNone;
     OCMovzxEAXAL;
     OCPushX0;
@@ -2923,7 +2925,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    writeLn('csel x0, #0, #1, gt');
+    WriteLn('csel x0, #0, #1, gt');
     LastOutputCodeValue:=locNone;
     OCPushX0;
    end;
@@ -2931,7 +2933,7 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    writeLn('csel x0, #0, #1, ge');
+    WriteLn('csel x0, #0, #1, ge');
     LastOutputCodeValue:=locNone;
     OCPushX0;
    end;
@@ -2951,6 +2953,7 @@ begin
    OPAndB:begin
     OCPopX0;
     OCPopX1;
+
     WriteLn('cmp x1, 0');
     WriteLn('csel x0, 0, x0, eq');
     OCPushX0;
@@ -3138,9 +3141,9 @@ begin
    OPJZ:begin
     CountJumps:=CountJumps+1;
     OCPopX0;
-    writeLn('cmp x0, 0');
-    writeln('mov x9, #', Value);
-    writeLn('b.eq x9');
+    WriteLn('cmp x0, 0');
+    WriteLn('mov x9, #', Value);
+    WriteLn('b.eq x9');
     JumpTable[CountJumps]:=OutputCodeDataSize+1;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
