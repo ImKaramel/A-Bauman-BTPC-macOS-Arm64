@@ -2735,7 +2735,8 @@ end;
 
 procedure OCMovDWordPtrEBXEAX;
 begin
- EmitByte($48); EmitByte($89); EmitByte($03);
+//  EmitByte($48); EmitByte($89); EmitByte($03);
+ WriteLn('str x0, [x1]');
  LastOutputCodeValue:=locMovDWordPtrEBXEAX;
 end;
 
@@ -3133,7 +3134,7 @@ begin
    OPJmp:begin
     if Value<>(PC+2) then begin
      CountJumps:=CountJumps+1;
-     EmitByte($e9); { JMP Value }
+     WriteLn('b l_', Value div 2);
      JumpTable[CountJumps]:=OutputCodeDataSize+1;
      EmitInt32(Value);
     end;
