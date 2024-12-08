@@ -1,8 +1,11 @@
-program DummyExample;
+program SimpleIfExample;
 var
-  num1: Integer;
+  a: integer;
 begin
-  num1 := 3;
-  if num1 > 2 then
-    num1 := 7;
+  a := 2;
+  if true then
+    a := 5
+  else 
+    a := 8;
+  a := 11;
 end.

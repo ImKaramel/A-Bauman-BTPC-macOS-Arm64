@@ -2837,6 +2837,7 @@ begin
  WriteLn('mov x28, sp');
  while PC<CodePosition do begin
   Opcode:=Code[PC];
+  WriteLn('l_',PC div 2, ':');
   Value:=Code[PC+1];
   Code[PC]:=OutputCodeDataSize;
   case Opcode of
@@ -2978,6 +2979,7 @@ begin
     OCMovDWordPtrEBXEAX;
    end;
    OPHalt:begin
+    WriteLn('mov x11, 44'); // TODO
     OCJmpDWordPtrESIOfs(0);
    end;
    OPWrI:begin
@@ -3135,6 +3137,7 @@ begin
      JumpTable[CountJumps]:=OutputCodeDataSize+1;
      EmitInt32(Value);
     end;
+    WriteLn('mov x7, 42'); // TODO
     PC:=PC+1;
     LastOutputCodeValue:=locNone;
    end;
@@ -3142,9 +3145,8 @@ begin
     CountJumps:=CountJumps+1;
     OCPopX0;
     WriteLn('cmp x0, 0');
-    WriteLn('mov x9, #', Value);
-    WriteLn('b.eq x9');
-    JumpTable[CountJumps]:=OutputCodeDataSize+1;
+    WriteLn('b.eq l_', Value div 2);
+    JumpTable[CountJumps]:= PC div 2 + 1;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
