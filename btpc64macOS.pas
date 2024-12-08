@@ -2676,12 +2676,6 @@ begin
  LastOutputCodeValue:=locPopX1;
 end;
 
-procedure OCIMulEBX;
-begin
- EmitByte($48); EmitByte($f7); EmitByte($eb);
- LastOutputCodeValue:=locIMulEBX;
-end;
-
 procedure OCXorX0X0;
 begin
  WriteLn('eor x0, x0, x0');
