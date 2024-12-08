@@ -2694,77 +2694,16 @@ begin
  LastOutputCodeValue:=locIDivEBX;
 end;
 
-procedure OCPushEDX;
-begin
-//TODO
-end;
-
 procedure OCCmpX1X0;
 begin
  WriteLn('cmp x1, x0');
  LastOutputCodeValue:=locCmpX1X0;
 end;
 
-procedure OCMovzxEAXAL;
-begin
-//TODO
-end;
-
-{!}
-procedure OCJNZJNE0x03;
-begin
-//TODO
-end;
-
-procedure OCMovDWordPtrESPEAX;
-begin
-//TODO
-end;
-
 procedure OCMovDWordPtrX1X0;
 begin
  WriteLn('str x0, [x1]');
  LastOutputCodeValue:=locMovDWordPtrEBXEAX;
-end;
-
-procedure OCJmpDWordPtrESIOfs(Ofs:integer);
-begin
-//TODO
-end;
-
-procedure OCCallDWordPtrESIOfs(Ofs:integer);
-begin
-//TODO
-end;
-
-procedure OCXChgEDXESI;
-begin
-//TODO
-end;
-
-procedure OCPopESI;
-begin
-//TODO
-end;
-
-procedure OCMovECXImm(Value:integer);
-begin
-//TODO
-end;
-
-procedure OCCLD;
-begin
-//TODO
-end;
-
-procedure OCREPMOVSB;
-begin
-//TODO
-end;
-
-procedure OCTestEAXEAX;
-begin
-//TODO
 end;
 
 procedure OCNegDWordPtrESP;
@@ -2775,27 +2714,6 @@ begin
  LastOutputCodeValue:=locNegDWordPtrESP;
 end;
 
-procedure OCMovEAXDWordPtrESP;
-begin
-//TODO
-end;
-
-{-}
-procedure OCMovEBXDWordPtrFORStateCurrentValue;
-begin
-//TODO
-end;
-
-procedure OCCmpDWordPtrEBXEAX;
-begin
-//TODO
-end;
-
-{-}
-procedure OCMovEAXDWordPtrFORStateDestValue;
-begin
-//TODO
-end;
 
 var JumpTable:array[1:MaximalCodeSize] of integer;
 
@@ -2943,31 +2861,31 @@ begin
     OCMovDWordPtrX1X0;
    end;
    OPHalt:begin
-//TODO
+    //TODO
    end;
    OPWrI:begin
-//TODO
+    //TODO
    end;
    OPWrC:begin
-//TODO
+    //TODO
    end;
    OPWrL:begin
-//TODO
+    //TODO
    end;
    OPRdI:begin
-//TODO
+    //TODO
    end;
    OPRdC:begin
-//TODO
+    //TODO
    end;
    OPRdL:begin
-//TODO
+    //TODO
    end;
    OPEOF:begin
-//TODO
+    //TODO
    end;
    OPEOL:begin
-//TODO
+    //TODO
    end;
    OPLdC:begin
     WriteLn('mov x0, #', Value);
@@ -2976,10 +2894,10 @@ begin
     PC:=PC+1;
    end;
    OPLdA:begin
-//TODO
+    //TODO
    end;
    OPLdLA:begin
-//TODO
+    //TODO
    end;
    OPLdL:begin
    //TODO
@@ -3002,10 +2920,10 @@ begin
     PC:=PC+1;
    end;
    OPMove:begin
-   //TODO
+    //TODO
    end;
    OPCopy:begin
-   //TODO
+    //TODO
    end;
    OPAddC:begin
     WriteLn('ldr x0, [sp], #16');
@@ -3041,7 +2959,7 @@ begin
     PC:=PC+1;
    end;
    OPCall:begin
-   //TODO
+    //TODO
    end;
    OPAdjS:begin
     Value:=Value*(-4);
@@ -3050,7 +2968,7 @@ begin
     PC:=PC+1;
    end;
    OPExit:begin
-//TODO
+    //TODO
    end;
   end;
   PC:=PC+1;
