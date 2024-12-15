@@ -2649,7 +2649,7 @@ const locNone=0;
       locREPMOVSB=19;
       locTestEAXEAX=20;
       locNegDWordPtrESP=21;
-      locMovEAXDWordPtrESP=22;
+      locMovX0DWordPtrESP=22;
       locMovEBXDWordPtrFORStateCurrentValue=23;
       locCmpDWordPtrEBXEAX=24;
       locMovEAXDWordPtrFORStateDestValue=25;
@@ -2712,6 +2712,12 @@ begin
   WriteLn('mvn x0, x0');
   OCPushX0;
  LastOutputCodeValue:=locNegDWordPtrESP;
+end;
+
+procedure OCMovX0DWordPtrESP;
+begin
+ WriteLn('ldr x0, [sp]'); (* MOV X0,DWORD PTR {ESP} *)
+ LastOutputCodeValue:=locMovX0DWordPtrESP;
 end;
 
 
@@ -2913,7 +2919,14 @@ begin
     //TODO
    end;
    OPLdL:begin
-   //TODO
+   Value:=Value*4;
+    if Value=0 then begin
+     OCMovX0DWordPtrESP;
+    end else begin
+      WriteLn('ldr x0, [sp, #', Value,']');
+    end;
+    OCPushX0;
+    PC:=PC+1;
    end;
    OPLdG:begin
     Value:=Value*4;
@@ -2923,7 +2936,18 @@ begin
     PC:=PC+1;
    end;
    OPStL:begin
-    //TODO
+    OCPopX0;
+    Value:=Value-8;
+    Value:=Value*4;
+    if Value=0 then begin
+      WriteLn('str x0, [sp]'); { MOV DWORD PTR [ESP],X0 }
+    end else if (Value>=-128) and (Value<=127) then begin
+     WriteLn('str x0, [sp, #', Value ,']'); { MOV DWORD PTR [ESP+BYTE Value],X0 }
+    end else begin
+      WriteLn('ldr x0, [sp, #', Value ,']'); { MOV X0,DWORD PTR [ESP+DWORD Value] }
+    end;
+    LastOutputCodeValue:=locNone;
+    PC:=PC+1;
    end;
    OPStG:begin
     OCPopX0;
@@ -2972,7 +2996,11 @@ begin
     PC:=PC+1;
    end;
    OPCall:begin
-    //TODO
+    CountJumps:=CountJumps+1;
+    WriteLn('bl l_', Value);
+    JumpTable[CountJumps]:= PC div 2 + 1;
+    LastOutputCodeValue:=locNone;
+    PC:=PC+1;
    end;
    OPAdjS:begin
     Value:=Value*(-4);
@@ -2981,12 +3009,22 @@ begin
     PC:=PC+1;
    end;
    OPExit:begin
-    //TODO
+    Value:= Value-4;
+    Value:= Value*4;
+    if Value>0 then begin
+      WriteLn('add sp, sp, #', Value);
+      WriteLn('ret');
+    end else if Value=0 then begin
+     WriteLn('ret'); { RET }
+    end else begin
+     Error(145);
+    end;
+    LastOutputCodeValue:=locNone;
+    PC:=PC+1;
    end;
   end;
   PC:=PC+1;
  end;
-
 
   { Patch jumps + calls }
   for Index:=1 to CountJumps do begin
