@@ -2684,7 +2684,7 @@ end;
 
 procedure OCIDIVX1;
 begin
- WriteLn('sdiv x0, x1, x0 ');
+ WriteLn('sdiv x0, x1, x0');
  LastOutputCodeValue:=locIDivEBX;
 end;
 
@@ -2756,7 +2756,7 @@ begin
     OCPopX0;
     OCXorX0X0;
     OCIDIVX1;
-    OCPushEDX;
+    OCPushX0;
    end;
    OPDiv2:begin
     WriteLn('asr x0, x0, #2');
@@ -2767,7 +2767,7 @@ begin
     OCPopX0;
     OCXorX0X0;
     OCIDIVX1;
-    OCPushEDX;
+    OCPushX0;
    end;
    OPEqlI:begin
     OCPopX1;
@@ -2888,7 +2888,15 @@ begin
     PC:=PC+1;
    end;
    OPLdA:begin
-    //TODO
+    Value := Value * 4;
+    if Value = 0 then begin
+        WriteLn('mov x0, x29');
+    end else begin
+        WriteLn('add x0, x29, #', Value );
+    end;
+    LastOutputCodeValue := locNone;
+    OCPushX0;
+    PC := PC + 1;
    end;
    OPLdLA:begin
     //TODO
