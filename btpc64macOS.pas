@@ -2664,6 +2664,12 @@ begin
   LastOutputCodeValue:=locPushX0;
 end;
 
+procedure OCPushX1;
+begin
+  WriteLn('str x1, [sp, #-16]!');
+  LastOutputCodeValue:=locPushX0;
+end;
+
 procedure OCPopX0;
 begin
   WriteLn('ldr x0, [sp], #16');
@@ -2722,16 +2728,16 @@ begin
  LastOutputCodeValue:=locNone;
  PC:=0;
  CountJumps:=0;
- WriteLn('mov x28, sp');
+ WriteLn('mov x27, sp');
  while PC<CodePosition do begin
   Opcode:=Code[PC];
-  WriteLn('l_',PC div 2, ':');
+  WriteLn('l_', PC, ':');
   Value:=Code[PC+1];
   Code[PC]:=OutputCodeDataSize;
   case Opcode of
    OPAdd:begin
-    WriteLn('ldr x0, [sp], #16');
-    WriteLn('ldr x1, [sp], #16');
+    OCPopX0;
+    OCPopX1;
     WriteLn('add x0, x0, x1');
     WriteLn('str x0, [sp, #-16]!');
     LastOutputCodeValue:=locNone;
@@ -2847,7 +2853,9 @@ begin
     LastOutputCodeValue:=locNone;
    end;
    OPLoad:begin
-    //TODO
+    OCPopX0;
+    WriteLn('ldr x1, [x0]');
+    OCPushX1;
    end;
    OPStore:begin
     OCPopX1;
@@ -2856,6 +2864,9 @@ begin
    end;
    OPHalt:begin
     //TODO
+    WriteLn('mov x8, #93');
+    WriteLn('mov x0, #0');   
+    WriteLn('svc #0');        
    end;
    OPWrI:begin
     //TODO
@@ -2890,9 +2901,9 @@ begin
    OPLdA:begin
     Value := Value * 4;
     if Value = 0 then begin
-        WriteLn('mov x0, x29');
+        WriteLn('mov x0, x27');
     end else begin
-        WriteLn('add x0, x29, #', Value );
+        WriteLn('add x0, x27, #', Value );
     end;
     LastOutputCodeValue := locNone;
     OCPushX0;
@@ -2906,7 +2917,7 @@ begin
    end;
    OPLdG:begin
     Value:=Value*4;
-    WriteLn('ldr x0, [x28, #', Value,']');
+    WriteLn('ldr x0, [x27, #', Value,']');
     OCPushX0;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
@@ -2917,7 +2928,7 @@ begin
    OPStG:begin
     OCPopX0;
     Value:=Value*4;
-    WriteLn('str x0, [x28, #', Value, ']');
+    WriteLn('str x0, [x27, #', Value, ']');
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -2944,7 +2955,7 @@ begin
    OPJmp:begin
     if Value<>(PC+2) then begin
      CountJumps:=CountJumps+1;
-     WriteLn('b l_', Value div 2);
+     WriteLn('b l_', Value);
      JumpTable[CountJumps]:=OutputCodeDataSize+1;
      EmitInt32(Value);
     end; 
@@ -2955,7 +2966,7 @@ begin
     CountJumps:=CountJumps+1;
     OCPopX0;
     WriteLn('cmp x0, 0');
-    WriteLn('b.eq l_', Value div 2);
+    WriteLn('b.eq l_', Value);
     JumpTable[CountJumps]:= PC div 2 + 1;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
