@@ -2720,6 +2720,13 @@ begin
  LastOutputCodeValue:=locMovX0DWordPtrESP;
 end;
 
+procedure OCCallDWordPtrX19Ofs(Ofs:integer);
+begin
+ WriteLn('mov x2, #', Ofs);
+ WriteLn('ldr x3, [x19, x2]');
+ WriteLn('blr x3');
+ LastOutputCodeValue:=locCallDWordPtrESIOfs;
+end;
 
 var JumpTable:array[1:MaximalCodeSize] of integer;
 
@@ -2875,28 +2882,34 @@ begin
     WriteLn('svc #0');        
    end;
    OPWrI:begin
-    //TODO
+    OCCallDWordPtrX19Ofs(16);
    end;
    OPWrC:begin
-    //TODO
+    OCCallDWordPtrX19Ofs(8);
    end;
    OPWrL:begin
-    //TODO
+    OCCallDWordPtrX19Ofs(24);
    end;
    OPRdI:begin
-    //TODO
+    OCPopX1;
+    OCCallDWordPtrX19Ofs(40);
+    OCMovDWordPtrX1X0;
    end;
    OPRdC:begin
-    //TODO
+    OCPopX1;
+    OCCallDWordPtrX19Ofs(32);
+    OCMovDWordPtrX1X0;
    end;
    OPRdL:begin
-    //TODO
+    OCCallDWordPtrX19Ofs(48);
    end;
    OPEOF:begin
-    //TODO
+    OCCallDWordPtrX19Ofs(56);
+    OCPushX0;
    end;
    OPEOL:begin
-    //TODO
+    OCCallDWordPtrX19Ofs(64);
+    OCPushX0;
    end;
    OPLdC:begin
     WriteLn('mov x0, #', Value);
