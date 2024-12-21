@@ -2929,7 +2929,15 @@ begin
     PC := PC + 1;
    end;
    OPLdLA:begin
-    //TODO
+    Value := Value * 4;
+    if Value=0 then begin
+      WriteLn('mov x0, sp');
+    end else begin
+        WriteLn('add x0, sp, #', Value );
+    end;
+    LastOutputCodeValue:=locNone;
+    OCPushX0;
+    PC:=PC+1;
    end;
    OPLdL:begin
    Value:=Value*4;
