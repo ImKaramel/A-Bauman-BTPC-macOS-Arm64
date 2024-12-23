@@ -50,46 +50,60 @@ Copyright:
 .section __BSS,__bss
    
     .macro pushall
-        pushq %rdi
-        pushq %rsi
-        pushq %rbp
-        pushq %rsp
-        pushq %rdx
-        pushq %rcx
-        pushq %rbx
-        pushq %rax
+        # pushq %rdi
+        str x4, [sp, #-16]!
+        # pushq %rsi
+        str x19, [sp, #-16]!
+        # pushq %rbp
+        str x27, [sp, #-16]!
+        # pushq %rsp
+        str sp, [sp, #-16]!
+        # pushq %rdx
+        str x3, [sp, #-16]!
+        # pushq %rcx
+        str x2, [sp, #-16]!
+        # pushq %rbx
+        str x1, [sp, #-16]!
+        # pushq %rax
+        str x0, [sp, #-16]!
         
     .endm
     
+
     .macro popall
-        popq %rax
-        popq %rbx
-        popq %rcx
-        popq %rdx
-        popq %rsp
-        popq %rbp
-        popq %rsi
-        popq %rdi
+        ldr x0, [sp], #16    // pop %rax
+        ldr x1, [sp], #16     // pop %rbx
+        ldr x2, [sp], #16      // pop %rcx
+        ldr x3, [sp], #16     // pop %rdx
+        ldr sp, [sp], #16    // pop %rsp
+        ldr x27, [sp], #16    // pop %rbp
+        ldr x19, [sp], #16    // pop %rsi
+        ldr x4,  [sp], #16       // pop %rdi
     .endm
-    
+
+
     .macro parleft
-        pushq $'{'
-        call RTLWriteChar
+        mov x8, #'{'
+        str x8, [sp, #-16]!
+        bl RTLWriteChar  
     .endm
     
     .macro parright
-        pushq $'}'
-        call RTLWriteChar
+        mov x8, #'}'
+        str x8, [sp, #-16]!
+        bl RTLWriteChar  
     .endm
+
     
     .macro space
-        pushq $' '
-        call RTLWriteChar
+        mov x8, #' '
+        str x8, [sp, #-16]!
+        bl RTLWriteChar  
     .endm
         
     .macro raxchar
-        pushq %rax
-        call RTLWriteChar
+        str x8, [sp, #-16]!
+        bl RTLWriteChar  
     .endm
     
     # .macro raxint
@@ -107,7 +121,7 @@ Copyright:
 
 .global _main
 _main:
-    jmp StubEntryPoint
+    b StubEntryPoint
 
 /*
 1. X  RTLHalt           — остановка программы,
@@ -246,19 +260,20 @@ RTLWriteInteger:
 #-----------------WriteLn------------------
 #------------------------------------------    
 RTLWriteLn: 
-    pushq   $13             #13 == 0xD == CR
-    call    RTLWriteChar
-    #addq    $8, %rsp
-    
-    pushq   $10             #10 == 0xA == LF
-    call    RTLWriteChar
-    #addq    $8, %rsp
-
+    # pushq   $13             #13 == 0xD == CR
+    mov x8, #13 
+    str x8, [sp, #-16]!   
+    # call    RTLWriteChar
+    bl RTLWriteChar
+    # addq    $8, %rsp
+    # pushq   $10             #10 == 0xA == LF
+    mov x8, #10 
+    str x8, [sp, #-16]!  
+    # call    RTLWriteChar
+    bl RTLWriteChar
+    # addq    $8, %rsp
     ret
    
-     
-
-
 
 ReadCharEx:
     pushall
@@ -426,9 +441,9 @@ RTLEOLN:
 #------------------Halt--------------------
 #------------------------------------------        
 RTLHalt:
-    movq    $0x2000001, %rax            #syscall #1 == Exit()
-    movq    $0,  %rdi                   #exit process state
-    syscall
+    mov x0, #93                  // syscall #93 == Exit()
+    mov x4, #0                   // exit process state
+    svc #0 
 
 
 #------------------------------------------#
@@ -552,10 +567,12 @@ Test4:
 #dont need to allocate(prepare) stack pages
 #------------------------------------------
 StubEntryPoint:
-
-    movq %rsp, %rbp                                 # bero's legacy
-    movq RTLFunctionTable@GOTPCREL(%rip), %rsi      # store functionTable and don't change %rsi
-    
+    mov sp, x27 
+    adrp x10, RTLFunctionTable@PAGE
+    add x10, x10, RTLFunctionTable@PAGEOFF
+    mov x10, [x10] 
+    mov x10, x10   
+# movq RTLFunctionTable@GOTPCREL(%rip), %rsi      # store functionTable and don't change %rsi
 ProgramEntryPoint:
 
 #------------------------------------------

@@ -2876,10 +2876,7 @@ begin
     OCMovDWordPtrX1X0;
    end;
    OPHalt:begin
-    //TODO
-    WriteLn('mov x8, #93');
-    WriteLn('mov x0, #0');   
-    WriteLn('svc #0');        
+    OCCallDWordPtrX19Ofs(93);   
    end;
    OPWrI:begin
     OCCallDWordPtrX19Ofs(16);
