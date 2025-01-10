@@ -139,23 +139,22 @@ _main:
 #------------------------------------------
 RTLWriteChar:
     pushall
-    movq    %rsp,   %rbp    #make stack frame
-                            
-    movq    $0x2000004, %rax    #syscall #4 == Write();                        
-    # movq    $1,     %rax    #syscall #1 == Write();
-    movq    $1,     %rdi    #param1 == write_to == 1 == stdout
+    # movq    %rsp,   %rbp    #make stack frame
+    mov x27, sp 
+    # syscall #1 == Write();
+    mov x0, #1                               
+    # movq    $1,     %rdi    #param1 == write_to == 1 == stdout
+    mov x4, #1  
+    # movq    %rbp,   %rsi    #p2 == write_from == %rbp == top_of_stack
 
-    movq    %rbp,   %rsi    #p2 == write_from == %rbp == top_of_stack
-    addq    $72,    %rsi    #reach top of stack:[0-ret,8-arg1,16-arg2]
-                            #we have all regs pushed so top is really really far
-    
-    movq    $1,     %rdx    #p3 == count == single_byte
+    add x19, x19, #128      # reach top of stack:[0-ret,16-arg1,32-arg2]
+                            # we have all regs pushed so top is really really far
 
-    syscall
-    
+    mov x3, #1     #p3 == count == single_byte
+    svc #0         # syscall
     popall
-    ret     $8
-    
+    # ret     $8
+    ret
 #------------------------------------------
 #--------------WriteInteger----------------
 #------------------------------------------    
