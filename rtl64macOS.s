@@ -159,55 +159,94 @@ RTLWriteChar:
 #--------------WriteInteger----------------
 #------------------------------------------    
 RTLWriteInteger:
-    pushq %rsi
-    #pushq %rbp
-    #movq %rsp,  %rbp
+    # pushq %rsi
+    str x19, [sp, #-16]!
     
-    movq 16(%rsp),  %rbx    #arg: count (stdout width). we do NOT care if it == 1
-    movq 24(%rsp),  %rax    #arg: num
-    
-    cmpq $0,    %rax
-    jnl RTLWriteIntegerNotSigned
+    # movq 16(%rsp),  %rbx    #arg: count (stdout width). we do NOT care if it == 1
+    ldr x1, [sp, #32] 
 
-        negq %rax
-        decq %rbx
-        pushq $'-'
-        call RTLWriteChar 
+    # movq 24(%rsp),  %rax    #arg: num
+    ldr x0, [sp, #48]
+    
+    # cmpq $0,    %rax
+    cmp x0, #0             # Сравниваем num с 0
+
+    # jnl RTLWriteIntegerNotSigned
+    b.ge RTLWriteIntegerNotSigned  # Если num >= 0, переходим к RTLWriteIntegerNotSigned
+
+        # negq %rax
+        neg x0, x0            # Инвертируем значение num
+        # decq %rbx
+        sub x1, x1, #1        # Уменьшаем count на 1
+
+        # pushq $'-'
+        mov x8, #'-'
+        str x8, [sp, #-16]!
+
+        # call RTLWriteChar 
+        bl RTLWriteChar # Вызываем RTLWriteChar для записи символа '-'
 
     RTLWriteIntegerNotSigned:
-    xorq %rcx,  %rcx
-    pushq %rax
-    pushq %rbx
+        # xorq %rcx,  %rcx
+        mov x2, #0 
+        # pushq %rax
+        str x0, [sp, #-16]! 
+        # pushq %rbx
+        str x1, [sp, #-16]! 
     
     RTLWriteIntegerPreCheckLoop:
-        testq %rax, %rax
-        jz RTLWriteIntegerPreCheckLoopDone
-        incq %rcx
-        movq $10,   %rbx
-        xorq %rdx,  %rdx
-        idiv %rbx          
-        
-        jmp RTLWriteIntegerPreCheckLoop
+        # testq %rax, %rax
+        cmp x0, #0  
+        # jz RTLWriteIntegerPreCheckLoopDone
+        b.eq RTLWriteIntegerPreCheckLoopDone
+        # incq %rcx
+        add x2, x2, #1 
+        # movq $10,   %rbx
+        mov x1, #10 
+        # xorq %rdx,  %rdx
+        mov x3, #0 
+        # idiv %rbx   
+
+        mov x9, x0
+        sdiv x0, x0, x1    #  X0 = X0 / X1
+        mul x8, x0, x1     #  X8 = X0 * X1 
+        sub x3, x9, x8     # X3 = X9 - X8
+        # jmp RTLWriteIntegerPreCheckLoop
+        b RTLWriteIntegerPreCheckLoop 
         
     RTLWriteIntegerPreCheckLoopDone:
-    testq %rcx, %rcx
-    setz %dl                    #dl: (0 == rcx) ? 1 : 0
-    orb %dl,    %cl
+    # testq %rcx, %rcx
+    cmp x2, #0 
+    # setz %dl                    #dl: (0 == rcx) ? 1 : 0
+    cset x3, eq 
+    # orb %dl,    %cl
+    orr x3, x2, x2   # Выполняем OR между X2 и X3, результат сохраняем в X2
     
-    popq %rbx
-    popq %rax
-    subq %rcx,  %rbx
+    # popq %rbx
+    ldr x1, [sp], #16
+    # popq %rax
+    ldr x0, [sp], #16 
+    # subq %rcx,  %rbx  %rbx = %rbx - %rcx
+    sub x1, x2, x1
     
-    cmpq $0,    %rbx
-    jle RTLWriteIntegerNotPadding
-        pushq %rcx
-    
+    # cmpq $0,    %rbx
+    cmp x1, #0 
+
+    # jle RTLWriteIntegerNotPadding
+    b.le RTLWriteIntegerNotPadding
+        # pushq %rcx
+        str x2, [sp, #-16]! 
         RTLWriteIntegerPaddingLoop:
-            pushq $' '
-            call RTLWriteChar
-            decq %rbx
-        jnz RTLWriteIntegerPaddingLoop
-        popq %rcx
+            # pushq $' '
+            mov x8, #' '  
+            # call RTLWriteChar
+            bl RTLWriteChar
+            # decq %rbx
+            sub x1, x1, #1 
+        # jnz RTLWriteIntegerPaddingLoop
+        b.ne RTLWriteIntegerPaddingLoop
+        # popq %rcx
+        ldr x2, [sp], #16
     
     RTLWriteIntegerNotPadding:
     #find last digit's address:     
@@ -221,39 +260,64 @@ RTLWriteInteger:
     #2st iter:      |0x3b| 2d | 3d |0x00|0x3b|...
     #3st iter:      | 1d | 2d | 3d |0x00|0x3b|...
     
-    movq RTLWriteIntegerBuffer@GOTPCREL(%rip), %rdi
-    # movq $RTLWriteIntegerBuffer, %rdi   #leaq RTLWriteIntegerBuffer-1(%rcx), %rdi 
-    addq %rcx,  %rdi                    #-||-
-    decq %rdi                           #-||-
+    # movq RTLWriteIntegerBuffer@GOTPCREL(%rip), %rdi
+    adrp x4, RTLWriteIntegerBuffer@PAGE
+    add x4, x4, RTLWriteIntegerBuffer@PAGEOFF
+
+    # addq %rcx,  %rdi                    #-||- %rdi = %rdi + %rcx
+    add x4, x4, x2
+    # decq %rdi                           #-||-
+    sub x4, x4, #1  
     #LEA EDI,[OFFSET RTLWriteIntegerBuffer+ECX-1]
     
-    pushq %rcx              #we dont care if (count < real_num_width)
+    # pushq %rcx              #we dont care if (count < real_num_width)
+    str x2, [sp, #-16]! 
 
     RTLWriteIntegerLoop:
-        movq $10,   %rsi
-        xorq %rdx,  %rdx
-        idiv %rsi
+        # movq $10,   %rsi
+        mov x19, #10
+        # xorq %rdx,  %rdx
+        mov x3, #0
+        # idiv %rsi
+        mov x9, x0
+        sdiv x0, x0, x19    #  X0 = X0 / X19
+        mul x8, x0, x19     #  X8 = X0 * X19 
+        sub x3, x9, x8     # X3 = X9 - X8
+
         #convert to string
-        movq %rdx,  %rbx    # ~= lea '0'(%rdx), %rbx
-        addq $'0',  %rbx    
-        
-        movb %bl, (%rdi)
-        decq %rdi
-    loop RTLWriteIntegerLoop
-    
-    popq %rcx
-    
-    movq $0x2000004,    %rax                            # syscall 4 == Write
-    movq $1,            %rdi                            # p1, write_to == 1 == stdout
-    movq RTLWriteIntegerBuffer@GOTPCREL(%rip),  %rsi    # p2, write_from == buf addr
-    movq %rcx,          %rdx                            # p3, count
+        # movq %rdx,  %rbx    # ~= lea '0'(%rdx), %rbx  movq %rdx,  %rbx + addq $'0',  %rbx
+        add x1, x3, #'0'   
 
-    syscall
-
+        # movb %bl, (%rdi)
+        strb w1, [x4]
+        # decq %rdi
+        sub x4, x4, #1 
+        cmp x4, #0
+    # loop RTLWriteIntegerLoop
+    b.ne RTLWriteIntegerLoop
     
-    #popq %rbp
-    popq %rsi
-    ret  $16    #take ret addr from stack and remove 2 args
+    # popq %rcx
+    ldr x2, [sp], #16
+
+    # movq $0x2000004,    %rax                            # syscall 4 == Write
+    mov x0, #64     # syscall 64 == Write
+    # movq $1,            %rdi                            # p1, write_to == 1 == stdout
+    mov x4, #1 
+    #movq RTLWriteIntegerBuffer@GOTPCREL(%rip),  %rsi    # p2, write_from == buf addr
+    adrp x19, RTLWriteIntegerBuffer@PAGE
+    add x19, x19, RTLWriteIntegerBuffer@PAGEOFF 
+
+    # movq %rcx,          %rdx                            # p3, count
+    mov x2, x3 
+    # syscall
+    svc #0 
+
+    # popq %rsi
+    ldr x19, [sp], #16
+    ldr x30, [sp], #16 # take ret addr from stack
+    add sp, sp, #32 
+    # ret  $16    #take ret addr from stack and remove 2 args
+    ret
     
 #------------------------------------------
 #-----------------WriteLn------------------
@@ -264,27 +328,30 @@ RTLWriteLn:
     str x8, [sp, #-16]!   
     # call    RTLWriteChar
     bl RTLWriteChar
-    # addq    $8, %rsp
+ 
     # pushq   $10             #10 == 0xA == LF
     mov x8, #10 
     str x8, [sp, #-16]!  
     # call    RTLWriteChar
     bl RTLWriteChar
-    # addq    $8, %rsp
     ret
    
 
 ReadCharEx:
     pushall
-    #movq    %rsp, %rbp
-    
-    #movq    %rax, %rbx              #copy to %rbx cuz %rax will be used for syscall
-    
-    movq    $0x2000003, %rax        #syscall #3 == Read();
-    xorq    %rdi, %rdi              #p1 == read_from == 0 == stdin
-    movq    ReadCharBuffer@GOTPCREL(%rip), %rsi   #p2 == write_to == buffer
-    movq    $1, %rdx                #p3 == count == single_byte
-    syscall
+  
+    # movq    $0x2000003, %rax        #syscall #3 == Read();
+    mov x0, #63              # syscall #63 == Read();
+    # xorq    %rdi, %rdi              #p1 == read_from == 0 == stdin
+    mov x4, #0 
+    # movq    ReadCharBuffer@GOTPCREL(%rip), %rsi   #p2 == write_to == buffer
+    adrp x19, ReadCharBuffer@PAGE
+    add x19, x1, ReadCharBuffer@PAGEOFF  # p2 == write_to == buffer
+
+    # movq    $1, %rdx                #p3 == count == single_byte
+    mov x3, #1 
+    # syscall
+    svc #0 
 
     #test against value read on prev. step 
     #beware of empty %rbx if ReadCharEx is the first function to be called
@@ -293,23 +360,40 @@ ReadCharEx:
     #orb     %bl, (IsEOF)
 
     #test against num of bytes that were actually read
-    cmpq    $0, %rax
-    setz    %bl                         #bl: (0 == bytes_read) ? 1:0
-    mov     IsEOF@GOTPCREL(%rip), %r8   # address of IsEOF in r8
-    xor     %rcx, %rcx                  
-    orb     %bl, (%r8)
-
+    # cmpq    $0, %rax
+    cmp x0, #0
+    #setz    %bl                         #bl: (0 == bytes_read) ? 1:0
+    cset w1, eq
+    # mov     IsEOF@GOTPCREL(%rip), %r8   # address of IsEOF in r8
+    adrp x8, IsEOF@PAGE
+    add x8, x8, IsEOF@PAGEOFF  # address of IsEOF in x8  
+    ldrb w8, [x3]  # Загружает байт из адреса IsEOF в регистр w8!!!!
+    # xor     %rcx, %rcx     
+    mov x2, 0             
+    # orb     %bl, (%r8) Логическое ИЛИ значения в bl с байтом по адресу r8
+    orr w8, w8, w1 
+    strb w8, [x8] # Сохраняет байт из w2 обратно по адресу IsEOF.
     popall
     ret
     
 ReadCharInit:
-    mov     ReadCharInited@GOTPCREL(%rip), %r8   # address of ReadCharInited in r8    
-    cmpb    $0, (%r8)
-    jnz     ReadInitDone
+    # mov     ReadCharInited@GOTPCREL(%rip), %r8   # address of ReadCharInited in r8    
+    adrp x8, ReadCharInited@PAGE
+    add x8, x8, ReadCharInited@PAGEOFF
+    ldrb w8, [x8] 
+    # cmpb    $0, (%r8)
+    cmp w8, #0
+    # jnz     ReadInitDone
+    b.ne ReadInitDone
         
-        call    ReadCharEx
-        movq    ReadCharInited@GOTPCREL(%rip), %r8   # address of ReadCharInited in r8 
-        movb    $1, (%r8)
+        # call    ReadCharEx
+        bl ReadCharEx 
+        # movq    ReadCharInited@GOTPCREL(%rip), %r8   # address of ReadCharInited in r8 
+        adrp x8, ReadCharInited@PAGE
+        add x8, x8, ReadCharInited@PAGEOFF
+        mov w8, #1 
+        # movb    $1, (%r8)
+        strb w8, [x8]
 
     ReadInitDone:
     ret
@@ -318,80 +402,118 @@ ReadCharInit:
 #----------------ReadChar------------------
 #------------------------------------------    
 RTLReadChar:
-    call    ReadCharInit
-
-    xorq    %rax, %rax
-    movq    ReadCharBuffer@GOTPCREL(%rip), %r8
-    movb    (%r8), %al    # == movzxbl (ReadCharBuffer), %rax
+    # call    ReadCharInit
+    bl      ReadCharInit
+    # xorq    %rax, %rax
+    mov     x0, #0 
+    # movq    ReadCharBuffer@GOTPCREL(%rip), %r8
+    adrp    x8, ReadCharBuffer@PAGE
+    add     x8, x8, ReadCharBuffer@PAGEOFF
+    # movb    (%r8), %al    # == movzxbl (ReadCharBuffer), %rax
+    ldrb    w0, [x8] 
     
-    call    ReadCharEx
-
+    # call    ReadCharEx
+    bl      ReadCharEx
     ret
 
 #------------------------------------------
 #--------------ReadInteger-----------------
 #------------------------------------------    
 RTLReadInteger:
-    call ReadCharInit
-    
+    # call ReadCharInit
+    bl ReadCharInit
     pushall
-    #movq %rsp,  %rbp
-    
-    xorq %rax, %rax
-    #lea 1(%rax), %rcx
-    movq $1, %rcx
+
+    # xorq %rax, %rax
+    mov x0, #0
+    # movq $1, %rcx
+    mov x2, #1 
     
     ReadIntegerSkipWhiteSpace:
-        mov     IsEOF@GOTPCREL(%rip), %r8   # address of IsEOF in r8
-        cmpb $0,    (%r8)                 #cmp with $1 and it works. no idea why {!}
-        jnz  ReadIntegerDone          #{!}{!!} why jz works and jnz 
-        movq ReadCharBuffer@GOTPCREL(%rip), %r8
-        cmpb $0,    (%r8)
-        je ReadIntegerSkipWhiteSpaceDone
-        movq ReadCharBuffer@GOTPCREL(%rip), %r8
-        cmpb $32,   (%r8)        #32d == 0x20 == space
-        ja ReadIntegerSkipWhiteSpaceDone
-        
-        call ReadCharEx
-        
-        jmp ReadIntegerSkipWhiteSpace
-        
+        # mov     IsEOF@GOTPCREL(%rip), %r8   # address of IsEOF in r8
+        adrp x8, IsEOF@PAGE
+        add x8, x8, IsEOF@PAGEOFF
+        ldrb w8, [x8] 
+        # cmpb $0,    (%r8)                 #cmp with $1 and it works. no idea why {!}
+        cmp w8, #0 
+        # jnz  ReadIntegerDone          #{!}{!!} why jz works and jnz 
+        b.ne ReadIntegerDone
+        # movq ReadCharBuffer@GOTPCREL(%rip), %r8
+        adrp x8, ReadCharBuffer@PAGE
+        add x8, x8, ReadCharBuffer@PAGEOFF
+        ldrb w8, [x8]
+        # cmpb $0,    (%r8)
+        cmp w8, #0 
+        # je ReadIntegerSkipWhiteSpaceDone
+        b.eq ReadIntegerSkipWhiteSpaceDone
+        # movq ReadCharBuffer@GOTPCREL(%rip), %r8
+        adrp x8, ReadCharBuffer@PAGE
+        add x8, x8, ReadCharBuffer@PAGEOFF
+        ldrb w8, [x8]
+        # cmpb $32,   (%r8)        #32d == 0x20 == space
+        cmp w8, #32
+        # ja ReadIntegerSkipWhiteSpaceDone
+        b.hi ReadIntegerSkipWhiteSpaceDone # branch if higher
+        # call ReadCharEx
+        bl ReadCharEx
+        # jmp ReadIntegerSkipWhiteSpace
+        b ReadIntegerSkipWhiteSpace
+
     ReadIntegerSkipWhiteSpaceDone:
-    movq ReadCharBuffer@GOTPCREL(%rip), %r8
-    cmpb $'-',  (%r8)
-    jne ReadIntegerNotSigned
-        
-        negq %rcx                   #rcx stores -1 or 1 and will multiply the result
-        call ReadCharEx
+    # movq ReadCharBuffer@GOTPCREL(%rip), %r8
+    adrp x8, ReadCharBuffer@PAGE
+    add x8, x8, ReadCharBuffer@PAGEOFF
+    ldrb w8, [x8] 
+
+    # cmpb $'-',  (%r8)
+    cmp w8, #'-' 
+    #jne ReadIntegerNotSigned
+    b.ne ReadIntegerNotSigned  
+        #negq %rcx                   #rcx stores -1 or 1 and will multiply the result
+        neg x2, x2 
+        # call ReadCharEx
+        bl ReadCharEx
         
     ReadIntegerNotSigned:
     ReadIntegerLoop:
-        xorq %rbx, %rbx
-        movq ReadCharBuffer@GOTPCREL(%rip), %r8
-        movb (%r8),  %bl
+        # xorq %rbx, %rbx
+        mov x1, #0
+        # movq ReadCharBuffer@GOTPCREL(%rip), %r8
+        adrp x8, ReadCharBuffer@PAGE
+        add x8, x8, ReadCharBuffer@PAGEOFF   
+        ldrb w8, [x8]                # movb (%r8),  %bl
+
         
-        cmpb $'0',  %bl 
-        jb ReadIntegerDone
-        cmpb $'9',  %bl
-        ja ReadIntegerDone
+        # cmpb $'0',  %bl 
+        cmp w8, #'0' 
+        # jb ReadIntegerDone
+        b.lt ReadIntegerDone
+        # cmpb $'9',  %bl
+        cmp w8, #'9' 
+        # ja ReadIntegerDone
+        b.gt ReadIntegerDone
         
-        imul $10,   %rax            #rax *= 10
+        # imul $10,   %rax            #rax *= 10
+        mov x9, #10 
+        mul x0, x0, x9 
         #cast string to int:
-        subq $'0',  %rbx            # == lea -'0'(%rax,%rbx,1),  %rax
-        addq %rbx,  %rax  
+        # subq $'0',  %rbx            # == lea -'0'(%rax,%rbx,1),  %rax
+        sub w8, w8, #'0'
+        #addq %rbx,  %rax 
+        add x0, x0, x1 
                   
         
-        call ReadCharEx
-        jmp ReadIntegerLoop
+        # call ReadCharEx
+        bl ReadCharEx 
+        # jmp ReadIntegerLoop
+        b ReadIntegerLoop
     
     ReadIntegerDone:
 
-    #movq $1, %rcx
-
-    imul %rcx               #rax *= rcx  (rcx={1;-1})
-
-    movq %rax, (%rsp)       #rax is on top of stack (look at pushall())
-    
+    # imul %rcx               #rax *= rcx  (rcx={1;-1})
+    mul x0, x0, x2
+    # movq %rax, (%rsp)       #rax is on top of stack (look at pushall())
+    str x0, [sp]
     popall
     ret
 
@@ -402,18 +524,31 @@ RTLReadInteger:
 #so put there some trash before calling it
 #------------------------------------------   
 RTLReadLn:
-    call ReadCharInit
+    # call ReadCharInit
+    bl ReadCharInit
+    # mov     IsEOF@GOTPCREL(%rip), %r8   # address of IsEOF in r8
+    adrp x8, IsEOF@PAGE             
+    add x8, x8, IsEOF@PAGEOFF
+    ldrb w8, [x8]  
+    # cmpb    $0, (%r8)
+    cmp w8, #0 
+    # jne     ReadLnDone
+    b.ne ReadLnDone
+        # movq ReadCharBuffer@GOTPCREL(%rip), %r8
+        adrp x8, ReadCharBuffer@PAGE   
+        add x8, x8, ReadCharBuffer@PAGEOFF
+        # movb (%r8), %bl
+        # cmpb    $10, %bl  #cmp to LF
+        ldrb w8, [x8] # Сравнение w8 с 10 (LF)
+
+        # je      ReadLnDone
+        b.eq ReadLnDone
     
-    mov     IsEOF@GOTPCREL(%rip), %r8   # address of IsEOF in r8
-    cmpb    $0, (%r8)
-    jne     ReadLnDone
-        movq ReadCharBuffer@GOTPCREL(%rip), %r8
-        movb (%r8), %bl
-        cmpb    $10, %bl  #cmp to LF
-        je      ReadLnDone
-    
-            call    ReadCharEx
-            jmp     RTLReadLn
+            # call    ReadCharEx
+            bl ReadCharEx                   
+      
+            # jmp     RTLReadLn
+            b RTLReadLn
     
     ReadLnDone:
     ret
@@ -422,141 +557,36 @@ RTLReadLn:
 #-------------------EOF--------------------
 #------------------------------------------         
 RTLEOF:
-    xorq    %rax, %rax
-    mov     IsEOF@GOTPCREL(%rip), %r8   # address of IsEOF in r8
-    movb    (%r8), %al
+    # xorq    %rax, %rax
+    mov x0, #0
+    # mov     IsEOF@GOTPCREL(%rip), %r8   # address of IsEOF in r8
+    adrp x8, IsEOF@PAGE         
+    add x8, x8, IsEOF@PAGEOFF
+    # movb    (%r8), %al
+    ldrb w0, [x8]
     ret
 
 #------------------------------------------
 #------------------EOLN--------------------
 #------------------------------------------    
 RTLEOLN:
-    movq    ReadCharBuffer@GOTPCREL(%rip), %r8
-    cmpb    $10, (%r8)       #cmp to LF
-    sete    %dl                         #bero's legacy
+    # movq    ReadCharBuffer@GOTPCREL(%rip), %r8
+    adrp x8, ReadCharBuffer@PAGE       
+    add x8, x8, ReadCharBuffer@PAGEOFF
+    ldrb w8, [x8]
+    # cmpb    $10, (%r8)       #cmp to LF
+    cmp w8, #10 
+    # sete    %dl                         #bero's legacy
+    cset w3, eq 
     ret
 
 #------------------------------------------
 #------------------Halt--------------------
 #------------------------------------------        
 RTLHalt:
-    mov x0, #93                  // syscall #93 == Exit()
-    mov x4, #0                   // exit process state
+    mov x0, #93
+    mov x4, #0                    
     svc #0 
-
-
-#------------------------------------------#
-#-                 Tests                  -#
-#------------------------------------------#
-Test1:
-    #test 1: ReadInt, WriteChar, WriteInt, WriteLine
-    #test input(-1337 + space): "-1337 "
-
-    #expected: 
-    #%entered_num%- 1234
-    #A
-
-    call RTLReadInteger
-    call RTLReadLn
-
-    pushq %rax
-    pushq $1
-    call RTLWriteInteger
-    #addq $16, %rsp
-    
-    #space
-
-    pushq $-1234
-    pushq $6
-    call RTLWriteInteger   
-    #addq $16, %rsp
-    call RTLWriteLn
-
-    pushq $'A'
-    call RTLWriteChar  
-    call RTLWriteLn
-    
-    call RTLHalt
-    
-Test2:
-    #test 2: ReadChar, EndOfLine, EndOfFile, WriteInt
-    #test input(B + linebreak): "B\n"
-
-    #expected
-    #{B66}{10}{1}{*1}
-
-    call RTLReadChar
-    parleft
-    raxchar                     #should be "B"
-    #raxint                      #should be 66(B)
-    pushq %rax
-    pushq $1
-    call RTLWriteInteger    
-    parright
-    
-    #
-    parleft
-    xorq %rax, %rax
-    movq ReadCharBuffer@GOTPCREL(%rip), %r8
-    movb (%r8), %al #should be 10 == LF
-    # raxint
-    pushq %rax
-    pushq $1
-    call RTLWriteInteger
-    parright
-    #
-    
-    xorq %rdx, %rdx
-    call RTLEOLN
-    parleft
-    pushq %rdx
-    pushq $1
-    call RTLWriteInteger        #should be 1 cuz of linebreak
-    #addq $16, %rsp
-    parright
-    
-
-    call RTLEOF
-    parleft
-    raxchar
-    #raxint
-    pushq %rax
-    pushq $1
-    call RTLWriteInteger
-    parright
-    
-    call RTLHalt
-
-Test3:
-    #test3: ReadLn, ReadChar
-    #test input(linebreak + A):"\nA" 
-
-    #expected
-    #{A 65}
-    
-#put smth into %rax in case IsEOF wont be triggered after first char
-    movq $1, %rax   
-    call RTLReadLn
-    
-    call RTLReadChar
-    parleft
-    raxchar             #should be "A"
-    space
-    #raxint              #should be 65(A)
-    pushq %rax
-    pushq $1
-    call RTLWriteInteger
-    parright
-    
-    call RTLHalt
-
-
-Test4:
-    pushq $-1234
-    pushq $6
-    call RTLWriteInteger
-    call RTLWriteLn
-    call RTLHalt
 
     
 #//==----------------------------------==//
@@ -567,10 +597,9 @@ Test4:
 #------------------------------------------
 StubEntryPoint:
     mov sp, x27 
-    adrp x10, RTLFunctionTable@PAGE
-    add x10, x10, RTLFunctionTable@PAGEOFF
-    mov x10, [x10] 
-    mov x10, x10   
+    adrp x19, RTLFunctionTable@PAGE
+    add x19, x19, RTLFunctionTable@PAGEOFF
+
 # movq RTLFunctionTable@GOTPCREL(%rip), %rsi      # store functionTable and don't change %rsi
 ProgramEntryPoint:
 
