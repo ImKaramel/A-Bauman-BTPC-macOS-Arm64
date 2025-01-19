@@ -2660,72 +2660,185 @@ var LastOutputCodeValue,PC:integer;
 
 procedure OCPushX0;
 begin
-  WriteLn('str x0, [sp, #-16]!');
+  // WriteLn('str x0, [sp, #-16]!');
+  EmitByte($e0);   
+  EmitByte($0f);
+  EmitByte($1f);
+  EmitByte($f8); 
   LastOutputCodeValue:=locPushX0;
 end;
 
 procedure OCPushX1;
 begin
-  WriteLn('str x1, [sp, #-16]!');
+  // WriteLn('str x1, [sp, #-16]!');
+  EmitByte($e1);   
+  EmitByte($0f);
+  EmitByte($1f);
+  EmitByte($f8); 
   LastOutputCodeValue:=locPushX0;
 end;
 
 procedure OCPopX0;
 begin
-  WriteLn('ldr x0, [sp], #16');
+  // WriteLn('ldr x0, [sp], #16');
+  EmitByte($e0);   
+  EmitByte($07);
+  EmitByte($41);
+  EmitByte($f8); 
   LastOutputCodeValue:=locPopX0;
 end;
 
 procedure OCPopX1;
 begin
-  WriteLn('ldr x1, [sp], #16');
+  // WriteLn('ldr x1, [sp], #16');
+ EmitByte($e1);   
+ EmitByte($07);
+ EmitByte($41);
+ EmitByte($f8); 
  LastOutputCodeValue:=locPopX1;
+end;
+
+procedure OCPopESI;
+begin
+ // WriteLn('ldr x19, [sp], #16');
+ EmitByte($f3);   
+ EmitByte($07);
+ EmitByte($41);
+ EmitByte($f8); 
+ LastOutputCodeValue:=locPopESI;
 end;
 
 procedure OCXorX0X0;
 begin
- WriteLn('eor x0, x0, x0');
+ // WriteLn('eor x0, x0, x0');
+ EmitByte($00);   
+ EmitByte($00);
+ EmitByte($00);
+ EmitByte($ca); 
  LastOutputCodeValue:=locXorEDXEDX;
+end;
+
+procedure OCValToReg;
+begin
+ // WriteLn('mov x12, #1'); 
+ EmitByte($2c);   
+ EmitByte($00);
+ EmitByte($80);
+ EmitByte($d2);
 end;
 
 procedure OCIDIVX1;
 begin
- WriteLn('sdiv x0, x1, x0');
+ // WriteLn('sdiv x0, x1, x0');
+ EmitByte($20);   
+ EmitByte($0c);
+ EmitByte($c0);
+ EmitByte($9a); 
  LastOutputCodeValue:=locIDivEBX;
 end;
 
 procedure OCCmpX1X0;
 begin
- WriteLn('cmp x1, x0');
+ // WriteLn('cmp x1, x0');
+ EmitByte($3f);   
+ EmitByte($00);
+ EmitByte($00);
+ EmitByte($eb); 
  LastOutputCodeValue:=locCmpX1X0;
 end;
 
 procedure OCMovDWordPtrX1X0;
 begin
- WriteLn('str x0, [x1]');
+ // WriteLn('str x0, [x1]');
+ EmitByte($20);   
+ EmitByte($00);
+ EmitByte($00);
+ EmitByte($f9); 
  LastOutputCodeValue:=locMovDWordPtrEBXEAX;
 end;
 
 procedure OCNegDWordPtrESP;
 begin
   OCPopX0;
-  WriteLn('mvn x0, x0');
+  // WriteLn('mvn x0, x0');
+  EmitByte($e0);   
+  EmitByte($03);
+  EmitByte($20);
+  EmitByte($aa); 
   OCPushX0;
  LastOutputCodeValue:=locNegDWordPtrESP;
 end;
 
 procedure OCMovX0DWordPtrESP;
 begin
- WriteLn('ldr x0, [sp]'); (* MOV X0,DWORD PTR {ESP} *)
+ // WriteLn('ldr x0, [sp]'); (* MOV X0,DWORD PTR {ESP} *)
+ EmitByte($e0);   
+ EmitByte($03);
+ EmitByte($40);
+ EmitByte($f9); 
  LastOutputCodeValue:=locMovX0DWordPtrESP;
 end;
 
 procedure OCCallDWordPtrX19Ofs(Ofs:integer);
 begin
  WriteLn('mov x2, #', Ofs);
- WriteLn('ldr x3, [x19, x2]');
- WriteLn('blr x3');
+ // WriteLn('ldr x3, [x19, x2]');
+ EmitByte($63);   
+ EmitByte($6a);
+ EmitByte($62);
+ EmitByte($f8); 
+ // WriteLn('blr x3');
+ EmitByte($60);   
+ EmitByte($00);
+ EmitByte($3f);
+ EmitByte($d6); 
  LastOutputCodeValue:=locCallDWordPtrESIOfs;
+end;
+
+procedure OCXChgEDXESI;
+begin
+ // writeLn('mov x8, x4');
+ EmitByte($e8);   
+ EmitByte($03);
+ EmitByte($04);
+ EmitByte($aa); 
+ // writeLn('mov x4, x19');
+ EmitByte($e4);   
+ EmitByte($03);
+ EmitByte($13);
+ EmitByte($aa); 
+ // writeLn('mov x19, x8');
+ EmitByte($f3);   
+ EmitByte($03);
+ EmitByte($08);
+ EmitByte($aa); 
+ LastOutputCodeValue:=locXChgEDXESI;
+end;
+
+procedure OCMovECXImm(Value:integer);
+begin
+//MOV RCX, Value
+ WriteLn('mov x2, #', Value);
+ LastOutputCodeValue:=locMovECXImm;
+end;
+
+procedure OCREPMOVSB;
+begin
+  WriteLn('mov x0, src');
+  WriteLn('');
+  WriteLn('');
+  WriteLn('');
+  WriteLn('');
+  WriteLn('');
+  WriteLn('');
+  WriteLn('');
+//     MOV     X2, X3              // X2 = RCX (количество байтов для копирования)
+// 1:  LDRB    W0, [X19], #1      // Загрузить байт из [X19] в W0 и инкрементировать X19
+//     STRB    W0, [X4], #1       // Сохранить байт из W0 в [X4] и инкрементировать X4
+//     SUBS    X2, X2, #1         // Вычесть 1 из X2
+//     BNE     1b                 // Если X2 не ноль, повторить
+
+ LastOutputCodeValue:=locREPMOVSB;
 end;
 
 var JumpTable:array[1:MaximalCodeSize] of integer;
@@ -2751,8 +2864,16 @@ begin
    OPAdd:begin
     OCPopX0;
     OCPopX1;
-    WriteLn('add x0, x0, x1');
-    WriteLn('str x0, [sp, #-16]!');
+    // WriteLn('add x0, x0, x1');
+    EmitByte($00);   
+    EmitByte($00);
+    EmitByte($01);
+    EmitByte($8b); 
+    // WriteLn('str x0, [sp, #-16]!');
+    EmitByte($e0);   
+    EmitByte($0f);
+    EmitByte($1f);
+    EmitByte($f8); 
     LastOutputCodeValue:=locNone;
    end;
    OPNeg:begin
@@ -2761,7 +2882,11 @@ begin
    OPMul:begin
     OCPopX1;
     OCPopX0;
-    WriteLn('mul x0, x0, x1');
+    // WriteLn('mul x0, x0, x1');
+    EmitByte($00);   
+    EmitByte($7c);
+    EmitByte($01);
+    EmitByte($9b); 
     OCPushX0;
    end;
    OPDivD:begin
@@ -2778,7 +2903,11 @@ begin
     OCPushX0;
    end;
    OPDiv2:begin
-    WriteLn('asr x0, x0, #2');
+    // WriteLn('asr x0, x0, #2');
+    EmitByte($00);   
+    EmitByte($fc);
+    EmitByte($42);
+    EmitByte($93); 
     LastOutputCodeValue:=locNone;
    end;
    OPRem2:begin
@@ -2792,7 +2921,12 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    WriteLn('csel x0, #0, #1, eq');
+    OCValToReg;
+    // WriteLn('csel x0, xzr, x12, eq');
+    EmitByte($e0);   
+    EmitByte($03);
+    EmitByte($8c);
+    EmitByte($9a);
     LastOutputCodeValue:=locNone;
     OCPushX0;
    end;
@@ -2800,7 +2934,12 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    WriteLn('csel x0, #0, #1, ne');
+    OCValToReg;
+    // WriteLn('csel x0, xzr, x12, ne');
+    EmitByte($e0);   
+    EmitByte($13);
+    EmitByte($8c);
+    EmitByte($9a);
     LastOutputCodeValue:=locNone;
     OCPushX0;
    end;
@@ -2808,7 +2947,12 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    WriteLn('csel x0, #0, #1, lt');
+    OCValToReg;
+    // WriteLn('csel x0, xzr, x12, lt');
+    EmitByte($e0);   
+    EmitByte($b3);
+    EmitByte($8c);
+    EmitByte($9a);
     LastOutputCodeValue:=locNone;
     OCPushX0;
    end;
@@ -2816,7 +2960,12 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    WriteLn('csel x0, #0, #1, le');
+    OCValToReg;
+    // WriteLn('csel x0, xzr, x12, le');
+    EmitByte($e0);   
+    EmitByte($d3);
+    EmitByte($8c);
+    EmitByte($9a);
     LastOutputCodeValue:=locNone;
     OCPushX0;
    end;
@@ -2824,7 +2973,12 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    WriteLn('csel x0, #0, #1, gt');
+    OCValToReg;
+    // WriteLn('csel x0, xzr, x12, gt');
+    EmitByte($e0);   
+    EmitByte($c3);
+    EmitByte($8c);
+    EmitByte($9a);
     LastOutputCodeValue:=locNone;
     OCPushX0;
    end;
@@ -2832,7 +2986,12 @@ begin
     OCPopX1;
     OCPopX0;
     OCCmpX1X0;
-    WriteLn('csel x0, #0, #1, ge');
+    OCValToReg;
+    // WriteLn('csel x0, xzr, x12, ge');
+    EmitByte($e0);   
+    EmitByte($a3);
+    EmitByte($8c);
+    EmitByte($9a);
     LastOutputCodeValue:=locNone;
     OCPushX0;
    end;
@@ -2845,29 +3004,50 @@ begin
    OPSwap:begin
     OCPopX1;
     OCPopX0;
-    WriteLn('str x1, [sp, #-16]!');
+    OCPushX1;
     LastOutputCodeValue:=locNone;
     OCPushX0;
    end;
    OPAndB:begin
     OCPopX0;
     OCPopX1;
-    WriteLn('cmp x1, 0');
-    WriteLn('csel x0, 0, x0, eq');
+    // WriteLn('cmp x1, 0');
+    EmitByte($3f);   
+    EmitByte($00);
+    EmitByte($00);
+    EmitByte($f1);
+    // WriteLn('csel x0, xzr, x0, eq');
+    EmitByte($e0);   
+    EmitByte($03);
+    EmitByte($80);
+    EmitByte($9a);
     OCPushX0;
     LastOutputCodeValue:=locNone;
    end;
    OPOrB:begin
     OCPopX0;
     OCPopX1;
-    WriteLn('cmp x1, 1');
-    WriteLn('csel x0, 1, x0, eq');
+    // WriteLn('cmp x1, 1');
+    EmitByte($3f);   
+    EmitByte($04);
+    EmitByte($00);
+    EmitByte($f1);
+    OCValToReg;
+    // WriteLn('csel x0, x12, x0, eq');
+    EmitByte($80);   
+    EmitByte($01);
+    EmitByte($80);
+    EmitByte($9a);
     OCPushX0;
     LastOutputCodeValue:=locNone;
    end;
    OPLoad:begin
     OCPopX0;
-    WriteLn('ldr x1, [x0]');
+    // WriteLn('ldr x1, [x0]');
+    EmitByte($01);   
+    EmitByte($00);
+    EmitByte($40);
+    EmitByte($f9);
     OCPushX1;
    end;
    OPStore:begin
@@ -2910,14 +3090,18 @@ begin
    end;
    OPLdC:begin
     WriteLn('mov x0, #', Value);
-    WriteLn('str x0, [sp, #-16]!');
+    OCPushX0;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPLdA:begin
     Value := Value * 4;
     if Value = 0 then begin
-        WriteLn('mov x0, x27');
+        // WriteLn('mov x0, x27');
+        EmitByte($e0);   
+        EmitByte($03);
+        EmitByte($1b);
+        EmitByte($aa);
     end else begin
         WriteLn('add x0, x27, #', Value );
     end;
@@ -2958,7 +3142,11 @@ begin
     Value:=Value-8;
     Value:=Value*4;
     if Value=0 then begin
-      WriteLn('str x0, [sp]'); { MOV DWORD PTR [ESP],X0 }
+      // WriteLn('str x0, [sp]'); { MOV DWORD PTR [ESP],X0 }
+      EmitByte($e0);   
+      EmitByte($03);
+      EmitByte($00);
+      EmitByte($f9);
     end else if (Value>=-128) and (Value<=127) then begin
      WriteLn('str x0, [sp, #', Value ,']'); { MOV DWORD PTR [ESP+BYTE Value],X0 }
     end else begin
@@ -2975,23 +3163,37 @@ begin
     PC:=PC+1;
    end;
    OPMove:begin
+   // EDX = rdi = x4 ESI = rsi = x19 (пусть будет так)
+    OCXChgEDXESI;
+    writeLn('ldr x14, [sp], #16');
+    LastOutputCodeValue:=locNone;
+    OCPopESI;
+    Value:=Value*4;
+    OCMovECXImm(Value);
+    OCREPMOVSB;
+    OCXChgEDXESI;
+    PC:=PC+1;
     //TODO
    end;
    OPCopy:begin
     //TODO
    end;
    OPAddC:begin
-    WriteLn('ldr x0, [sp], #16');
+    OCPopX0;
     WriteLn('add x0, x0, #', Value);
-    WriteLn('str x0, [sp, #-16]!');
+    OCPushX0;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPMulC:begin
-    WriteLn('ldr x0, [sp], #16');
+    OCPopX0;
     WriteLn('mov x1, #', Value);
-    WriteLn('mul x0, x0, x1');
-    WriteLn('str x0, [sp, #-16]!');
+    // WriteLn('mul x0, x0, x1');
+    EmitByte($00);   
+    EmitByte($7c);
+    EmitByte($01);
+    EmitByte($9b);
+    OCPushX0;
     PC:=PC+1;
    end;
    OPJmp:begin
@@ -3007,7 +3209,11 @@ begin
    OPJZ:begin
     CountJumps:=CountJumps+1;
     OCPopX0;
-    WriteLn('cmp x0, 0');
+    // WriteLn('cmp x0, xzr');
+    EmitByte($1f);   
+    EmitByte($00);
+    EmitByte($1f);
+    EmitByte($eb);
     WriteLn('b.eq l_', Value);
     JumpTable[CountJumps]:= PC div 2 + 1;
     LastOutputCodeValue:=locNone;
@@ -3033,7 +3239,11 @@ begin
       WriteLn('add sp, sp, #', Value);
       WriteLn('ret');
     end else if Value=0 then begin
-     WriteLn('ret'); { RET }
+     // WriteLn('ret'); { RET }
+     EmitByte($c0);   
+     EmitByte($03);
+     EmitByte($5f);
+     EmitByte($d6);
     end else begin
      Error(145);
     end;
