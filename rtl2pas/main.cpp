@@ -158,7 +158,6 @@ mach_header MachHeader;
 std::vector<load_command> load_commands;
 
 void findSectionHeaders(FILE *f) {
-
     rewind(f);
     fread(&MachHeader, 1, sizeof(MachHeader), f);
     std::cout << "MachOHeaderSize: " << std::hex << sizeof(MachHeader) << std::endl;
