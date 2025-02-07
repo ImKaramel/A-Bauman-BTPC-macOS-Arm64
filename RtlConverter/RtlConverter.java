@@ -68,27 +68,25 @@ public class RtlConverter {
         return PROLOGUE_RTL_ENDING + convertInternal(ENDING_OFFSET, fileSize) + EPILOGUE;
     }
 
-    private String convertInternal(int startFrom, int endAt) throws IOException {
-        assert rtlContent.length > endAt;
+    private String convertInternal(int startFromIncluded, int endAtNotIncluded) throws IOException {
+        assert rtlContent.length > endAtNotIncluded;
         StringBuilder ret = new StringBuilder();
         // индекс в rtlContent
-        for (int idx = startFrom; idx < endAt; ) {
+        for (int idx = startFromIncluded; idx < endAtNotIncluded; ) {
             // Формируем вызов с 20 символами
-            if (endAt - idx >= LONG_STRING_SIZE) {
+            if (endAtNotIncluded - idx >= LONG_STRING_SIZE) {
                 ret.append(FUN_LONG_STRING_PREFIX);
                 for (int i = 0; i < LONG_STRING_SIZE; i++) {
                     int innerIdx = idx + i;
-                    useByte(innerIdx);
-                    ret.append(convertByteToPasString(rtlContent[innerIdx]));
+                    ret.append(convertByteToPasString(useByte(innerIdx)));
                 }
                 ret.append(FUN_SUFFIX);
                 idx += LONG_STRING_SIZE;
                 continue;
             }
 
-            useByte(idx);
             ret.append(FUN_CHAR_PREFIX);
-            ret.append(convertByteToPasString(rtlContent[idx]));
+            ret.append(convertByteToPasString(useByte(idx)));
             ret.append(FUN_SUFFIX);
 
             idx++;
@@ -96,12 +94,13 @@ public class RtlConverter {
         return ret.toString();
     }
 
-    private void useByte(int idx) {
+    private byte useByte(int idx) {
         if (selfCheckSet.get(idx)) {
             throw new IllegalStateException("Byte at " + idx + " is already used.");
         }
         selfCheckSet.set(idx);
         counter.incrementAndGet();
+        return rtlContent[idx];
     }
 
     private String convertByteToPasString(byte b) {
@@ -110,7 +109,7 @@ public class RtlConverter {
 
     public static void main(String[] args) throws IOException {
         RtlConverter rtlConverter = new RtlConverter();
-        Files.writeString(Paths.get("stub.txt"), rtlConverter.convert(Path.of("rtl64macOS")));
+        Files.writeString(Paths.get(args[1]), rtlConverter.convert(Paths.get(args[0])));
         System.out.println("I am OK.");
     }
 }

@@ -112,32 +112,21 @@
             "command": "/bin/sh",
             "args": [
                 "-c",
-                "mkdir -p target && cd rtl2pas && as rtl64macOS.s -o ../target/rtl64macOS.o && ld -o ../target/rtl64macOS ../target/rtl64macOS.o -no_compact_unwind"
+                "mkdir -p target && cd RtlConverter && as rtl64macOS.s -o ../target/rtl64macOS.o && ld -o ../target/rtl64macOS ../target/rtl64macOS.o -no_compact_unwind"
             ],
             "type": "shell",
             "problemMatcher": []
         },
         {
-            "label": "Build rtl2pas",
+            "label": "Generate stub.txt using RtlConverter",
             "command": "/bin/sh",
             "args": [
                 "-c",
-                "mkdir -p target && cd rtl2pas && g++ main.cpp -o ../target/rtl2pas"
-            ],
-            "type": "shell",
-            "problemMatcher": []
-        },
-        {
-            "label": "Generate stub.txt using rtl2pas",
-            "command": "/bin/sh",
-            "args": [
-                "-c",
-                "cd target && ./rtl2pas"
+                "cd RtlConverter && java RtlConverter.java ../target/rtl64macOS ../target/stub.txt"
             ],
             "type": "shell",
             "dependsOn": [
                 "Build rtl64macOS binary",
-                "Build rtl2pas"
             ],
             "problemMatcher": []
         },
