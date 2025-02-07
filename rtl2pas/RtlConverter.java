@@ -17,7 +17,7 @@ public class RtlConverter {
             procedure EmitEndingStub;
             begin
             """;
-    private static final String EPILOGUE = "end.\n";
+    private static final String EPILOGUE = "end;\n";
 
     private static final String FUN_LONG_STRING_PREFIX = "    OutputCodeString(";
     private static final String FUN_CHAR_PREFIX = "    OutputCodeChar(";
@@ -42,13 +42,13 @@ public class RtlConverter {
         String end = convertEnd();
         int endByteSize = counter.get();
 
-        String ret = begin + "\n" + end + "\n" + convertContants(endByteSize);
+        String ret = begin + "\n" + end + "\n" + convertConstants(endByteSize);
         checkAllBytesAreUsed();
         return ret;
     }
 
-    private String convertContants(int endByteSize) {
-        return "EndStubSize=" + endByteSize + ";";
+    private String convertConstants(int endByteSize) {
+        return "const EndStubSize=" + endByteSize + ";";
     }
 
     private void checkAllBytesAreUsed() {

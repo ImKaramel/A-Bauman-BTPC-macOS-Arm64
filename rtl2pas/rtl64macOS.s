@@ -1,4 +1,3 @@
-//as rtl64macOS.s -o rtl64macOS.o && ld rtl64macOS.o -e _main -o rtl64macOS -lSystem -syslibroot $(xcrun --show-sdk-path) 
 
 .section __DATA,__data
     .align 3
@@ -6,7 +5,6 @@ RTLFunctionTable:
     .quad RTLWriteChar
 
 Copyright:   
-//objdump rtl64macOS > rtl64macOS.asm
 .section __BSS,__bss
 
 .macro pushall
@@ -60,7 +58,3 @@ StubEntryPoint:
     add x19, x19, RTLFunctionTable@PAGEOFF
 
 ProgramEntryPoint:
-    mov x0, #'@'            
-    str x0, [sp, #-16]! 
-    bl RTLWriteChar         
-    b RTLHalt
