@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <vector>
 
+
+
 #define EI_NIDENT (16)
 #define PASCAL_STR_LEN_MAX 20
 
@@ -145,14 +147,17 @@ struct source_version_command {
 struct custom_thread_command {
     uint32_t flavor;
     uint32_t count;
-    x86_thread_state64_t state;
+// #if defined(__x86_64__)
+//     x86_thread_state64_t state;  // Для x86_64
+// #elif defined(__arm64__) || defined(__aarch64__)
+    arm_thread_state64_t state;  // Для ARM64
+// #endif
 };
 
 mach_header MachHeader;
 std::vector<load_command> load_commands;
 
 void findSectionHeaders(FILE *f) {
-
     rewind(f);
     fread(&MachHeader, 1, sizeof(MachHeader), f);
     std::cout << "MachOHeaderSize: " << std::hex << sizeof(MachHeader) << std::endl;
@@ -311,7 +316,7 @@ bool isExecutable(FILE *f) {
 }
 
 int main() {
-
+    
     myfile.open("stub.txt");
 
     FILE *f = fopen("rtl64macOS", "rwb");
