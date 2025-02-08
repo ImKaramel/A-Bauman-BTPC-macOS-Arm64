@@ -6,7 +6,7 @@ import java.util.BitSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RtlConverter {
-    private static final int ENDING_OFFSET = 0x4000; // 16384
+    private static final int END_OFFSET = 0x4000 /* 16384 */;
 
     private static final String PROLOGUE_RTL_BEGINNING = """
             procedure EmitStubCode;
@@ -35,20 +35,19 @@ public class RtlConverter {
 
         counter = new AtomicInteger(0);
         String begin = convertBegin();
-        @SuppressWarnings("unused")
         int beginByteSize = counter.get();
 
         counter = new AtomicInteger(0);
         String end = convertEnd();
         int endByteSize = counter.get();
 
-        String ret = begin + "\n" + end + "\n" + convertConstants(endByteSize);
+        String ret = begin + "\n" + end + "\n" + convertConstants(beginByteSize, endByteSize);
         checkAllBytesAreUsed();
         return ret;
     }
 
-    private String convertConstants(int endByteSize) {
-        return "const EndStubSize=" + endByteSize + ";";
+    private String convertConstants(int beginByteSize, int endByteSize) {
+        return "const StartStubSize=" + beginByteSize + ";\n" + "const EndStubSize=" + endByteSize + ";";
     }
 
     private void checkAllBytesAreUsed() {
@@ -60,19 +59,19 @@ public class RtlConverter {
     }
 
     private String convertBegin() throws IOException {
-        return PROLOGUE_RTL_BEGINNING + convertInternal(0, ENDING_OFFSET) + EPILOGUE;
+        return PROLOGUE_RTL_BEGINNING + convertInternal(0, END_OFFSET) + EPILOGUE;
     }
 
     private String convertEnd() throws IOException {
         int fileSize = rtlContent.length;
-        return PROLOGUE_RTL_ENDING + convertInternal(ENDING_OFFSET, fileSize) + EPILOGUE;
+        return PROLOGUE_RTL_ENDING + convertInternal(END_OFFSET, fileSize) + EPILOGUE;
     }
 
-    private String convertInternal(int startFromIncluded, int endAtNotIncluded) throws IOException {
+    private String convertInternal(int startFromIncluded, int endAtNotIncluded) {
         assert rtlContent.length > endAtNotIncluded;
         StringBuilder ret = new StringBuilder();
         // индекс в rtlContent
-        for (int idx = startFromIncluded; idx < endAtNotIncluded; ) {
+        for (int idx = startFromIncluded; idx < endAtNotIncluded;) {
             // Формируем вызов с 20 символами
             if (endAtNotIncluded - idx >= LONG_STRING_SIZE) {
                 ret.append(FUN_LONG_STRING_PREFIX);
