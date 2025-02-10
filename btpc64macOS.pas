@@ -2078,8 +2078,8 @@ end;
 procedure EmitStubCode;
 begin
     OutputCodeDataSize := 0;
-    OutputCodeString(#207#250#237#254#12#0#0#1#0#0#0#0#2#0#0#0#16#0#0#0);
-    OutputCodeString(#248#2#0#0#133#0#32#0#0#0#0#0#25#0#0#0#72#0#0#0);
+    OutputCodeString(#207#250#237#254#12#0#0#1#0#0#0#0#2#0#0#0#15#0#0#0);
+    OutputCodeString(#48#3#0#0#133#0#32#0#0#0#0#0#25#0#0#0#72#0#0#0);
     OutputCodeString(#95#95#80#65#71#69#90#69#82#79#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#1#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
@@ -2088,37 +2088,39 @@ begin
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#64#0#0#0#0#0#0);
     OutputCodeString(#5#0#0#0#5#0#0#0#1#0#0#0#0#0#0#0#95#95#116#101);
     OutputCodeString(#120#116#0#0#0#0#0#0#0#0#0#0#95#95#84#69#88#84#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#136#63#0#0#1#0#0#0#120#0#0#0);
-    OutputCodeString(#0#0#0#0#136#63#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#0#0#0#0#0#0#0#0#132#60#0#0#1#0#0#0#124#3#0#0);
+    OutputCodeString(#0#0#0#0#132#60#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#4#0#128#0#0#0#0#0#0#0#0#0#0#0#0#25#0#0#0);
     OutputCodeString(#152#0#0#0#95#95#68#65#84#65#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#64#0#0#1#0#0#0#0#64#0#0#0#0#0#0#0#64#0#0);
     OutputCodeString(#0#0#0#0#0#64#0#0#0#0#0#0#3#0#0#0#3#0#0#0);
     OutputCodeString(#1#0#0#0#0#0#0#0#95#95#100#97#116#97#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#95#95#68#65#84#65#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#64#0#0#1#0#0#0#8#0#0#0#0#0#0#0#0#64#0#0);
-    OutputCodeString(#3#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#0#64#0#0#1#0#0#0#168#0#0#0#0#0#0#0#0#64#0#0);
+    OutputCodeString(#4#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#25#0#0#0#72#0#0#0#95#95#76#73);
     OutputCodeString(#78#75#69#68#73#84#0#0#0#0#0#0#0#128#0#0#1#0#0#0);
-    OutputCodeString(#0#64#0#0#0#0#0#0#0#128#0#0#0#0#0#0#24#3#0#0);
+    OutputCodeString(#0#64#0#0#0#0#0#0#0#128#0#0#0#0#0#0#208#4#0#0);
     OutputCodeString(#0#0#0#0#1#0#0#0#1#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#52#0#0#128#16#0#0#0#0#128#0#0#88#0#0#0#51#0#0#128);
-    OutputCodeString(#16#0#0#0#88#128#0#0#48#0#0#0#2#0#0#0#24#0#0#0);
-    OutputCodeString(#144#128#0#0#8#0#0#0#16#129#0#0#112#0#0#0#11#0#0#0);
-    OutputCodeString(#80#0#0#0#0#0#0#0#6#0#0#0#6#0#0#0#2#0#0#0);
-    OutputCodeString(#8#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#34#0#0#128#48#0#0#0#0#128#0#0#8#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#14#0#0#0);
-    OutputCodeString(#32#0#0#0#12#0#0#0#47#117#115#114#47#108#105#98#47#100#121#108);
-    OutputCodeString(#100#0#0#0#0#0#0#0#27#0#0#0#24#0#0#0#189#17#166#93);
-    OutputCodeString(#5#160#61#139#143#182#35#120#233#245#80#0#50#0#0#0#32#0#0#0);
-    OutputCodeString(#1#0#0#0#0#0#15#0#0#0#0#0#1#0#0#0#3#0#0#0);
-    OutputCodeString(#3#7#91#4#42#0#0#0#16#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#40#0#0#128#24#0#0#0#136#63#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#38#0#0#0#16#0#0#0#136#128#0#0#8#0#0#0);
-    OutputCodeString(#41#0#0#0#16#0#0#0#144#128#0#0#0#0#0#0#29#0#0#0);
-    OutputCodeString(#16#0#0#0#128#129#0#0#152#1#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#8#128#0#0#48#0#0#0#2#0#0#0#24#0#0#0#88#128#0#0);
+    OutputCodeString(#35#0#0#0#136#130#0#0#72#2#0#0#11#0#0#0#80#0#0#0);
+    OutputCodeString(#0#0#0#0#32#0#0#0#32#0#0#0#2#0#0#0#34#0#0#0);
+    OutputCodeString(#1#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#14#0#0#0#32#0#0#0);
+    OutputCodeString(#12#0#0#0#47#117#115#114#47#108#105#98#47#100#121#108#100#0#0#0);
+    OutputCodeString(#0#0#0#0#27#0#0#0#24#0#0#0#66#208#182#181#51#50#54#234);
+    OutputCodeString(#181#121#66#42#244#20#176#9#50#0#0#0#32#0#0#0#1#0#0#0);
+    OutputCodeString(#0#0#15#0#0#0#0#0#1#0#0#0#3#0#0#0#3#7#91#4);
+    OutputCodeString(#42#0#0#0#16#0#0#0#0#0#0#0#0#0#0#0#40#0#0#128);
+    OutputCodeString(#24#0#0#0#132#60#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#12#0#0#0#56#0#0#0#24#0#0#0#2#0#0#0#0#0#71#5);
+    OutputCodeString(#0#0#1#0#47#117#115#114#47#108#105#98#47#108#105#98#83#121#115#116);
+    OutputCodeString(#101#109#46#66#46#100#121#108#105#98#0#0#0#0#0#0#38#0#0#0);
+    OutputCodeString(#16#0#0#0#56#128#0#0#32#0#0#0#41#0#0#0#16#0#0#0);
+    OutputCodeString(#88#128#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
@@ -2850,65 +2852,68 @@ begin
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#27#0#0#20#228#15#31#248#243#15#31#248#251#15#31#248);
-    OutputCodeString(#232#15#31#248#227#15#31#248#226#15#31#248#225#15#31#248#224#15#31#248);
-    OutputCodeString(#144#0#128#210#32#0#128#210#225#3#0#145#34#0#128#210#1#16#0#212);
+    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#220#0#0#20#228#15#31#248);
+    OutputCodeString(#243#15#31#248#251#15#31#248#232#15#31#248#227#15#31#248#226#15#31#248);
+    OutputCodeString(#225#15#31#248#224#15#31#248#144#0#128#210#32#0#128#210#225#3#1#145);
+    OutputCodeString(#34#0#128#210#1#0#0#212#224#7#65#248#225#7#65#248#226#7#65#248);
+    OutputCodeString(#227#7#65#248#232#7#65#248#251#7#65#248#243#7#65#248#228#7#65#248);
+    OutputCodeString(#192#3#95#214#243#15#31#248#225#11#64#249#224#19#64#249#31#0#0#241);
+    OutputCodeString(#170#0#0#84#224#3#0#203#33#4#0#209#168#5#128#210#226#255#255#151);
+    OutputCodeString(#2#0#128#210#224#15#31#248#225#15#31#248#31#0#0#241#160#0#0#84);
+    OutputCodeString(#66#4#0#145#72#1#128#210#0#8#200#154#251#255#255#23#95#0#0#241);
+    OutputCodeString(#227#23#159#154#66#0#3#139#225#7#65#248#224#7#65#248#33#0#2#203);
+    OutputCodeString(#63#0#0#241#237#0#0#84#226#15#31#248#8#4#128#210#206#255#255#151);
+    OutputCodeString(#33#4#0#241#161#255#255#84#226#7#65#248#4#0#0#176#132#0#0#145);
+    OutputCodeString(#132#0#2#139#132#4#0#209#226#15#31#248#69#1#128#210#3#0#128#210);
+    OutputCodeString(#233#3#0#170#0#8#197#154#8#124#5#155#35#1#8#203#97#192#0#145);
+    OutputCodeString(#129#0#0#57#132#4#0#209#66#4#0#241#193#254#255#84#226#7#65#248);
+    OutputCodeString(#1#0#128#210#4#0#0#176#132#0#0#145#132#0#2#139#1#0#128#82);
+    OutputCodeString(#129#0#0#57#144#0#128#210#32#0#128#210#226#3#2#170#1#0#0#176);
+    OutputCodeString(#33#0#0#145#1#0#0#212#192#3#95#214#168#1#128#210#171#255#255#151);
+    OutputCodeString(#72#1#128#210#169#255#255#151#192#3#95#214#228#15#31#248#243#15#31#248);
+    OutputCodeString(#251#15#31#248#232#15#31#248#227#15#31#248#226#15#31#248#225#15#31#248);
+    OutputCodeString(#224#15#31#248#0#0#128#210#34#0#128#210#1#0#0#176#33#0#1#145);
+    OutputCodeString(#112#0#128#210#16#0#164#242#1#0#0#212#31#0#0#241#225#23#159#26);
+    OutputCodeString(#8#0#0#176#8#65#1#145#2#1#64#57#66#0#1#42#2#1#0#57);
     OutputCodeString(#224#7#65#248#225#7#65#248#226#7#65#248#227#7#65#248#232#7#65#248);
-    OutputCodeString(#251#7#65#248#243#7#65#248#228#7#65#248#192#3#95#214#0#0#128#210);
-    OutputCodeString(#48#0#128#210#1#16#0#212#192#3#95#214#251#3#0#145#19#0#0#176);
+    OutputCodeString(#251#7#65#248#243#7#65#248#228#7#65#248#192#3#95#214#8#0#0#176);
+    OutputCodeString(#8#33#1#145#8#1#64#57#31#1#0#113#193#0#0#84#220#255#255#151);
+    OutputCodeString(#8#0#0#176#8#33#1#145#40#0#128#82#8#1#0#57#192#3#95#214);
+    OutputCodeString(#245#255#255#151#8#0#0#176#8#1#1#145#0#1#64#57#210#255#255#151);
+    OutputCodeString(#192#3#95#214#239#255#255#151#228#15#31#248#243#15#31#248#251#15#31#248);
+    OutputCodeString(#232#15#31#248#227#15#31#248#226#15#31#248#225#15#31#248#224#15#31#248);
+    OutputCodeString(#0#0#128#210#34#0#128#210#8#0#0#176#8#65#1#145#8#1#64#57);
+    OutputCodeString(#31#1#0#113#65#3#0#84#8#0#0#176#8#1#1#145#8#1#64#57);
+    OutputCodeString(#31#129#0#113#104#0#0#84#187#255#255#151#245#255#255#23#8#0#0#176);
+    OutputCodeString(#8#1#1#145#8#1#64#57#31#181#0#113#97#0#0#84#226#3#2#203);
+    OutputCodeString(#179#255#255#151#8#0#0#176#8#1#1#145#1#1#64#57#63#192#0#113);
+    OutputCodeString(#227#0#0#84#63#228#0#113#168#0#0#84#0#124#9#155#0#0#1#139);
+    OutputCodeString(#169#255#255#151#246#255#255#23#0#124#2#155#224#7#65#248#225#7#65#248);
+    OutputCodeString(#226#7#65#248#227#7#65#248#232#7#65#248#251#7#65#248#243#7#65#248);
+    OutputCodeString(#228#7#65#248#192#3#95#214#188#255#255#151#8#0#0#176#8#65#1#145);
+    OutputCodeString(#8#1#64#57#31#1#0#113#1#1#0#84#8#0#0#176#8#1#1#145);
+    OutputCodeString(#8#1#64#57#31#41#0#113#96#0#0#84#146#255#255#151#244#255#255#23);
+    OutputCodeString(#192#3#95#214#0#0#128#210#8#0#0#176#8#65#1#145#0#1#64#57);
+    OutputCodeString(#192#3#95#214#169#255#255#151#8#0#0#176#8#1#1#145#0#1#64#57);
+    OutputCodeString(#31#40#0#113#224#23#159#154#192#3#95#214#0#0#128#210#48#0#128#210);
+    OutputCodeString(#16#0#164#242#1#0#0#212#192#3#95#214#251#3#0#145#19#0#0#176);
     OutputCodeChar(#115);
-    OutputCodeChar(#2);
-    OutputCodeChar(#0);
+    OutputCodeChar(#130);
+    OutputCodeChar(#1);
     OutputCodeChar(#145);
 end;
 
 procedure EmitEndingStub;
 begin
-    OutputCodeString(#140#63#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#0#0#0#0#60#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#224#63#0#0);
+    OutputCodeString(#1#0#0#0#136#60#0#0#1#0#0#0#224#60#0#0#1#0#0#0);
+    OutputCodeString(#216#61#0#0#1#0#0#0#148#62#0#0#1#0#0#0#172#62#0#0);
+    OutputCodeString(#1#0#0#0#120#63#0#0#1#0#0#0#176#63#0#0#1#0#0#0);
+    OutputCodeString(#196#63#0#0#1#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
@@ -3719,70 +3724,87 @@ begin
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#32#0#0#0#80#0#0#0#80#0#0#0);
-    OutputCodeString(#0#0#0#0#1#0#0#0#0#0#0#0#0#0#0#0#4#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#24#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#24#0#0#0#0#64#6#0#0#64#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#1#0#0#0#0#0#0#0#0#0#0#0#0#1#95#0#18#0#0#0);
-    OutputCodeString(#0#2#0#0#0#3#0#136#127#0#0#2#95#109#104#95#101#120#101#99);
+    OutputCodeString(#0#0#0#0#17#34#96#89#0#0#0#0#0#1#95#0#18#0#0#0);
+    OutputCodeString(#0#2#0#0#0#3#0#132#121#0#0#2#95#109#104#95#101#120#101#99);
     OutputCodeString(#117#116#101#95#104#101#97#100#101#114#0#9#109#97#105#110#0#13#0#0);
-    OutputCodeString(#136#127#4#88#16#0#0#0#28#0#0#0#14#1#0#2#140#63#0#0);
-    OutputCodeString(#1#0#0#0#41#0#0#0#14#1#0#2#228#63#0#0#1#0#0#0);
-    OutputCodeString(#49#0#0#0#14#1#0#2#244#63#0#0#1#0#0#0#64#0#0#0);
-    OutputCodeString(#14#1#0#2#0#64#0#0#1#0#0#0#82#0#0#0#14#2#0#0);
-    OutputCodeString(#0#64#0#0#1#0#0#0#99#0#0#0#14#2#0#2#8#64#0#0);
+    OutputCodeString(#132#121#4#88#36#12#24#36#20#20#100#20#124#40#4#24#44#48#28#44);
+    OutputCodeString(#40#52#4#20#28#20#0#0#0#0#0#0#45#0#0#0#14#1#0#2);
+    OutputCodeString(#136#60#0#0#1#0#0#0#58#0#0#0#14#1#0#2#224#60#0#0);
+    OutputCodeString(#1#0#0#0#74#0#0#0#14#1#0#2#4#61#0#0#1#0#0#0);
+    OutputCodeString(#99#0#0#0#14#1#0#2#16#61#0#0#1#0#0#0#127#0#0#0);
+    OutputCodeString(#14#1#0#2#40#61#0#0#1#0#0#0#159#0#0#0#14#1#0#2);
+    OutputCodeString(#76#61#0#0#1#0#0#0#186#0#0#0#14#1#0#2#96#61#0#0);
+    OutputCodeString(#1#0#0#0#212#0#0#0#14#1#0#2#116#61#0#0#1#0#0#0);
+    OutputCodeString(#232#0#0#0#14#1#0#2#216#61#0#0#1#0#0#0#243#0#0#0);
+    OutputCodeString(#14#1#0#2#236#61#0#0#1#0#0#0#254#0#0#0#14#1#0#2);
+    OutputCodeString(#104#62#0#0#1#0#0#0#11#1#0#0#14#1#0#2#144#62#0#0);
+    OutputCodeString(#1#0#0#0#24#1#0#0#14#1#0#2#148#62#0#0#1#0#0#0);
+    OutputCodeString(#36#1#0#0#14#1#0#2#172#62#0#0#1#0#0#0#51#1#0#0);
+    OutputCodeString(#14#1#0#2#216#62#0#0#1#0#0#0#77#1#0#0#14#1#0#2);
+    OutputCodeString(#8#63#0#0#1#0#0#0#107#1#0#0#14#1#0#2#36#63#0#0);
+    OutputCodeString(#1#0#0#0#128#1#0#0#14#1#0#2#36#63#0#0#1#0#0#0);
+    OutputCodeString(#144#1#0#0#14#1#0#2#80#63#0#0#1#0#0#0#160#1#0#0);
+    OutputCodeString(#14#1#0#2#120#63#0#0#1#0#0#0#170#1#0#0#14#1#0#2);
+    OutputCodeString(#172#63#0#0#1#0#0#0#181#1#0#0#14#1#0#2#176#63#0#0);
+    OutputCodeString(#1#0#0#0#188#1#0#0#14#1#0#2#196#63#0#0#1#0#0#0);
+    OutputCodeString(#196#1#0#0#14#1#0#2#224#63#0#0#1#0#0#0#204#1#0#0);
+    OutputCodeString(#14#1#0#2#244#63#0#0#1#0#0#0#219#1#0#0#14#1#0#2);
+    OutputCodeString(#0#64#0#0#1#0#0#0#237#1#0#0#14#2#0#0#0#64#0#0);
+    OutputCodeString(#1#0#0#0#3#2#0#0#14#2#0#2#64#64#0#0#1#0#0#0);
+    OutputCodeString(#18#2#0#0#14#2#0#2#72#64#0#0#1#0#0#0#33#2#0#0);
+    OutputCodeString(#14#2#0#2#80#64#0#0#1#0#0#0#39#2#0#0#14#2#0#2);
+    OutputCodeString(#96#64#0#0#1#0#0#0#56#2#0#0#14#2#0#2#168#64#0#0);
     OutputCodeString(#1#0#0#0#2#0#0#0#15#1#16#0#0#0#0#0#1#0#0#0);
-    OutputCodeString(#22#0#0#0#15#1#0#0#136#63#0#0#1#0#0#0#32#0#95#95);
-    OutputCodeString(#109#104#95#101#120#101#99#117#116#101#95#104#101#97#100#101#114#0#95#109);
-    OutputCodeString(#97#105#110#0#82#84#76#87#114#105#116#101#67#104#97#114#0#82#84#76);
-    OutputCodeString(#72#97#108#116#0#83#116#117#98#69#110#116#114#121#80#111#105#110#116#0);
-    OutputCodeString(#80#114#111#103#114#97#109#69#110#116#114#121#80#111#105#110#116#0#82#84);
-    OutputCodeString(#76#70#117#110#99#116#105#111#110#84#97#98#108#101#0#67#111#112#121#114);
-    OutputCodeString(#105#103#104#116#0#0#0#0#250#222#12#192#0#0#1#151#0#0#0#1);
-    OutputCodeString(#0#0#0#0#0#0#0#20#250#222#12#2#0#0#1#131#0#2#4#0);
-    OutputCodeString(#0#2#0#2#0#0#0#99#0#0#0#88#0#0#0#0#0#0#0#9);
-    OutputCodeString(#0#0#129#128#32#2#0#12#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#120#0#0#0#0#0#0#0#1#114#116#108#54);
-    OutputCodeString(#52#109#97#99#79#83#0#3#67#213#223#157#73#255#54#135#156#230#220#73);
-    OutputCodeString(#32#47#129#59#65#118#103#89#166#253#15#21#136#192#58#165#26#139#63#173);
-    OutputCodeString(#127#172#178#88#111#198#233#102#192#4#215#209#209#107#2#79#88#5#255#124);
-    OutputCodeString(#180#124#122#133#218#189#139#72#137#44#167#173#127#172#178#88#111#198#233#102);
-    OutputCodeString(#192#4#215#209#209#107#2#79#88#5#255#124#180#124#122#133#218#189#139#72);
-    OutputCodeString(#137#44#167#11#9#60#4#59#202#229#250#47#151#171#183#234#134#110#40#168);
-    OutputCodeString(#226#149#220#1#162#77#130#113#35#151#162#143#14#189#182#238#57#36#155#119);
-    OutputCodeString(#184#35#69#88#57#216#236#249#194#27#140#54#158#78#232#72#192#195#203#202);
-    OutputCodeString(#109#103#208#129#50#183#137#173#127#172#178#88#111#198#233#102#192#4#215#209);
-    OutputCodeString(#209#107#2#79#88#5#255#124#180#124#122#133#218#189#139#72#137#44#167#173);
-    OutputCodeString(#127#172#178#88#111#198#233#102#192#4#215#209#209#107#2#79#88#5#255#124);
-    OutputCodeString(#180#124#122#133#218#189#139#72#137#44#167#173#127#172#178#88#111#198#233#102);
-    OutputCodeString(#192#4#215#209#209#107#2#79#88#5#255#124#180#124#122#133#218#189#139#72);
-    OutputCodeString(#137#44#167#74#54#16#190#100#179#99#196#3#188#156#195#132#28#168#181#195);
-    OutputCodeChar(#186);
-    OutputCodeChar(#83);
-    OutputCodeChar(#181);
-    OutputCodeChar(#36);
-    OutputCodeChar(#224);
-    OutputCodeChar(#221);
-    OutputCodeChar(#131);
-    OutputCodeChar(#81);
-    OutputCodeChar(#220);
-    OutputCodeChar(#65);
-    OutputCodeChar(#226);
-    OutputCodeChar(#167);
-    OutputCodeChar(#153);
-    OutputCodeChar(#65);
-    OutputCodeChar(#97);
+    OutputCodeString(#22#0#0#0#15#1#0#0#132#60#0#0#1#0#0#0#28#0#0#0);
+    OutputCodeString(#1#0#0#1#0#0#0#0#0#0#0#0#32#0#95#95#109#104#95#101);
+    OutputCodeString(#120#101#99#117#116#101#95#104#101#97#100#101#114#0#95#109#97#105#110#0);
+    OutputCodeString(#100#121#108#100#95#115#116#117#98#95#98#105#110#100#101#114#0#82#84#76);
+    OutputCodeString(#87#114#105#116#101#67#104#97#114#0#82#84#76#87#114#105#116#101#73#110);
+    OutputCodeString(#116#101#103#101#114#0#82#84#76#87#114#105#116#101#73#110#116#101#103#101);
+    OutputCodeString(#114#78#111#116#83#105#103#110#101#100#0#82#84#76#87#114#105#116#101#73);
+    OutputCodeString(#110#116#101#103#101#114#80#114#101#67#104#101#99#107#76#111#111#112#0#82);
+    OutputCodeString(#84#76#87#114#105#116#101#73#110#116#101#103#101#114#80#114#101#67#104#101);
+    OutputCodeString(#99#107#76#111#111#112#68#111#110#101#0#82#84#76#87#114#105#116#101#73);
+    OutputCodeString(#110#116#101#103#101#114#80#97#100#100#105#110#103#76#111#111#112#0#82#84);
+    OutputCodeString(#76#87#114#105#116#101#73#110#116#101#103#101#114#78#111#116#80#97#100#100);
+    OutputCodeString(#105#110#103#0#82#84#76#87#114#105#116#101#73#110#116#101#103#101#114#76);
+    OutputCodeString(#111#111#112#0#82#84#76#87#114#105#116#101#76#110#0#82#101#97#100#67);
+    OutputCodeString(#104#97#114#69#120#0#82#101#97#100#67#104#97#114#73#110#105#116#0#82);
+    OutputCodeString(#101#97#100#73#110#105#116#68#111#110#101#0#82#84#76#82#101#97#100#67);
+    OutputCodeString(#104#97#114#0#82#84#76#82#101#97#100#73#110#116#101#103#101#114#0#82);
+    OutputCodeString(#101#97#100#73#110#116#101#103#101#114#83#107#105#112#87#104#105#116#101#83);
+    OutputCodeString(#112#97#99#101#0#82#101#97#100#73#110#116#101#103#101#114#83#107#105#112);
+    OutputCodeString(#87#104#105#116#101#83#112#97#99#101#68#111#110#101#0#82#101#97#100#73);
+    OutputCodeString(#110#116#101#103#101#114#78#111#116#83#105#103#110#101#100#0#82#101#97#100);
+    OutputCodeString(#73#110#116#101#103#101#114#76#111#111#112#0#82#101#97#100#73#110#116#101);
+    OutputCodeString(#103#101#114#68#111#110#101#0#82#84#76#82#101#97#100#76#110#0#82#101);
+    OutputCodeString(#97#100#76#110#68#111#110#101#0#82#84#76#69#79#70#0#82#84#76#69);
+    OutputCodeString(#79#76#78#0#82#84#76#72#97#108#116#0#83#116#117#98#69#110#116#114);
+    OutputCodeString(#121#80#111#105#110#116#0#80#114#111#103#114#97#109#69#110#116#114#121#80);
+    OutputCodeString(#111#105#110#116#0#82#84#76#87#114#105#116#101#73#110#116#101#103#101#114);
+    OutputCodeString(#66#117#102#102#101#114#0#82#101#97#100#67#104#97#114#66#117#102#102#101);
+    OutputCodeString(#114#0#82#101#97#100#67#104#97#114#73#110#105#116#101#100#0#73#115#69);
+    OutputCodeString(#79#70#0#82#84#76#70#117#110#99#116#105#111#110#84#97#98#108#101#0);
+    OutputCodeChar(#67);
+    OutputCodeChar(#111);
+    OutputCodeChar(#112);
+    OutputCodeChar(#121);
+    OutputCodeChar(#114);
+    OutputCodeChar(#105);
+    OutputCodeChar(#103);
+    OutputCodeChar(#104);
+    OutputCodeChar(#116);
+    OutputCodeChar(#0);
+    OutputCodeChar(#0);
+    OutputCodeChar(#0);
+    OutputCodeChar(#0);
+    OutputCodeChar(#0);
+    OutputCodeChar(#0);
     OutputCodeChar(#0);
 end;
 
 const StartStubSize=16384;
-const EndStubSize=17176;
+const EndStubSize=17616;
 
   {__TEXT}
   OffsSegTextVMSize=$88;
@@ -3791,7 +3813,7 @@ const EndStubSize=17176;
   ValSegTextFileSize=$4000;
   {__text}
   OffsSectTextSize=$D8;
-  ValSectTextSize=$78;
+  ValSectTextSize=$37C;
   {__DATA}
   OffsSegDataVMAddr=$118;
   OffsSegDataOffs=$128; 
@@ -3807,61 +3829,71 @@ const EndStubSize=17176;
   OffsSegLinkOffs=$1c0;
   ValSegLinkVMAddr=$8000;
   ValSegLinkOffs=$8000;
+  {LC_DYLD_INFO_ONLY}
+  OffsComRebaseOff = $1E8;
+  OffsComRebaseSize = $1EC; // не надо 
+  OffsComExportOff = $208;
+  ValComRebaseOff = $8000;
+  ValComRebaseSize = $8;
+  ValComExportOff = $8008;
   {SYMTAB_OFFSETS}
-  OffsSymTabOffs=$208;
-  OffsStrTabOffs=$210;
-  ValSymTabOffs=$8090;
-  ValStrTabOffs=$8110;
+  OffsSymTabOffs=$218;
+  OffsStrTabOffs=$220;
+  ValSymTabOffs=$8058; 
+  ValStrTabOffs=$8288;
+  {LC_FUNCTION_STARTS}
+  OffsComDataOff = $338;
+  ValComDataOff = $8038;
   {SYMTAB_DATA}
-  OffsData0=$21E8;
-  OffsData1=$21F8;
-  OffsData2=$2208;
-  OffsData3=$2218;
-  OffsData4=$2228;
-  OffsData5=$80e8;
-  ValData0=$1000;
-  ValData1=$1074;
-  ValData2=$1075;
-  ValData3=$1076;
-  ValData4=$1077;
-  ValData5=$4008;
+  OffsData0=$8200; // rtlWriteIntegerBuffer
+  OffsData1=$8260; // ReadCharBuffer
+  OffsData2=$8270; // ReadCharInited
+  OffsData3=$8280; // IsEOF
+  OffsData4=$8290; //RTLFunctionTable
+  OffsData5=$82A0; //CopyRight
+  ValData0=$4000;
+  ValData1=$4040;
+  ValData2=$4048;
+  ValData3=$4050;
+  ValData4=$4058;
+  ValData5=$40A0;
   {GOT}
-  OffsStrings0=$FF9;
-  OffsStrings1=$D0D;
-  OffsStrings2=$D45;
-  OffsStrings3=$D76;
-  OffsStrings4=$D8D;
-  OffsStrings5=$DA3;
-  OffsStrings17=$DB9;
-  OffsStrings6=$DCD;
-  OffsStrings7=$DF4;
-  OffsStrings8=$E05;
-  OffsStrings9=$E16;
-  OffsStrings10=$E2E;
-  OffsStrings11=$E4A;
-  OffsStrings12=$E8D;
-  OffsStrings13=$E9E;
-  OffsStrings14=$EBC;
-  OffsStrings15=$EC7;
-  OffsStrings16=$F45;
+  OffsStrings0=$3FF8; 
+  OffsStrings1=$3D60;
+  OffsStrings2=$3D9C;
+  OffsStrings3=$3E14;
+  OffsStrings4=$3E30;
+  OffsStrings5=$3E68;
+  OffsStrings17=$3E80;
+  OffsStrings6=$3E98;
+  OffsStrings7=$3ED8;
+  OffsStrings8=$3EEC;
+  OffsStrings9=$E16;//??
+  OffsStrings10=$3F08;
+  OffsStrings11=$3F24;
+  OffsStrings12=$3F7C;
+  OffsStrings13=$3F90;
+  OffsStrings14=$3FB4;
+  OffsStrings15=$3FC8;
+  OffsStrings16=$F45; //for test
 
-  ValString0=$00000077;
-  ValString1=$000002EC;
-  ValString2=$000002B4;
-  ValString3=$2F7;
-  ValString4=$2E2;
-  ValString5=$2CB;
-  ValString17=$2B5;
-  ValString6=$2A0;
-  ValString7=$27B;
-  ValString8=$268;
+  ValString0=$130000B0;
+  ValString1=$040000B0;
+  ValString2=$C1FEFF54;
+  ValString3=$010000B0;
+  ValString4=$080000B0;
+  ValString5=$080000B0;
+  ValString17=$080000B0;
+  ValString6=$080000B0;
+  ValString7=$080000B0;
+  ValString8=$080000B0;
   ValString9=$257;
-  ValString10=$23F;
-  ValString11=$223;
-  ValString12=$1E2;
-  ValString13=$1CF;
-  ValString14=$1B3;
-  ValString15=$1A6;
+  ValString10=$080000B0;
+  ValString11=$080000B0;
+  ValString12=$080000B0;
+  ValString13=$080000B0;
+  ValString14=$080000B0;
+  ValString15=$080000B0;
   ValString16=$128;
 
 
@@ -4203,7 +4235,7 @@ procedure OCMovX2Imm(Value:integer);
 begin
 //MOV RCX, Value
  OCMovValueX6(Value);
- WriteLn('mov x2, x6');
+ //WriteLn('mov x2, x6');
  LastOutputCodeValue:=locMovECXImm;
 end;
 
@@ -4439,7 +4471,7 @@ begin
     OCMovDWordPtrX1X0;
    end;
    OPHalt:begin
-    OCCallDWordPtrX19Ofs(93);   
+    OCCallDWordPtrX19Ofs(0);   
    end;
    OPWrI:begin
     OCCallDWordPtrX19Ofs(16);
@@ -4730,14 +4762,30 @@ begin
 }
 
   {injecting}
-  // InjectionSize:=OutputCodeDataSize-StartStubSize; 
- 
+  InjectionSize:=OutputCodeDataSize-StartStubSize; 
+  iter := InjectionSize mod 16384;
+  while iter <= 16383 do
+  begin
+    // EmitByte($1F);
+    // EmitByte($20);
+    // EmitByte($03);
+    // EmitByte($D5);
+    EmitInt32($D503201F);
+    iter := iter + 4;   
+  end;
+  // writeln('InjectionSize= ', InjectionSize);
   {new}
   EmitEndingStub;
 
   {injecting}
-  InjectionSize:=OutputCodeDataSize-EndStubSize-StartStubSize;
-  //writeln('InjectionSize= ', InjectionSize);
+  InjectionSize:=OutputCodeDataSize-EndStubSize-StartStubSize; // всегда кратен 16384
+  // writeln('InjectionSize= ', InjectionSize);
+//    InjectionSize= 32
+// InjectionSize= 16384
+  // OutputCodeDataSize - количество всего вставленных байтов 
+  // EndStubSize количество байтов во 2 части rtl
+  // StartStubSize - количество байтов в 1 части rtl
+
   
 
   {__TEXT}
@@ -4748,27 +4796,33 @@ begin
   OutputCodePutInt32(OffsSectTextSize + $1, 		  ValSectTextSize + InjectionSize);   // not checked +15
 
   {__DATA}
-  OutputCodePutInt32(OffsSegDataVMAddr + $1, 		  ValSegDataVMAddr + InjectionSize ); // +++++
-  OutputCodePutInt32(OffsSegDataOffs + $1, 		  ValSegDataOffs + InjectionSize ); // +++++
+  OutputCodePutInt32(OffsSegDataVMAddr + $1, 		  ValSegDataVMAddr + InjectionSize); // +++++
+  OutputCodePutInt32(OffsSegDataOffs + $1, 		  ValSegDataOffs + InjectionSize  ); // +++++
 
 
   {__data}
-  OutputCodePutInt32(OffsSectDataVMAddr + $1, 		  ValSectDataVMAddr + InjectionSize ); // 8000 + 15 -- работает верно
-  OutputCodePutInt32(OffsSectDataOffs + $1, 		  ValSectDataOffs + InjectionSize); // ++++
-//
-//  {__LINKEDIT}
-//  OutputCodePutInt32(OffsSegLinkVMAddr + $1, 		  ValSegLinkVMAddr + InjectionSize);
-//  OutputCodePutInt32(OffsSegLinkOffs + $1, 		  ValSegLinkOffs + InjectionSize);
-//  {SYMTAB_OFFSETS}
-//  OutputCodePutInt32(OffsSymTabOffs + $1, 		  ValSymTabOffs + InjectionSize);
-//  OutputCodePutInt32(OffsStrTabOffs + $1, 		  ValStrTabOffs + InjectionSize);
+  OutputCodePutInt32(OffsSectDataVMAddr + $1, 		  ValSectDataVMAddr + InjectionSize); // 8000 + 15 -- работает верно
+  OutputCodePutInt32(OffsSectDataOffs + $1, 		  ValSectDataOffs + InjectionSize); // ++
+
+  {__LINKEDIT}
+ OutputCodePutInt32(OffsSegLinkVMAddr + $1, 		  ValSegLinkVMAddr + InjectionSize);
+ OutputCodePutInt32(OffsSegLinkOffs + $1, 		  ValSegLinkOffs + InjectionSize);
+ {LC_DYLD_INFO_ONLY}
+  OutputCodePutInt32(OffsComRebaseOff + $1, 		  ValComRebaseOff + InjectionSize);
+  OutputCodePutInt32(OffsComExportOff + $1, 		  ValComExportOff + InjectionSize);
+  {SYMTAB_OFFSETS}
+ OutputCodePutInt32(OffsSymTabOffs + $1, 		  ValSymTabOffs + InjectionSize);
+ OutputCodePutInt32(OffsStrTabOffs + $1, 		  ValStrTabOffs + InjectionSize);
+   {LC_FUNCTION_STARTS}
+  OutputCodePutInt32(OffsComDataOff + $1, 		  ValComDataOff + InjectionSize);
 //  {SYMTAB_DATA}
-  // OutputCodePutInt32(OffsData0 + InjectionSize + $1, 		  ValData0 + InjectionSize);
-  // OutputCodePutInt32(OffsData1 + InjectionSize + $1, 		  ValData1 + InjectionSize);
-  // OutputCodePutInt32(OffsData2 + InjectionSize + $1, 		  ValData2 + InjectionSize);
-  // OutputCodePutInt32(OffsData3 + InjectionSize + $1, 		  ValData3 + InjectionSize);
-  // OutputCodePutInt32(OffsData4 + InjectionSize + $1, 		  ValData4 + InjectionSize);
- // OutputCodePutInt32(OffsData5 + InjectionSize + $1, 		  ValData5 + InjectionSize);
+//   OutputCodePutInt32(OffsData1 + InjectionSize + $1, 		  ValData1 + InjectionSize);
+//   OutputCodePutInt32(OffsData0 + InjectionSize + $1, 		  ValData0 + InjectionSize);
+//   OutputCodePutInt32(OffsData2 + InjectionSize + $1, 		  ValData2 + InjectionSize);
+//   OutputCodePutInt32(OffsData3 + InjectionSize + $1, 		  ValData3 + InjectionSize);
+//   OutputCodePutInt32(OffsData4 + InjectionSize + $1, 		  ValData4 + InjectionSize);
+//  OutputCodePutInt32(OffsData5 + InjectionSize + $1, 		  ValData5 + InjectionSize);
+
   // {GOT}
   // OutputCodePutInt32(OffsStrings0 + $3 + $1, 		  ValString0 + InjectionSize);
   // OutputCodePutInt32(OffsStrings1 + $3 + $1, 		  ValString1 + InjectionSize);
@@ -4779,15 +4833,15 @@ begin
   // OutputCodePutInt32(OffsStrings6 + $3 + $1, 		  ValString6 + InjectionSize);
   // OutputCodePutInt32(OffsStrings7 + $3 + $1, 		  ValString7 + InjectionSize);
   // OutputCodePutInt32(OffsStrings8 + $3 + $1, 		  ValString8 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings9 + $3 + $1, 		  ValString9 + InjectionSize);
+  // // OutputCodePutInt32(OffsStrings9 + $3 + $1, 		  ValString9 + InjectionSize);
   // OutputCodePutInt32(OffsStrings10 + $3 + $1, 		  ValString10 + InjectionSize);
   // OutputCodePutInt32(OffsStrings11 + $3 + $1, 		  ValString11 + InjectionSize);
   // OutputCodePutInt32(OffsStrings12 + $3 + $1, 		  ValString12 + InjectionSize);
   // OutputCodePutInt32(OffsStrings13 + $3 + $1, 		  ValString13 + InjectionSize);
   // OutputCodePutInt32(OffsStrings14 + $3 + $1, 		  ValString14 + InjectionSize);
   // OutputCodePutInt32(OffsStrings15 + $3 + $1, 		  ValString15 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings16 + $3 + $1, 		  ValString16 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings17 + $3 + $1, 		  ValString17 + InjectionSize);
+  // // OutputCodePutInt32(OffsStrings16 + $3 + $1, 		  ValString16 + InjectionSize);// test
+  //  OutputCodePutInt32(OffsStrings17 + $3 + $1, 		  ValString17 + InjectionSize);
 
  WriteOutputCode;
 end;
@@ -4908,3 +4962,7 @@ begin
  Check(TokPeriod);
  AssembleAndLink;
 end.
+
+
+// clang -o ./target/rtl64macOS ./target/rtl64macOS.o -Wl,-no_deduplicate -Wl,-no_compact_unwind -Wl,-no_fixup_chains \
+//    -lSystem -isysroot `xcrun -sdk macosx --show-sdk-path`
