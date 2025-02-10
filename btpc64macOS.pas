@@ -3852,6 +3852,9 @@ const EndStubSize=18024;
   {LC_FUNCTION_STARTS}
   OffsComDataOff = $338;
   ValComDataOff = $8038;
+  {LC_CODE_SIGNATURE}
+  OffsCodeSignOff = $358;
+  ValCodeSignOff = $84D0;
   {SYMTAB_DATA}
   OffsData0=$8200; // rtlWriteIntegerBuffer
   OffsData1=$8210; // ReadCharBuffer
@@ -4250,7 +4253,9 @@ end;
 
 procedure OCCallDWordPtrX19Ofs(Ofs:integer);
 begin
- // br x19
+
+ // ldr x5, [x19]
+ // br x5
  // Todo: x19 + sizeof(addr) * Ofs
  EmitByte($60);
  EmitByte($02);
@@ -4823,33 +4828,35 @@ begin
  OutputCodePutInt32(OffsStrTabOffs + $1, 		  ValStrTabOffs + InjectionSize);
    {LC_FUNCTION_STARTS}
   OutputCodePutInt32(OffsComDataOff + $1, 		  ValComDataOff + InjectionSize);
+    {LC_CODE_SIGNATURE}
+  OutputCodePutInt32(OffsCodeSignOff + $1, 		  ValCodeSignOff + InjectionSize);
 //  {SYMTAB_DATA}
-//   OutputCodePutInt32(OffsData1 + InjectionSize + $1, 		  ValData1 + InjectionSize);
-//   OutputCodePutInt32(OffsData0 + InjectionSize + $1, 		  ValData0 + InjectionSize);
-//   OutputCodePutInt32(OffsData2 + InjectionSize + $1, 		  ValData2 + InjectionSize);
-//   OutputCodePutInt32(OffsData3 + InjectionSize + $1, 		  ValData3 + InjectionSize);
-//   OutputCodePutInt32(OffsData4 + InjectionSize + $1, 		  ValData4 + InjectionSize);
-//  OutputCodePutInt32(OffsData5 + InjectionSize + $1, 		  ValData5 + InjectionSize);
+  OutputCodePutInt32(OffsData1 + InjectionSize + $1, 		  ValData1 + InjectionSize);
+  OutputCodePutInt32(OffsData0 + InjectionSize + $1, 		  ValData0 + InjectionSize);
+  OutputCodePutInt32(OffsData2 + InjectionSize + $1, 		  ValData2 + InjectionSize);
+  OutputCodePutInt32(OffsData3 + InjectionSize + $1, 		  ValData3 + InjectionSize);
+  OutputCodePutInt32(OffsData4 + InjectionSize + $1, 		  ValData4 + InjectionSize);
+ OutputCodePutInt32(OffsData5 + InjectionSize + $1, 		  ValData5 + InjectionSize);
 
   // {GOT}
-  // OutputCodePutInt32(OffsStrings0 + $3 + $1, 		  ValString0 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings1 + $3 + $1, 		  ValString1 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings2 + $3 + $1, 		  ValString2 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings3 + $3 + $1, 		  ValString3 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings4 + $3 + $1, 		  ValString4 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings5 + $3 + $1, 		  ValString5 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings6 + $3 + $1, 		  ValString6 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings7 + $3 + $1, 		  ValString7 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings8 + $3 + $1, 		  ValString8 + InjectionSize);
-  // // OutputCodePutInt32(OffsStrings9 + $3 + $1, 		  ValString9 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings10 + $3 + $1, 		  ValString10 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings11 + $3 + $1, 		  ValString11 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings12 + $3 + $1, 		  ValString12 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings13 + $3 + $1, 		  ValString13 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings14 + $3 + $1, 		  ValString14 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings15 + $3 + $1, 		  ValString15 + InjectionSize);
-  // // OutputCodePutInt32(OffsStrings16 + $3 + $1, 		  ValString16 + InjectionSize);// test
-  //  OutputCodePutInt32(OffsStrings17 + $3 + $1, 		  ValString17 + InjectionSize);
+  OutputCodePutInt32(OffsStrings0 + $3 + $1, 		  ValString0 + InjectionSize);
+  OutputCodePutInt32(OffsStrings1 + $3 + $1, 		  ValString1 + InjectionSize);
+  OutputCodePutInt32(OffsStrings2 + $3 + $1, 		  ValString2 + InjectionSize);
+  OutputCodePutInt32(OffsStrings3 + $3 + $1, 		  ValString3 + InjectionSize);
+  OutputCodePutInt32(OffsStrings4 + $3 + $1, 		  ValString4 + InjectionSize);
+  OutputCodePutInt32(OffsStrings5 + $3 + $1, 		  ValString5 + InjectionSize);
+  OutputCodePutInt32(OffsStrings6 + $3 + $1, 		  ValString6 + InjectionSize);
+  OutputCodePutInt32(OffsStrings7 + $3 + $1, 		  ValString7 + InjectionSize);
+  OutputCodePutInt32(OffsStrings8 + $3 + $1, 		  ValString8 + InjectionSize);
+  // OutputCodePutInt32(OffsStrings9 + $3 + $1, 		  ValString9 + InjectionSize);
+  OutputCodePutInt32(OffsStrings10 + $3 + $1, 		  ValString10 + InjectionSize);
+  OutputCodePutInt32(OffsStrings11 + $3 + $1, 		  ValString11 + InjectionSize);
+  OutputCodePutInt32(OffsStrings12 + $3 + $1, 		  ValString12 + InjectionSize);
+  OutputCodePutInt32(OffsStrings13 + $3 + $1, 		  ValString13 + InjectionSize);
+  OutputCodePutInt32(OffsStrings14 + $3 + $1, 		  ValString14 + InjectionSize);
+  OutputCodePutInt32(OffsStrings15 + $3 + $1, 		  ValString15 + InjectionSize);
+  // OutputCodePutInt32(OffsStrings16 + $3 + $1, 		  ValString16 + InjectionSize);// test
+   OutputCodePutInt32(OffsStrings17 + $3 + $1, 		  ValString17 + InjectionSize);
 
  WriteOutputCode;
 end;
