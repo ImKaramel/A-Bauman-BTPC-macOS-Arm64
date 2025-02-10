@@ -4192,7 +4192,7 @@ begin
     val := val div 256;
   end;
 
-  mask := $F2A00006; 
+  mask := $F2800006; 
   val := LeftShift(GetLower16Bits(Value), 5);
   EmitByte(BitwiseOr(mask mod 256, val mod 256));
   mask := mask div 256;
@@ -4225,7 +4225,7 @@ begin
     val := val div 256;
   end;
 
-  mask := $F2A00000; 
+  mask := $F2800000; 
   val := LeftShift(GetLower16Bits(Value), 5);
   EmitByte(BitwiseOr(mask mod 256, val mod 256));
   mask := mask div 256;
@@ -4253,14 +4253,21 @@ end;
 
 procedure OCCallDWordPtrX19Ofs(Ofs:integer);
 begin
-
  // ldr x5, [x19]
- // br x5
- // Todo: x19 + sizeof(addr) * Ofs
- EmitByte($60);
+ EmitByte($65);
  EmitByte($02);
+ EmitByte($40);
+ EmitByte($F9);
+ // br x5
+ EmitByte($A0);
+ EmitByte($00);
  EmitByte($1F);
  EmitByte($D6);
+ // Todo: x19 + sizeof(addr) * Ofs
+//  EmitByte($60);
+//  EmitByte($02);
+//  EmitByte($1F);
+//  EmitByte($D6);
  LastOutputCodeValue:=locCallDWordPtrESIOfs;
 end;
 
@@ -4856,7 +4863,7 @@ begin
   OutputCodePutInt32(OffsStrings14 + $3 + $1, 		  ValString14 + InjectionSize);
   OutputCodePutInt32(OffsStrings15 + $3 + $1, 		  ValString15 + InjectionSize);
   // OutputCodePutInt32(OffsStrings16 + $3 + $1, 		  ValString16 + InjectionSize);// test
-   OutputCodePutInt32(OffsStrings17 + $3 + $1, 		  ValString17 + InjectionSize);
+  OutputCodePutInt32(OffsStrings17 + $3 + $1, 		  ValString17 + InjectionSize);
 
  WriteOutputCode;
 end;
