@@ -2078,8 +2078,8 @@ end;
 procedure EmitStubCode;
 begin
     OutputCodeDataSize := 0;
-    OutputCodeString(#207#250#237#254#12#0#0#1#0#0#0#0#2#0#0#0#15#0#0#0);
-    OutputCodeString(#48#3#0#0#133#0#32#0#0#0#0#0#25#0#0#0#72#0#0#0);
+    OutputCodeString(#207#250#237#254#12#0#0#1#0#0#0#0#2#0#0#0#16#0#0#0);
+    OutputCodeString(#64#3#0#0#133#0#32#0#0#0#0#0#25#0#0#0#72#0#0#0);
     OutputCodeString(#95#95#80#65#71#69#90#69#82#79#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#1#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
@@ -2100,7 +2100,7 @@ begin
     OutputCodeString(#4#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#25#0#0#0#72#0#0#0#95#95#76#73);
     OutputCodeString(#78#75#69#68#73#84#0#0#0#0#0#0#0#128#0#0#1#0#0#0);
-    OutputCodeString(#0#64#0#0#0#0#0#0#0#128#0#0#0#0#0#0#208#4#0#0);
+    OutputCodeString(#0#64#0#0#0#0#0#0#0#128#0#0#0#0#0#0#104#6#0#0);
     OutputCodeString(#0#0#0#0#1#0#0#0#1#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#34#0#0#128#48#0#0#0#0#128#0#0#8#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
@@ -2120,8 +2120,8 @@ begin
     OutputCodeString(#0#0#1#0#47#117#115#114#47#108#105#98#47#108#105#98#83#121#115#116);
     OutputCodeString(#101#109#46#66#46#100#121#108#105#98#0#0#0#0#0#0#38#0#0#0);
     OutputCodeString(#16#0#0#0#56#128#0#0#32#0#0#0#41#0#0#0#16#0#0#0);
-    OutputCodeString(#88#128#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
-    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#88#128#0#0#0#0#0#0#29#0#0#0#16#0#0#0#208#132#0#0);
+    OutputCodeString(#152#1#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
     OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
@@ -3785,26 +3785,36 @@ begin
     OutputCodeString(#66#117#102#102#101#114#0#82#101#97#100#67#104#97#114#66#117#102#102#101);
     OutputCodeString(#114#0#82#101#97#100#67#104#97#114#73#110#105#116#101#100#0#73#115#69);
     OutputCodeString(#79#70#0#82#84#76#70#117#110#99#116#105#111#110#84#97#98#108#101#0);
-    OutputCodeChar(#67);
-    OutputCodeChar(#111);
-    OutputCodeChar(#112);
-    OutputCodeChar(#121);
-    OutputCodeChar(#114);
-    OutputCodeChar(#105);
-    OutputCodeChar(#103);
-    OutputCodeChar(#104);
-    OutputCodeChar(#116);
-    OutputCodeChar(#0);
-    OutputCodeChar(#0);
-    OutputCodeChar(#0);
-    OutputCodeChar(#0);
-    OutputCodeChar(#0);
-    OutputCodeChar(#0);
+    OutputCodeString(#67#111#112#121#114#105#103#104#116#0#0#0#0#0#0#0#250#222#12#192);
+    OutputCodeString(#0#0#1#151#0#0#0#1#0#0#0#0#0#0#0#20#250#222#12#2);
+    OutputCodeString(#0#0#1#131#0#2#4#0#0#2#0#2#0#0#0#99#0#0#0#88);
+    OutputCodeString(#0#0#0#0#0#0#0#9#0#0#132#208#32#2#0#12#0#0#0#0);
+    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+    OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#3#124#0#0#0#0);
+    OutputCodeString(#0#0#0#1#114#116#108#54#52#109#97#99#79#83#0#228#120#92#77#128);
+    OutputCodeString(#120#174#33#101#33#235#127#77#64#33#24#116#146#72#48#1#68#253#172#231);
+    OutputCodeString(#196#224#121#152#255#21#171#173#127#172#178#88#111#198#233#102#192#4#215#209);
+    OutputCodeString(#209#107#2#79#88#5#255#124#180#124#122#133#218#189#139#72#137#44#167#173);
+    OutputCodeString(#127#172#178#88#111#198#233#102#192#4#215#209#209#107#2#79#88#5#255#124);
+    OutputCodeString(#180#124#122#133#218#189#139#72#137#44#167#190#35#198#255#224#138#85#135#243);
+    OutputCodeString(#117#224#160#213#246#198#47#110#127#23#16#102#34#100#23#66#176#113#41#71);
+    OutputCodeString(#100#98#55#127#42#101#48#37#107#218#15#103#204#4#230#196#83#235#184#83);
+    OutputCodeString(#164#132#218#21#168#30#215#70#10#155#77#55#113#173#83#173#127#172#178#88);
+    OutputCodeString(#111#198#233#102#192#4#215#209#209#107#2#79#88#5#255#124#180#124#122#133);
+    OutputCodeString(#218#189#139#72#137#44#167#173#127#172#178#88#111#198#233#102#192#4#215#209);
+    OutputCodeString(#209#107#2#79#88#5#255#124#180#124#122#133#218#189#139#72#137#44#167#173);
+    OutputCodeString(#127#172#178#88#111#198#233#102#192#4#215#209#209#107#2#79#88#5#255#124);
+    OutputCodeString(#180#124#122#133#218#189#139#72#137#44#167#82#147#32#253#65#208#232#82#152);
+    OutputCodeString(#165#131#196#113#174#252#210#222#249#44#58#18#96#203#185#164#69#23#253#91);
+    OutputCodeChar(#98);
+    OutputCodeChar(#100);
+    OutputCodeChar(#69);
     OutputCodeChar(#0);
 end;
 
 const StartStubSize=16384;
-const EndStubSize=17616;
+const EndStubSize=18024;
+
 
   {__TEXT}
   OffsSegTextVMSize=$88;
@@ -3831,10 +3841,8 @@ const EndStubSize=17616;
   ValSegLinkOffs=$8000;
   {LC_DYLD_INFO_ONLY}
   OffsComRebaseOff = $1E8;
-  OffsComRebaseSize = $1EC; // не надо 
   OffsComExportOff = $208;
   ValComRebaseOff = $8000;
-  ValComRebaseSize = $8;
   ValComExportOff = $8008;
   {SYMTAB_OFFSETS}
   OffsSymTabOffs=$218;
@@ -3846,17 +3854,17 @@ const EndStubSize=17616;
   ValComDataOff = $8038;
   {SYMTAB_DATA}
   OffsData0=$8200; // rtlWriteIntegerBuffer
-  OffsData1=$8260; // ReadCharBuffer
-  OffsData2=$8270; // ReadCharInited
-  OffsData3=$8280; // IsEOF
-  OffsData4=$8290; //RTLFunctionTable
-  OffsData5=$82A0; //CopyRight
+  OffsData1=$8210; // ReadCharBuffer
+  OffsData2=$8220; // ReadCharInited
+  OffsData3=$8230; // IsEOF
+  OffsData4=$8240; //RTLFunctionTable
+  OffsData5=$8250; //CopyRight
   ValData0=$4000;
   ValData1=$4040;
   ValData2=$4048;
   ValData3=$4050;
-  ValData4=$4058;
-  ValData5=$40A0;
+  ValData4=$4060;
+  ValData5=$40A8;
   {GOT}
   OffsStrings0=$3FF8; 
   OffsStrings1=$3D60;

@@ -27,7 +27,7 @@ IsEOF:
     .byte 0x00 
 
 
-    .align 3
+    .align 4
 RTLFunctionTable:
     .quad RTLHalt
     .quad RTLWriteChar
@@ -386,3 +386,5 @@ StubEntryPoint:
     add x19, x19, RTLFunctionTable@PAGEOFF
 
 ProgramEntryPoint:
+
+

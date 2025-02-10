@@ -112,7 +112,7 @@
             "command": "/bin/sh",
             "args": [
                 "-c",
-                "mkdir -p target && cd RtlConverter && as rtl64macOS.s -o ../target/rtl64macOS.o &&  ld -o ../target/rtl64macOS ../target/rtl64macOS.o -no_compact_unwind -no_deduplicate -no_weak_imports -no_fixup_chains  -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` && codesign --remove-signature ../target/rtl64macOS && chmod +x ../target/rtl64macOS"
+                "mkdir -p target && cd RtlConverter && as rtl64macOS.s -o ../target/rtl64macOS.o &&  ld -o ../target/rtl64macOS ../target/rtl64macOS.o -no_compact_unwind  -no_fixup_chains  -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path`  &&  chmod +x ../target/rtl64macOS"
             ],
             "type": "shell",
             "problemMatcher": []
