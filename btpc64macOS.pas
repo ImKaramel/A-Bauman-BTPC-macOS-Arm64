@@ -4649,24 +4649,6 @@ const StartStubSize=32768;
 const EndStubSize=18152;
 
 
-  {__TEXT}
-  OffsSegTextVMSize=$88;
-  OffsSegTextFileSize=$98;
-  ValSegTextVMSize=$4000;
-  ValSegTextFileSize=$4000;
-  {__text}
-  OffsSectTextSize=$D8;
-  ValSectTextSize=$37C;
-  {__DATA}
-  OffsSegDataVMAddr=$118;
-  OffsSegDataOffs=$128; 
-  ValSegDataVMAddr=$4000; // 1_00004000
-  ValSegDataOffs=$4000;
-  {__data}
-  OffsSectDataVMAddr=$168;
-  OffsSectDataOffs=$178;
-  ValSectDataVMAddr=$4000;
-  ValSectDataOffs=$4000;
   {__LINKEDIT}
   OffsSegLinkVMAddr=$1b0;
   OffsSegLinkOffs=$1c0;
@@ -5639,71 +5621,19 @@ begin
 
   {injecting}
   InjectionSize:=OutputCodeDataSize-EndStubSize-StartStubSize; // всегда кратен 16384
-  // writeln('InjectionSize= ', InjectionSize);
-//    InjectionSize= 32
-// InjectionSize= 16384
-  // OutputCodeDataSize - количество всего вставленных байтов 
-  // EndStubSize количество байтов во 2 части rtl
-  // StartStubSize - количество байтов в 1 части rtl
-
-  
-
-  {__TEXT}
-  OutputCodePutInt32(OffsSegTextVMSize + $1, 		  ValSegTextVMSize + InjectionSize); // ++++++
-  OutputCodePutInt32(OffsSegTextFileSize + $1, 		  ValSegTextFileSize + InjectionSize); // ++++
-
-  {__text}
-  OutputCodePutInt32(OffsSectTextSize + $1, 		  ValSectTextSize + InjectionSize);   // not checked +15
-
-  {__DATA}
-  OutputCodePutInt32(OffsSegDataVMAddr + $1, 		  ValSegDataVMAddr + InjectionSize); // +++++
-  OutputCodePutInt32(OffsSegDataOffs + $1, 		  ValSegDataOffs + InjectionSize  ); // +++++
-
-
-  {__data}
-  OutputCodePutInt32(OffsSectDataVMAddr + $1, 		  ValSectDataVMAddr + InjectionSize); // 8000 + 15 -- работает верно
-  OutputCodePutInt32(OffsSectDataOffs + $1, 		  ValSectDataOffs + InjectionSize); // ++
-
   {__LINKEDIT}
- OutputCodePutInt32(OffsSegLinkVMAddr + $1, 		  ValSegLinkVMAddr + InjectionSize);
- OutputCodePutInt32(OffsSegLinkOffs + $1, 		  ValSegLinkOffs + InjectionSize);
- {LC_DYLD_INFO_ONLY}
-  OutputCodePutInt32(OffsComRebaseOff + $1, 		  ValComRebaseOff + InjectionSize);
-  OutputCodePutInt32(OffsComExportOff + $1, 		  ValComExportOff + InjectionSize);
+  OutputCodePutInt32(OffsSegLinkVMAddr + $1, ValSegLinkVMAddr + InjectionSize);
+  OutputCodePutInt32(OffsSegLinkOffs + $1, 	 ValSegLinkOffs + InjectionSize);
+  {LC_DYLD_INFO_ONLY}
+  OutputCodePutInt32(OffsComRebaseOff + $1,  ValComRebaseOff + InjectionSize);
+  OutputCodePutInt32(OffsComExportOff + $1,  ValComExportOff + InjectionSize);
   {SYMTAB_OFFSETS}
- OutputCodePutInt32(OffsSymTabOffs + $1, 		  ValSymTabOffs + InjectionSize);
- OutputCodePutInt32(OffsStrTabOffs + $1, 		  ValStrTabOffs + InjectionSize);
-   {LC_FUNCTION_STARTS}
-  OutputCodePutInt32(OffsComDataOff + $1, 		  ValComDataOff + InjectionSize);
-    {LC_CODE_SIGNATURE}
-  OutputCodePutInt32(OffsCodeSignOff + $1, 		  ValCodeSignOff + InjectionSize);
-//  {SYMTAB_DATA}
-  OutputCodePutInt32(OffsData1 + InjectionSize + $1, 		  ValData1 + InjectionSize);
-  OutputCodePutInt32(OffsData0 + InjectionSize + $1, 		  ValData0 + InjectionSize);
-  OutputCodePutInt32(OffsData2 + InjectionSize + $1, 		  ValData2 + InjectionSize);
-  OutputCodePutInt32(OffsData3 + InjectionSize + $1, 		  ValData3 + InjectionSize);
-  OutputCodePutInt32(OffsData4 + InjectionSize + $1, 		  ValData4 + InjectionSize);
- OutputCodePutInt32(OffsData5 + InjectionSize + $1, 		  ValData5 + InjectionSize);
-
-  // {GOT}
-  // OutputCodePutInt32(OffsStrings0 + $3 + $1, 		  ValString0 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings1 + $3 + $1, 		  ValString1 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings2 + $3 + $1, 		  ValString2 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings3 + $3 + $1, 		  ValString3 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings4 + $3 + $1, 		  ValString4 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings5 + $3 + $1, 		  ValString5 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings6 + $3 + $1, 		  ValString6 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings7 + $3 + $1, 		  ValString7 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings8 + $3 + $1, 		  ValString8 + InjectionSize);
-  // // OutputCodePutInt32(OffsStrings9 + $3 + $1, 		  ValString9 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings10 + $3 + $1, 		  ValString10 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings11 + $3 + $1, 		  ValString11 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings12 + $3 + $1, 		  ValString12 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings13 + $3 + $1, 		  ValString13 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings14 + $3 + $1, 		  ValString14 + InjectionSize);
-  // OutputCodePutInt32(OffsStrings15 + $3 + $1, 		  ValString15 + InjectionSize);
-  // // OutputCodePutInt32(OffsStrings16 + $3 + $1, 		  ValString16 + InjectionSize);// test
-  // OutputCodePutInt32(OffsStrings17 + $3 + $1, 		  ValString17 + InjectionSize);
+  OutputCodePutInt32(OffsSymTabOffs + $1, 	 ValSymTabOffs + InjectionSize);
+  OutputCodePutInt32(OffsStrTabOffs + $1, 	 ValStrTabOffs + InjectionSize);
+  {LC_FUNCTION_STARTS}
+  OutputCodePutInt32(OffsComDataOff + $1, 	 ValComDataOff + InjectionSize);
+  {LC_CODE_SIGNATURE}
+  OutputCodePutInt32(OffsCodeSignOff + $1, 	 ValCodeSignOff + InjectionSize);
 
  WriteOutputCode;
 end;
@@ -5824,7 +5754,3 @@ begin
  Check(TokPeriod);
  AssembleAndLink;
 end.
-
-
-// clang -o ./target/rtl64macOS ./target/rtl64macOS.o -Wl,-no_deduplicate -Wl,-no_compact_unwind -Wl,-no_fixup_chains \
-//    -lSystem -isysroot `xcrun -sdk macosx --show-sdk-path`
