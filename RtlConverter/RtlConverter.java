@@ -6,7 +6,7 @@ import java.util.BitSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RtlConverter {
-    private static final int END_OFFSET = 0x4000 /* 16384 */;
+    private static final int END_OFFSET = 0x8000 /* 16384 */;
 
     private static final String PROLOGUE_RTL_BEGINNING = """
             procedure EmitStubCode;
@@ -64,7 +64,11 @@ public class RtlConverter {
 
     private String convertEnd() throws IOException {
         int fileSize = rtlContent.length;
-        return PROLOGUE_RTL_ENDING + convertInternal(END_OFFSET, fileSize) + EPILOGUE;
+        useByte(END_OFFSET);
+        useByte(END_OFFSET + 1);
+        useByte(END_OFFSET + 2);
+        useByte(END_OFFSET + 3);
+        return PROLOGUE_RTL_ENDING + convertInternal(END_OFFSET + 4, fileSize) + EPILOGUE;
     }
 
     private String convertInternal(int startFromIncluded, int endAtNotIncluded) {

@@ -99,7 +99,7 @@
             "command": "/bin/sh",
             "args": [
                 "-c",
-                "objdump -d target/dummyAarch64Exec > target/dummyAarch64Exec.asm"
+                "objdump -D target/dummyAarch64Exec > target/dummyAarch64Exec.asm"
             ],
             "type": "shell",
             "dependsOn": [
@@ -112,7 +112,8 @@
             "command": "/bin/sh",
             "args": [
                 "-c",
-                "mkdir -p target && cd RtlConverter && as rtl64macOS.s -o ../target/rtl64macOS.o &&  ld -o ../target/rtl64macOS ../target/rtl64macOS.o -no_compact_unwind  -no_fixup_chains  -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path`  &&  chmod +x ../target/rtl64macOS"
+                "mkdir -p target && cd RtlConverter && as rtl64macOS.s -o ../target/rtl64macOS.o &&  ld -o ../target/rtl64macOS ../target/rtl64macOS.o -no_compact_unwind  -no_fixup_chains  -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -segprot __PAS rwx rx &&  chmod +x ../target/rtl64macOS"
+
             ],
             "type": "shell",
             "problemMatcher": []
