@@ -384,7 +384,7 @@ StubEntryPoint:
     mov x27, sp            
     adrp x19, RTLFunctionTable@PAGE
     add x19, x19, RTLFunctionTable@PAGEOFF
-    bl ProgramEntryPoint
+    b ProgramEntryPoint
 
 .section __PAS,__pas
 
