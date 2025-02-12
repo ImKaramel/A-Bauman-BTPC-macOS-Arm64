@@ -87,7 +87,7 @@
             "command": "/bin/sh",
             "args": [
                 "-c",
-                "./target/btpc64macosaarch64 < dummy.pas > target/dummyAarch64Exec"
+                "./target/btpc64macosaarch64 < dummy.pas > target/dummyAarch64Exec && chmod +x target/dummyAarch64Exec"
             ],
             "dependsOn": [
                 "Build compiler for aarch64"
