@@ -75,7 +75,7 @@ RTLWriteChar:
     pushall
     mov x16, #4                 // syscall #4 (write) на macOS
     mov x0, #1                 // file descriptor: stdout
-    add x1, sp, #64            // адрес символа (x8 - 64 )
+    add x1, sp, #0            // адрес символа (x8 - 64 )
     mov x2, #1                // количество байт для записи
     svc #0                 // системный вызов
     popall

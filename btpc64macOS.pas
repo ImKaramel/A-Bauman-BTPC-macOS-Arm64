@@ -2989,12 +2989,8 @@ begin
   iter := InjectionSize mod 16384;
   while iter <= 16383 do
   begin
-    // EmitByte($1F);
-    // EmitByte($20);
-    // EmitByte($03);
-    // EmitByte($D5);
-    EmitInt32($D503201F);
-    iter := iter + 4;   
+    EmitByte(0);
+    iter := iter + 1;   
   end;
   
   {new}
@@ -3014,14 +3010,14 @@ begin
 
   {LC_DYLD_INFO_ONLY}
   OutputCodePutInt32(OffsComRebaseOff + $1,  ValComRebaseOff + InjectionSize - $4000);
-  OutputCodePutInt32(OffsComExportOff + $1,  ValComExportOff + InjectionSize - $4000);
+  OutputCodePutInt32(OffsComExportOff + $1,  ValComExportOff + InjectionSize  - $4000);
   
   {SYMTAB_OFFSETS}
-  OutputCodePutInt32(OffsSymTabOffs + $1, 	 ValSymTabOffs + InjectionSize - $4000);
-  OutputCodePutInt32(OffsStrTabOffs + $1, 	 ValStrTabOffs + InjectionSize - $4000);
+  OutputCodePutInt32(OffsSymTabOffs + $1, 	 ValSymTabOffs + InjectionSize  - $4000);
+  OutputCodePutInt32(OffsStrTabOffs + $1, 	 ValStrTabOffs + InjectionSize  - $4000);
   
   {LC_FUNCTION_STARTS}
-  OutputCodePutInt32(OffsComDataOff + $1, 	 ValComDataOff + InjectionSize - $4000);
+  OutputCodePutInt32(OffsComDataOff + $1, 	 ValComDataOff + InjectionSize  - $4000);
   
   {LC_CODE_SIGNATURE}
   OutputCodePutInt32(OffsCodeSignOff + $1, 	 ValCodeSignOff + InjectionSize - $4000);

@@ -64,7 +64,12 @@ public class RtlConverter {
 
     private String convertEnd() throws IOException {
         int fileSize = rtlContent.length;
-        return PROLOGUE_RTL_ENDING + convertInternal(END_OFFSET, fileSize) + EPILOGUE;
+        for (int i = END_OFFSET; i < END_OFFSET + 0x4000; i++) {
+            // Ignore exists __PAS segment
+            useByte(i);
+        }
+        counter.set(0);
+        return PROLOGUE_RTL_ENDING + convertInternal(END_OFFSET + 0x4000, fileSize) + EPILOGUE;
     }
 
     private String convertInternal(int startFromIncluded, int endAtNotIncluded) {

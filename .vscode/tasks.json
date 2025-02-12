@@ -64,21 +64,12 @@
             ],
             "problemMatcher": []
         },
-        // {
-        //     "label": "Build compiler for aarch64",
-        //     "command": "/bin/sh",
-        //     "args": [
-        //         "-c",
-        //         "mkdir -p target && ./btpc64macOS < btpc64macOS.pas > target/btpc64macosaarch64 && chmod +x target/btpc64macosaarch64"
-        //     ],
-        //     "problemMatcher": []
-        // },
         {
             "label": "Build dummy code for aarch64",
             "command": "/bin/sh",
             "args": [
                 "-c",
-                "./target/btpc64macosaarch64 < dummy.pas > target/dummyAarch64Exec && chmod +x target/dummyAarch64Exec"
+                "./target/btpc64macosaarch64 < dummy.pas > target/dummyAarch64Exec && chmod +x target/dummyAarch64Exec && objdump -D target/dummyAarch64Exec > target/dummyAarch64Exec.asm && codesign --remove-signature target/dummyAarch64Exec && codesign --sign - target/dummyAarch64Exec"
             ],
             "dependsOn": [
                 "Build compiler for aarch64"
@@ -127,7 +118,7 @@
             "command": "/bin/bash",
             "args": [
                 "-c",
-                "mkdir -p target && cp btpc64macOS.pas target/btpc64macOS.full.pas && RtlConverter/replace_stub.sh target/btpc64macOS.full.pas target/stub.txt && ./btpc64macOS < target/btpc64macOS.full.pas > target/btpc64macosaarch64 && chmod +x target/btpc64macosaarch64"
+                "mkdir -p target && cp btpc64macOS.pas target/btpc64macOS.full.pas && RtlConverter/replace_stub.sh target/btpc64macOS.full.pas target/stub.txt && ./btpc64macOS < target/btpc64macOS.full.pas > target/btpc64macosaarch64 && chmod +x target/btpc64macosaarch64",
             ],
             "type": "shell",
             "dependsOn": [
