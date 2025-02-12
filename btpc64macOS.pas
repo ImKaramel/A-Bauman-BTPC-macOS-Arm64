@@ -5022,35 +5022,30 @@ procedure OCMovX2Imm(Value:integer);
 begin
 //MOV RCX, Value
  OCMovValueX6(Value);
- //WriteLn('mov x2, x6');
  LastOutputCodeValue:=locMovECXImm;
 end;
 
 
 procedure OCCallDWordPtrX19Ofs(Ofs:integer);
 begin
- // ldr x5, [x19]
- EmitByte($65);
- EmitByte($02);
- EmitByte($40);
- EmitByte($F9);
  // mov x6, #Value
  OCMovValueX6(Ofs);
- // add x5, x5, x6
- EmitByte($A5);
+ //add x6, x6, x19
+ EmitByte($c6);
  EmitByte($00);
- EmitByte($06);
- EmitByte($8B);
- // br x5
- EmitByte($A0);
+ EmitByte($13);
+ EmitByte($8b);
+ // ldr x6, [x6]
+ EmitByte($C6);
+ EmitByte($00);
+ EmitByte($40);
+ EmitByte($F9);
+ // br x6  
+ EmitByte($c0);
  EmitByte($00);
  EmitByte($1F);
  EmitByte($D6);
- // Todo: x19 + sizeof(addr) * Ofs
-//  EmitByte($60);
-//  EmitByte($02);
-//  EmitByte($1F);
-//  EmitByte($D6);
+ //
  LastOutputCodeValue:=locCallDWordPtrESIOfs;
 end;
 
