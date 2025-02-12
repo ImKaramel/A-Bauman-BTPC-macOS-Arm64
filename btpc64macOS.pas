@@ -2275,7 +2275,6 @@ begin
 end;
 
 
-
 procedure OCXChgX4X19;
 begin
  // writeLn('mov x8, x4');
@@ -2465,12 +2464,16 @@ begin
  EmitByte($00);
  EmitByte($40);
  EmitByte($F9);
+ // adr x30, .+8
+ EmitByte($5e);
+ EmitByte($00);
+ EmitByte($00);
+ EmitByte($10);
  // br x6  
  EmitByte($c0);
  EmitByte($00);
  EmitByte($1F);
  EmitByte($D6);
- //
  LastOutputCodeValue:=locCallDWordPtrESIOfs;
 end;
 
