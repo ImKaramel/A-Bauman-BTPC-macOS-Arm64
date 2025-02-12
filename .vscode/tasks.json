@@ -17,10 +17,7 @@
                 "-c",
                 "mkdir -p target && ./btpc64macOS < dummy.pas > target/dummyX86Exec && chmod +x target/dummyX86Exec"
             ],
-            "type": "shell",
-            "dependsOn": [
-                "Clean target"
-            ]
+            "type": "shell"
         },
         {
             "label": "Run dummy code built for x86",
@@ -65,23 +62,17 @@
                 "-c",
                 "mkdir -p target && ./btpc64macOS < btpc64macOSDebug.pas > target/btpc64macOSDebug && chmod +x target/btpc64macOSDebug && ./target/btpc64macOSDebug < dummy.pas > target/dummyExec.opcodes.txt"
             ],
-            "dependsOn": [
-                "Clean target"
-            ],
             "problemMatcher": []
         },
-        {
-            "label": "Build compiler for aarch64",
-            "command": "/bin/sh",
-            "args": [
-                "-c",
-                "mkdir -p target && ./btpc64macOS < btpc64macOS.pas > target/btpc64macosaarch64 && chmod +x target/btpc64macosaarch64"
-            ],
-            "dependsOn": [
-                "Clean target"
-            ],
-            "problemMatcher": []
-        },
+        // {
+        //     "label": "Build compiler for aarch64",
+        //     "command": "/bin/sh",
+        //     "args": [
+        //         "-c",
+        //         "mkdir -p target && ./btpc64macOS < btpc64macOS.pas > target/btpc64macosaarch64 && chmod +x target/btpc64macosaarch64"
+        //     ],
+        //     "problemMatcher": []
+        // },
         {
             "label": "Build dummy code for aarch64",
             "command": "/bin/sh",
@@ -99,7 +90,7 @@
             "command": "/bin/sh",
             "args": [
                 "-c",
-                "objdump -D target/dummyAarch64Exec > target/dummyAarch64Exec.asm"
+                "mkdir -p target && objdump -D target/dummyAarch64Exec > target/dummyAarch64Exec.asm"
             ],
             "type": "shell",
             "dependsOn": [
@@ -123,7 +114,7 @@
             "command": "/bin/sh",
             "args": [
                 "-c",
-                "cd RtlConverter && java RtlConverter.java ../target/rtl64macOS ../target/stub.txt"
+                "mkdir -p target && cd RtlConverter && java RtlConverter.java ../target/rtl64macOS ../target/stub.txt"
             ],
             "type": "shell",
             "dependsOn": [
@@ -131,7 +122,18 @@
             ],
             "problemMatcher": []
         },
-        // rtl64macOS
-        //  cd "/Users/assistentka_professora/Desktop/A-Bauman-BTPC-macOS-Arm64/rtl2pas/" && g++ main.cpp -o main && "/Users/assistentka_professora/Desktop/A-Bauman-BTPC-macOS-Arm64/rtl2pas/"main
+        {
+            "label": "Build compiler for aarch64",
+            "command": "/bin/bash",
+            "args": [
+                "-c",
+                "mkdir -p target && cp btpc64macOS.pas target/btpc64macOS.full.pas && RtlConverter/replace_stub.sh target/btpc64macOS.full.pas target/stub.txt && ./btpc64macOS < target/btpc64macOS.full.pas > target/btpc64macosaarch64 && chmod +x target/btpc64macosaarch64"
+            ],
+            "type": "shell",
+            "dependsOn": [
+                "Generate stub.txt using RtlConverter",
+            ],
+            "problemMatcher": []
+        }
     ]
 }
