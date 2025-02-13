@@ -2326,16 +2326,36 @@ var
 begin
   result := 0;
   bitPosition := 1;
-  while (a > 0) or (b > 0) do
+  while (a <> 0) or (b <> 0) do
   begin
-    if (a mod 2 > 0) or (b mod 2 > 0) then
+    if (a mod 2 <> 0) or (b mod 2 <> 0) then 
       result := result + bitPosition;
+    //writeln(a mod 2, ' ', b mod 2);
+   // writeln('res' , result, ' ' , bitPosition);
     a := a div 2;
     b := b div 2;
     bitPosition := bitPosition * 2;
   end;
   BitwiseOr := result;
 end;
+
+function BitwiseAnd(a, b: Integer): Integer;
+var
+  result, bitPosition: Integer;
+begin
+  result := 0;
+  bitPosition := 1;
+  while (a > 0) or (b > 0) do
+  begin
+    if (a mod 2 > 0) and (b mod 2 > 0) then  // Проверяем, оба бита равны 1
+      result := result + bitPosition;
+    a := a div 2;
+    b := b div 2;
+    bitPosition := bitPosition * 2;
+  end;
+  BitwiseAnd := result;
+end;
+
 
 function LeftShift(a: Integer; shiftCount: Integer): Integer;
 var
@@ -2369,18 +2389,15 @@ begin
 end;
 
 procedure OCB(offs : integer);
-var mask, i: integer;
+var mask, i, maskNeg: integer;
 begin 
-  // writeln(offs);
-  offs := (offs - 1) div 4;
-  //writeln('OCB(', offs, ')');
-  // 47 80 00 14
+  maskNeg := $3FFFFFF;
+  offs := BitwiseAnd(maskNeg, offs);
+  offs := offs div 4; // offs - 1
   mask := $14000000;
   for i := 1 to 4 do
   begin
-    // writeln('aaaa', mask, ' ', offs, ' ', mask mod 256, ' ', offs mod 256);
-    // writeln(BitwiseOr(mask  mod 256, offs mod 256));
-    EmitByte(BitwiseOr(mask  mod 256, offs mod 256));
+    EmitByte(BitwiseOr(mask  mod 256, (offs mod 256)));
     mask := mask div 256;
     offs := offs div 256;
   end;
