@@ -2288,27 +2288,22 @@ begin
  EmitByte($aa); 
  LastOutputCodeValue:=locXChgEDXESI;
 end;
-
+//TODO
 procedure OCREPMOVSB;
 begin
   // Предполагаем, что:
   // x1 = адрес назначения (rbx)
   // x2 = адрес источника (rcx)
   // x3 = количество байт для копирования (rdx)
-  WriteLn('cmp x3, #0');     // Проверка, если количество байт больше 0
-  WriteLn('beq end_ocrepmovsb'); // Если 0, выходим
+  WriteLn('cmp x3, #0');      
+  WriteLn('beq end_ocrepmovsb'); 
   WriteLn('rep_movsb_loop:');
-  WriteLn('ldrb w4, [x2], #1'); // Загружаем байт из источника (rcx) в w4 и увеличиваем x2 на 1
-  WriteLn('strb w4, [x1], #1 ');   // Сохраняем байт в назначение (rbx) и увеличиваем x1 на 1
-  WriteLn('subs x3, x3, #1 ');// Уменьшаем счетчик
-  WriteLn('bne rep_movsb_loop'); // Если счетчик не равен 0, продолжаем цикл
+  WriteLn('ldrb w4, [x2], #1'); 
+  WriteLn('strb w4, [x1], #1 ');     
+  WriteLn('subs x3, x3, #1 ');
+  WriteLn('bne rep_movsb_loop');  
   WriteLn('end_ocrepmovsb:');
   WriteLn('ret'); 
-//     MOV     X2, X3              // X2 = RCX (количество байтов для копирования)
-// 1:  LDRB    W0, [X19], #1      // Загрузить байт из [X19] в W0 и инкрементировать X19
-//     STRB    W0, [X4], #1       // Сохранить байт из W0 в [X4] и инкрементировать X4
-//     SUBS    X2, X2, #1         // Вычесть 1 из X2
-//     BNE     1b                 // Если X2 не ноль, повторить
 
  LastOutputCodeValue:=locREPMOVSB;
 end;
@@ -2336,8 +2331,6 @@ var
   result: Integer;
 begin
   result := a;
-  
-  // Просто умножаем число на 2 shiftCount раз
   for i := 1 to shiftCount do
   begin
     result := result * 2;
@@ -2399,8 +2392,13 @@ begin
 end;
 
 procedure OCMovValueX6(Value:integer);
-var val, result, mask, i : integer;
+var val, result, mask, i, flag : integer;
 begin
+  flag := 0;
+  if (Value < 0 ) then begin
+    flag := 1;
+    Value := Value * (-1);
+  end;
  // MOVZ x6, #Value, lsl #16
  // MOVK x6, #Value, lsl #0
   // EmitInt32(BitwiseOr($D2A00006, LeftShift(GetUpper16Bits(Value), 5)));
@@ -2430,14 +2428,26 @@ begin
     mask := mask div 256;
     val := val div 256;
   end;
-  //EmitInt32(BitwiseOr($F2A00000, LeftShift(GetLower16Bits(Value), 5)));
+  if (flag = 1) then 
+    begin
+     //sub x6, xzr, x6 E6 03 06 CB	
+      EmitByte($E6);
+      EmitByte($03);
+      EmitByte($06);
+      EmitByte($CB);
+    end;
 end;
 
 procedure OCMovValueX0(Value:integer);
-var val, result, mask, i : integer;
+var val, result, mask, i, flag: integer;
 begin
  // MOVZ x0, #Value, lsl #16
  // MOVK x0, #Value, lsl #0
+  flag := 0;
+  if (Value < 0 ) then begin
+    flag := 1;
+    Value := Value * (-1);
+  end;
   mask := $D2A00000; 
   val := LeftShift(GetUpper16Bits(Value), 5);
   EmitByte(BitwiseOr(mask mod 256, val mod 256));
@@ -2463,7 +2473,14 @@ begin
     mask := mask div 256;
     val := val div 256;
   end;
-  //EmitInt32(BitwiseOr($F2A00000, LeftShift(GetLower16Bits(Value), 5)));
+  if (flag = 1) then 
+    begin
+     //sub x0, xzr, x0 E0 03 00 CB
+      EmitByte($E0);
+      EmitByte($03);
+      EmitByte($00);
+      EmitByte($CB);
+    end;
 
 end;
 
@@ -2543,12 +2560,10 @@ begin
  
  PC:=0;
  CountJumps:=0;
+//  writeln('5 mod 2=  ', 5 mod 2);
+//  writeln('6 mod 2=  ', 6 mod 2);
+//  writeln('7 mod 2=  ', 7 mod 2);
 
- // WriteLn('mov x27, sp');
-//  EmitByte($fb);   
-//  EmitByte($03);
-//  EmitByte($00);
-//  EmitByte($91);
  while PC<CodePosition do begin
   Opcode:=Code[PC];
   // WriteLn('l_', Opcode, ':');
@@ -2617,9 +2632,9 @@ begin
     OCPopX0;
     OCCmpX1X0;
     OCValToReg;
-    // WriteLn('csel x0, xzr, x12, eq');
+    // WriteLn('csel x0, xzr, x12, ne');
     EmitByte($e0);   
-    EmitByte($03);
+    EmitByte($13);
     EmitByte($8c);
     EmitByte($9a);
     LastOutputCodeValue:=locNone;
@@ -2630,9 +2645,9 @@ begin
     OCPopX0;
     OCCmpX1X0;
     OCValToReg;
-    // WriteLn('csel x0, xzr, x12, ne');
+    // WriteLn('csel x0, xzr, x12, eq');
     EmitByte($e0);   
-    EmitByte($13);
+    EmitByte($03);
     EmitByte($8c);
     EmitByte($9a);
     LastOutputCodeValue:=locNone;
@@ -2888,8 +2903,13 @@ begin
    end;
    OPStG:begin
     OCPopX0;
-    Value:=Value*4;
+    Value:=Value*(4);
     OCMovValueX6(Value);
+    //sub x6, xzr, x6        E6 03 06 CB
+    // EmitByte($E6);   
+    // EmitByte($03);
+    // EmitByte($06);
+    // EmitByte($CB);
     //WriteLn('str x0, [x27, x6]');
     EmitByte($60);   
     EmitByte($6b);
@@ -2998,7 +3018,9 @@ begin
     PC:=PC+1;
    end;
    OPAdjS:begin
-    Value:=Value*(-4);
+    // if (Value < 0) then 
+    //   begin
+    Value := Value * (4);
     OCMovValueX6(Value);
     // WriteLn('sub sp, sp, x6');
     EmitByte($ff);   
