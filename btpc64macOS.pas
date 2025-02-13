@@ -2209,6 +2209,13 @@ begin
  EmitByte($d2);
 end;
 
+procedure OCNop;
+begin
+  // nop
+  EmitInt32($D503201F);
+end;
+
+
 procedure OCIDIVX1;
 begin
  // WriteLn('sdiv x0, x1, x0');
@@ -2229,19 +2236,6 @@ begin
  LastOutputCodeValue:=locCmpX1X0;
 end;
 
-// 4000
-
-//  0 AA
-//  1 40
-//  2 00
-//  3 DD
-//  4 ВВ
-//  5 ВВ
-//  6 ВВ
-//  7 ВВ
-//  8
-//  9 
-//  10
 procedure OCMovDWordPtrX1X0;
 begin
  // WriteLn('str x0, [x1]');
@@ -2294,8 +2288,6 @@ begin
  EmitByte($aa); 
  LastOutputCodeValue:=locXChgEDXESI;
 end;
-
-
 
 procedure OCREPMOVSB;
 begin
@@ -2371,6 +2363,40 @@ begin
   GetUpper16Bits := result;
 end;
 
+procedure OCB(offs : integer);
+var mask, i: integer;
+begin 
+  // writeln(offs);
+  offs := (offs - 1) div 4;
+  //writeln('OCB(', offs, ')');
+  // 47 80 00 14
+  mask := $14000000;
+  for i := 1 to 4 do
+  begin
+    // writeln('aaaa', mask, ' ', offs, ' ', mask mod 256, ' ', offs mod 256);
+    // writeln(BitwiseOr(mask  mod 256, offs mod 256));
+    EmitByte(BitwiseOr(mask  mod 256, offs mod 256));
+    mask := mask div 256;
+    offs := offs div 256;
+  end;
+end;
+
+procedure OCBEq(offs : integer);
+var mask, i: integer;
+begin 
+  offs := (offs - 1) div 4;
+  mask := $54000000;
+  offs := LeftShift(offs, 5);
+  EmitByte(BitwiseOr(mask mod 256, offs mod 256));
+  mask := mask div 256;
+  offs := offs div 256;
+  for i := 1 to 3 do
+  begin
+    EmitByte(BitwiseOr(mask  mod 256, offs mod 256));
+    mask := mask div 256;
+    offs := offs div 256;
+  end;
+end;
 
 procedure OCMovValueX6(Value:integer);
 var val, result, mask, i : integer;
@@ -2420,7 +2446,7 @@ begin
   for i := 1 to 3 do
   begin
     EmitByte(BitwiseOr(mask  mod 256, val mod 256));
-   // writeln(BitwiseOr(mask mod 256, val mod 256), ' bitOr');
+    // writeln(BitwiseOr(mask mod 256, val mod 256), ' bitOr');
     mask := mask div 256;
     val := val div 256;
   end;
@@ -2479,17 +2505,45 @@ end;
 
 var JumpTable:array[1:MaximalCodeSize] of integer;
 
+procedure EmitFromJmpTable(CountJumps: integer);
+var Index, JmpAddr, OpCodeValue, OpCode, PrevOutputCodeDataSize : integer;
+begin
+    for Index:=1 to CountJumps do begin
+ 	    JmpAddr := JumpTable[Index];
+      OpCode := OutputCodeGetInt32(JmpAddr);
+      OpCodeValue := OutputCodeGetInt32(JmpAddr + 4);
+      PrevOutputCodeDataSize := OutputCodeDataSize;
+      if (OpCode = OPJmp) then
+      begin
+        OutputCodeDataSize := JmpAddr - 1;
+        OCB(Code[OpCodeValue] - JmpAddr + 4);
+        OCNop;
+        OutputCodeDataSize := PrevOutputCodeDataSize;
+      end;
+  	  if (OpCode = OPJZ) then
+      begin
+        OutputCodeDataSize := JmpAddr - 1;
+        OCBEq(Code[OpCodeValue] - JmpAddr + 4);
+        OCNop;
+        OutputCodeDataSize := PrevOutputCodeDataSize;
+      end;
+      //OutputCodePutInt32(JmpAddr,(   (   Code[OutputCodeGetInt32(JmpAddr)] - JmpAddr) - 3));
+    end;
+end;
+
 procedure AssembleAndLink;
 var
    InjectionSize,
    CountJumps,Opcode,Value,Index,PEEXECodeSize,PEEXESectionVirtualSize,
-   PEEXESectionAlignment,PEEXECodeStart, iter :integer;
+   PEEXESectionAlignment, PEEXECodeStart, iter :integer;
 begin
  EmitStubCode;
  PEEXECodeStart:=OutputCodeDataSize;
  LastOutputCodeValue:=locNone;
+ 
  PC:=0;
  CountJumps:=0;
+
  // WriteLn('mov x27, sp');
 //  EmitByte($fb);   
 //  EmitByte($03);
@@ -2901,10 +2955,11 @@ begin
    end;
    OPJmp:begin
     if Value<>(PC+2) then begin
-     CountJumps:=CountJumps+1;
+      CountJumps:=CountJumps+1;
+      JumpTable[CountJumps]:=OutputCodeDataSize+1;
 
-     JumpTable[CountJumps]:=OutputCodeDataSize+1;
-     EmitInt32(Value);
+      EmitInt32(OPJmp);
+      EmitInt32(Value);
     end; 
     PC:=PC+1;
     LastOutputCodeValue:=locNone;
@@ -2912,20 +2967,33 @@ begin
    OPJZ:begin
     CountJumps:=CountJumps+1;
     OCPopX0;
+    
     // WriteLn('cmp x0, xzr');
     EmitByte($1f);   
     EmitByte($00);
     EmitByte($1f);
     EmitByte($eb);
-    //WriteLn('b.eq l_', Value);
-    JumpTable[CountJumps]:= PC div 2 + 1;
+
+    CountJumps := CountJumps + 1;
+    JumpTable[CountJumps]:=OutputCodeDataSize + 1;
+
+    EmitInt32(OPJZ);
+    EmitInt32(Value);
+
+    for Index:=1 to 8 do begin
+      EmitByte($1F);
+      EmitByte($20);
+      EmitByte($03);
+      EmitByte($D5);
+    end;
+
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPCall:begin
     CountJumps:=CountJumps+1;
     //WriteLn('bl l_', Value);
-    JumpTable[CountJumps]:= PC div 2 + 1;
+    JumpTable[CountJumps]:= PC;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -2967,13 +3035,6 @@ begin
   PC:=PC+1;
  end;
 
-  { Patch jumps + calls }
-  for Index:=1 to CountJumps do begin
- 	Value:=JumpTable[Index];
- 	{jump relative for x64 is limited to 32bit value}
-  	OutputCodePutInt32(Value,(   (   Code[OutputCodeGetInt32(Value)] - Value) - 3));
-  end;
-
 {	function to it's offset in x64 and x32 mapping }
 { func 	    x64		x32
 	halt 	0		0
@@ -2987,6 +3048,8 @@ begin
 	EOLN 	40		20
 }
 
+  EmitFromJmpTable(CountJumps);
+
   {injecting}
   InjectionSize:=OutputCodeDataSize-StartStubSize; 
   iter := InjectionSize mod 16384;
@@ -2995,7 +3058,7 @@ begin
     EmitByte(0);
     iter := iter + 1;   
   end;
-  
+
   {new}
   EmitEndingStub;
 
