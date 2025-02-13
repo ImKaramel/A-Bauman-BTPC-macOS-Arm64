@@ -1,0 +1,10 @@
+OPJmp= 39 Value = 2
+OPLdC= 28 Value = 123456
+OPStG= 34 Value = 0
+OPLdG= 32 Value = 0
+OPLdC= 28 Value = 3
+OPGtrI= 11 Value = 40
+OPJZ= 40 Value = 17
+OPLdC= 28 Value = 1
+OPStG= 34 Value = 0
+OPHalt= 19 Value = 0

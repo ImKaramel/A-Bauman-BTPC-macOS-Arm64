@@ -61,9 +61,6 @@ program BTPC; {{ BeRoTinyPascalCompiler }
 {$ifdef Windows}
  {$apptype console}
 {$endif}
-{$ifdef Darwin}
-  {$define MacOS}
-{$endif}
 
 const MaximalCodeSize=262144;
       MaximalIdentifiers=512;
@@ -863,7 +860,6 @@ begin
  end;
  Position:=j;
 end;
-
 
 procedure EmitCode(Value:integer);
 begin
@@ -1906,7 +1902,7 @@ begin
   Identifiers[f].Inside:=false;
   EmitOpcode(OPExit,Identifiers[f].ReturnAddress-StackPosition);
  end else begin
-  if FunctionDeclarationIndex>=0 then begin 
+  if FunctionDeclarationIndex>=0 then begin
    Error(143);
   end;
   GetSymbol;
@@ -2033,7 +2029,7 @@ begin
  end;
 end;
 
-procedure OutputCodePutInt32(o, i..integer);
+procedure OutputCodePutInt32(o,i..integer);
 begin
  if i>=0 then begin
   OutputCodeData[o]:=chr(i mod 256);
@@ -2067,55 +2063,579 @@ begin
  end;
 end;
 
-procedure OutputCodeChar(s: char);
-var i:integer;
+procedure EmitStubCode;
 begin
-  EmitChar(s);
+  OutputCodeDataSize:=0;
+  OutputCodeString(#207#250#237#254#7#0#0#1#3#0#0#0#2#0#0#0#8#0#0#0);
+  OutputCodeString(#184#2#0#0#1#0#0#0#0#0#0#0#25#0#0#0#72#0#0#0);
+  OutputCodeString(#95#95#80#65#71#69#90#69#82#79#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#1#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#25#0#0#0#152#0#0#0#95#95#84#69#88#84#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#1#0#0#0#0#16#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#16#0#0#0#0#0#0);
+  OutputCodeString(#5#0#0#0#5#0#0#0#1#0#0#0#0#0#0#0#95#95#116#101);
+  OutputCodeString(#120#116#0#0#0#0#0#0#0#0#0#0#95#95#84#69#88#84#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#109#12#0#0#1#0#0#0#147#3#0#0);
+  OutputCodeString(#0#0#0#0#109#12#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#4#0#128#0#0#0#0#0#0#0#0#0#0#0#0#25#0#0#0);
+  OutputCodeString(#152#0#0#0#95#95#68#65#84#65#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#16#0#0#1#0#0#0#0#16#0#0#0#0#0#0#0#16#0#0);
+  OutputCodeString(#0#0#0#0#0#16#0#0#0#0#0#0#3#0#0#0#3#0#0#0);
+  OutputCodeString(#1#0#0#0#0#0#0#0#95#95#100#97#116#97#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#95#95#68#65#84#65#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#16#0#0#1#0#0#0#191#0#0#0#0#0#0#0#0#16#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#25#0#0#0#72#0#0#0#95#95#76#73);
+  OutputCodeString(#78#75#69#68#73#84#0#0#0#0#0#0#0#32#0#0#1#0#0#0);
+  OutputCodeString(#0#16#0#0#0#0#0#0#0#32#0#0#0#0#0#0#176#4#0#0);
+  OutputCodeString(#0#0#0#0#1#0#0#0#1#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#2#0#0#0#24#0#0#0#0#32#0#0#38#0#0#0#96#34#0#0);
+  OutputCodeString(#80#2#0#0#27#0#0#0#24#0#0#0#229#42#152#99#63#19#48#198);
+  OutputCodeString(#142#168#164#150#80#228#85#164#42#0#0#0#16#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#5#0#0#0#184#0#0#0#4#0#0#0#42#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#109#12#0#0#1#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#233#132#3#0#0#87#86#85#84#82#81#83#80#72#137#229#72#199#192);
+  OutputCodeString(#4#0#0#2#72#199#199#1#0#0#0#72#137#238#72#131#198#72#72#199);
+  OutputCodeString(#194#1#0#0#0#15#5#88#91#89#90#92#93#94#95#194#8#0#86#72);
+  OutputCodeString(#139#92#36#16#72#139#68#36#24#72#131#248#0#15#141#13#0#0#0#72);
+  OutputCodeString(#247#216#72#255#203#106#45#232#170#255#255#255#72#49#201#80#83#72#133#192);
+  OutputCodeString(#15#132#18#0#0#0#72#255#193#72#199#195#10#0#0#0#72#49#210#72);
+  OutputCodeString(#247#251#235#229#72#133#201#15#148#194#8#209#91#88#72#41#203#72#131#251);
+  OutputCodeString(#0#15#142#14#0#0#0#81#106#32#232#107#255#255#255#72#255#203#117#244);
+  OutputCodeString(#89#72#141#61#236#2#0#0#72#1#207#72#255#207#81#72#199#198#10#0);
+  OutputCodeString(#0#0#72#49#210#72#247#254#72#137#211#72#131#195#48#136#31#72#255#207);
+  OutputCodeString(#226#229#89#72#199#192#4#0#0#2#72#199#199#1#0#0#0#72#141#53);
+  OutputCodeString(#180#2#0#0#72#137#202#15#5#94#194#16#0#106#13#232#22#255#255#255);
+  OutputCodeString(#106#10#232#15#255#255#255#195#87#86#85#84#82#81#83#80#72#199#192#3);
+  OutputCodeString(#0#0#2#72#49#255#72#141#53#247#2#0#0#72#199#194#1#0#0#0);
+  OutputCodeString(#15#5#72#131#248#0#15#148#195#76#141#5#226#2#0#0#72#49#201#65);
+  OutputCodeString(#8#24#88#91#89#90#92#93#94#95#195#76#141#5#203#2#0#0#65#128);
+  OutputCodeString(#56#0#15#133#16#0#0#0#232#171#255#255#255#76#141#5#181#2#0#0);
+  OutputCodeString(#65#198#0#1#195#232#217#255#255#255#72#49#192#76#141#5#160#2#0#0);
+  OutputCodeString(#65#138#0#232#136#255#255#255#195#232#193#255#255#255#87#86#85#84#82#81);
+  OutputCodeString(#83#80#72#49#192#72#199#193#1#0#0#0#76#141#5#123#2#0#0#65);
+  OutputCodeString(#128#56#0#15#133#115#0#0#0#76#141#5#104#2#0#0#65#128#56#0);
+  OutputCodeString(#15#132#24#0#0#0#76#141#5#87#2#0#0#65#128#56#32#15#135#7);
+  OutputCodeString(#0#0#0#232#56#255#255#255#235#198#76#141#5#63#2#0#0#65#128#56);
+  OutputCodeString(#45#15#133#8#0#0#0#72#247#217#232#29#255#255#255#72#49#219#76#141);
+  OutputCodeString(#5#35#2#0#0#65#138#24#128#251#48#15#130#27#0#0#0#128#251#57);
+  OutputCodeString(#15#135#18#0#0#0#72#107#192#10#72#131#235#48#72#1#216#232#238#254);
+  OutputCodeString(#255#255#235#207#72#247#233#72#137#4#36#88#91#89#90#92#93#94#95#195);
+  OutputCodeString(#232#22#255#255#255#76#141#5#226#1#0#0#65#128#56#0#15#133#26#0);
+  OutputCodeString(#0#0#76#141#5#207#1#0#0#65#138#24#128#251#10#15#132#7#0#0);
+  OutputCodeString(#0#232#174#254#255#255#235#208#195#72#49#192#76#141#5#179#1#0#0#65);
+  OutputCodeString(#138#0#195#76#141#5#166#1#0#0#65#128#56#10#15#148#194#195#72#199);
+  OutputCodeString(#192#1#0#0#2#72#199#199#0#0#0#0#15#5#232#242#254#255#255#232);
+  OutputCodeString(#152#255#255#255#80#106#1#232#174#253#255#255#104#46#251#255#255#106#6#232);
+  OutputCodeString(#162#253#255#255#232#76#254#255#255#106#65#232#98#253#255#255#232#64#254#255);
+  OutputCodeString(#255#232#188#255#255#255#232#166#254#255#255#106#123#232#76#253#255#255#80#232);
+  OutputCodeString(#70#253#255#255#80#106#1#232#114#253#255#255#106#125#232#55#253#255#255#106);
+  OutputCodeString(#123#232#48#253#255#255#72#49#192#76#141#5#40#1#0#0#65#138#0#80);
+  OutputCodeString(#106#1#232#79#253#255#255#106#125#232#20#253#255#255#72#49#210#232#97#255);
+  OutputCodeString(#255#255#106#123#232#5#253#255#255#82#106#1#232#49#253#255#255#106#125#232);
+  OutputCodeString(#246#252#255#255#232#56#255#255#255#106#123#232#234#252#255#255#80#232#228#252);
+  OutputCodeString(#255#255#80#106#1#232#16#253#255#255#106#125#232#213#252#255#255#232#52#255);
+  OutputCodeString(#255#255#72#199#192#1#0#0#0#232#218#254#255#255#232#18#254#255#255#106);
+  OutputCodeString(#123#232#184#252#255#255#80#232#178#252#255#255#106#32#232#171#252#255#255#80);
+  OutputCodeString(#106#1#232#215#252#255#255#106#125#232#156#252#255#255#232#251#254#255#255#104);
+  OutputCodeString(#46#251#255#255#106#6#232#191#252#255#255#232#105#253#255#255#232#100#253#255);
+  OutputCodeString(#255#232#224#254#255#255#72#137#229#72#141#53#119#0#0#0#$90#$90#$90#$90);
+  OutputCodeDataSize:=4096;
 end;
 
-// $$$STUB$$$
+procedure EmitEndingStub;
+begin
+  OutputCodeString(#60#50#48#48#54#95#66#84#80#67#95#97#117#116#104#111#114#95#66#101);
+  OutputCodeString(#110#106#97#109#105#110#95#82#111#115#115#101#97#117#120#95#98#101#110#106);
+  OutputCodeString(#97#109#105#110#64#114#111#115#115#101#97#117#120#46#99#111#109#62#60#50);
+  OutputCodeString(#48#49#55#95#76#105#110#117#120#80#111#114#116#95#97#117#116#104#111#114);
+  OutputCodeString(#95#65#110#116#104#111#110#121#95#66#101#108#121#97#101#118#95#97#110#116);
+  OutputCodeString(#111#110#115#100#108#64#103#109#97#105#108#46#99#111#109#62#60#0#0#214);
+  OutputCodeString(#14#0#0#1#0#0#0#114#12#0#0#1#0#0#0#166#12#0#0#1);
+  OutputCodeString(#0#0#0#85#13#0#0#1#0#0#0#197#13#0#0#1#0#0#0#221);
+  OutputCodeString(#13#0#0#1#0#0#0#136#14#0#0#1#0#0#0#185#14#0#0#1);
+  OutputCodeString(#0#0#0#199#14#0#0#1#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0);
+  OutputCodeString(#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#28#0#0#0);
+  OutputCodeString(#14#1#0#0#114#12#0#0#1#0#0#0#41#0#0#0#14#1#0#0);
+  OutputCodeString(#166#12#0#0#1#0#0#0#57#0#0#0#14#1#0#0#200#12#0#0);
+  OutputCodeString(#1#0#0#0#82#0#0#0#14#1#0#0#205#12#0#0#1#0#0#0);
+  OutputCodeString(#110#0#0#0#14#1#0#0#232#12#0#0#1#0#0#0#142#0#0#0);
+  OutputCodeString(#14#1#0#0#0#13#0#0#1#0#0#0#169#0#0#0#14#1#0#0);
+  OutputCodeString(#13#13#0#0#1#0#0#0#195#0#0#0#14#1#0#0#27#13#0#0);
+  OutputCodeString(#1#0#0#0#215#0#0#0#14#1#0#0#85#13#0#0#1#0#0#0);
+  OutputCodeString(#226#0#0#0#14#1#0#0#100#13#0#0#1#0#0#0#237#0#0#0);
+  OutputCodeString(#14#1#0#0#163#13#0#0#1#0#0#0#250#0#0#0#14#1#0#0);
+  OutputCodeString(#196#13#0#0#1#0#0#0#7#1#0#0#14#1#0#0#197#13#0#0);
+  OutputCodeString(#1#0#0#0#19#1#0#0#14#1#0#0#221#13#0#0#1#0#0#0);
+  OutputCodeString(#34#1#0#0#14#1#0#0#244#13#0#0#1#0#0#0#60#1#0#0);
+  OutputCodeString(#14#1#0#0#46#14#0#0#1#0#0#0#90#1#0#0#14#1#0#0);
+  OutputCodeString(#71#14#0#0#1#0#0#0#111#1#0#0#14#1#0#0#71#14#0#0);
+  OutputCodeString(#1#0#0#0#127#1#0#0#14#1#0#0#120#14#0#0#1#0#0#0);
+  OutputCodeString(#143#1#0#0#14#1#0#0#136#14#0#0#1#0#0#0#153#1#0#0);
+  OutputCodeString(#14#1#0#0#184#14#0#0#1#0#0#0#164#1#0#0#14#1#0#0);
+  OutputCodeString(#185#14#0#0#1#0#0#0#171#1#0#0#14#1#0#0#199#14#0#0);
+  OutputCodeString(#1#0#0#0#179#1#0#0#14#1#0#0#214#14#0#0#1#0#0#0);
+  OutputCodeString(#187#1#0#0#14#1#0#0#230#14#0#0#1#0#0#0#193#1#0#0);
+  OutputCodeString(#14#1#0#0#26#15#0#0#1#0#0#0#199#1#0#0#14#1#0#0);
+  OutputCodeString(#162#15#0#0#1#0#0#0#205#1#0#0#14#1#0#0#219#15#0#0);
+  OutputCodeString(#1#0#0#0#211#1#0#0#14#1#0#0#246#15#0#0#1#0#0#0);
+  OutputCodeString(#226#1#0#0#14#1#0#0#0#16#0#0#1#0#0#0#244#1#0#0);
+  OutputCodeString(#14#2#0#0#0#16#0#0#1#0#0#0#10#2#0#0#14#2#0#0);
+  OutputCodeString(#116#16#0#0#1#0#0#0#25#2#0#0#14#2#0#0#117#16#0#0);
+  OutputCodeString(#1#0#0#0#40#2#0#0#14#2#0#0#118#16#0#0#1#0#0#0);
+  OutputCodeString(#46#2#0#0#14#2#0#0#119#16#0#0#1#0#0#0#63#2#0#0);
+  OutputCodeString(#14#2#0#0#191#16#0#0#1#0#0#0#2#0#0#0#3#1#16#0);
+  OutputCodeString(#0#0#0#0#1#0#0#0#22#0#0#0#15#1#0#0#109#12#0#0);
+  OutputCodeString(#1#0#0#0#32#0#95#95#109#104#95#101#120#101#99#117#116#101#95#104);
+  OutputCodeString(#101#97#100#101#114#0#95#109#97#105#110#0#82#84#76#87#114#105#116#101);
+  OutputCodeString(#67#104#97#114#0#82#84#76#87#114#105#116#101#73#110#116#101#103#101#114);
+  OutputCodeString(#0#82#84#76#87#114#105#116#101#73#110#116#101#103#101#114#78#111#116#83);
+  OutputCodeString(#105#103#110#101#100#0#82#84#76#87#114#105#116#101#73#110#116#101#103#101);
+  OutputCodeString(#114#80#114#101#67#104#101#99#107#76#111#111#112#0#82#84#76#87#114#105);
+  OutputCodeString(#116#101#73#110#116#101#103#101#114#80#114#101#67#104#101#99#107#76#111#111);
+  OutputCodeString(#112#68#111#110#101#0#82#84#76#87#114#105#116#101#73#110#116#101#103#101);
+  OutputCodeString(#114#80#97#100#100#105#110#103#76#111#111#112#0#82#84#76#87#114#105#116);
+  OutputCodeString(#101#73#110#116#101#103#101#114#78#111#116#80#97#100#100#105#110#103#0#82);
+  OutputCodeString(#84#76#87#114#105#116#101#73#110#116#101#103#101#114#76#111#111#112#0#82);
+  OutputCodeString(#84#76#87#114#105#116#101#76#110#0#82#101#97#100#67#104#97#114#69#120);
+  OutputCodeString(#0#82#101#97#100#67#104#97#114#73#110#105#116#0#82#101#97#100#73#110);
+  OutputCodeString(#105#116#68#111#110#101#0#82#84#76#82#101#97#100#67#104#97#114#0#82);
+  OutputCodeString(#84#76#82#101#97#100#73#110#116#101#103#101#114#0#82#101#97#100#73#110);
+  OutputCodeString(#116#101#103#101#114#83#107#105#112#87#104#105#116#101#83#112#97#99#101#0);
+  OutputCodeString(#82#101#97#100#73#110#116#101#103#101#114#83#107#105#112#87#104#105#116#101);
+  OutputCodeString(#83#112#97#99#101#68#111#110#101#0#82#101#97#100#73#110#116#101#103#101);
+  OutputCodeString(#114#78#111#116#83#105#103#110#101#100#0#82#101#97#100#73#110#116#101#103);
+  OutputCodeString(#101#114#76#111#111#112#0#82#101#97#100#73#110#116#101#103#101#114#68#111);
+  OutputCodeString(#110#101#0#82#84#76#82#101#97#100#76#110#0#82#101#97#100#76#110#68);
+  OutputCodeString(#111#110#101#0#82#84#76#69#79#70#0#82#84#76#69#79#76#78#0#82);
+  OutputCodeString(#84#76#72#97#108#116#0#84#101#115#116#49#0#84#101#115#116#50#0#84);
+  OutputCodeString(#101#115#116#51#0#84#101#115#116#52#0#83#116#117#98#69#110#116#114#121);
+  OutputCodeString(#80#111#105#110#116#0#80#114#111#103#114#97#109#69#110#116#114#121#80#111);
+  OutputCodeString(#105#110#116#0#82#84#76#87#114#105#116#101#73#110#116#101#103#101#114#66);
+  OutputCodeString(#117#102#102#101#114#0#82#101#97#100#67#104#97#114#66#117#102#102#101#114);
+  OutputCodeString(#0#82#101#97#100#67#104#97#114#73#110#105#116#101#100#0#73#115#69#79);
+  OutputCodeString(#70#0#82#84#76#70#117#110#99#116#105#111#110#84#97#98#108#101#0#67);
+  OutputCodeString(#111#112#121#114#105#103#104#116#0#0#0#0#0#0#0#0#0#0#0#0);
+end;
 
-{__PAS}
-OffsSegPasVMSize = $1b8;
-OffsSegPasFileSize = $1c8;
-OffsSectPasSize = $208;
+const EndingStubSize=5297;
+  StartStubSize=$1004;
+  EndStubSize=$14b4;
+  {__TEXT}
+  OffsSegTextVMSize=$88;
+  OffsSegTextFileSize=$98;
+  ValSegTextVMSize=$1000;
+  ValSegTextFileSize=$1000;
+  {__text}
+  OffsSectTextSize=$D8;
+  ValSectTextSize=$393;
+  {__DATA}
+  OffsSegDataVMAddr=$118;
+  OffsSegDataOffs=$128;
+  ValSegDataVMAddr=$1000;
+  ValSegDataOffs=$1000;
+  {__data}
+  OffsSectDataVMAddr=$168;
+  OffsSectDataOffs=$178;
+  ValSectDataVMAddr=$1000;
+  ValSectDataOffs=$1000;
+  {__LINKEDIT}
+  OffsSegLinkVMAddr=$1B0;
+  OffsSegLinkOffs=$1C0;
+  ValSegLinkVMAddr=$2000;
+  ValSegLinkOffs=$2000;
+  {SYMTAB_OFFSETS}
+  OffsSymTabOffs=$1E8;
+  OffsStrTabOffs=$1F0;
+  ValSymTabOffs=$2000;
+  ValStrTabOffs=$2260;
+  {SYMTAB_DATA}
+  OffsData0=$21E8;
+  OffsData1=$21F8;
+  OffsData2=$2208;
+  OffsData3=$2218;
+  OffsData4=$2228;
+  OffsData5=$2238;
+  ValData0=$1000;
+  ValData1=$1074;
+  ValData2=$1075;
+  ValData3=$1076;
+  ValData4=$1077;
+  ValData5=$10BF;
+  {GOT}
+  OffsStrings0=$FF9;
+  OffsStrings1=$D0D;
+  OffsStrings2=$D45;
+  OffsStrings3=$D76;
+  OffsStrings4=$D8D;
+  OffsStrings5=$DA3;
+  OffsStrings17=$DB9;
+  OffsStrings6=$DCD;
+  OffsStrings7=$DF4;
+  OffsStrings8=$E05;
+  OffsStrings9=$E16;
+  OffsStrings10=$E2E;
+  OffsStrings11=$E4A;
+  OffsStrings12=$E8D;
+  OffsStrings13=$E9E;
+  OffsStrings14=$EBC;
+  OffsStrings15=$EC7;
+  OffsStrings16=$F45;
 
-{__LINKEDIT}
-OffsSegLinkVMAddr=$248;
-OffsSegLinkOffs=$258;
-ValSegLinkVMAddr=$c000;
-ValSegLinkOffs=$c000;
-
-{LC_DYLD_INFO_ONLY}
-OffsComRebaseOff = $280;
-OffsComExportOff = $2a0;
-ValComRebaseOff = $c000;
-ValComExportOff = $c008;
-
-{SYMTAB_OFFSETS}
-OffsSymTabOffs=$2b0;
-OffsStrTabOffs=$2b8;
-ValSymTabOffs=$c058; 
-ValStrTabOffs=$c288;
-
-{LC_FUNCTION_STARTS}
-OffsComDataOff = $3d0;
-ValComDataOff = $c038;
-
-{LC_CODE_SIGNATURE}
-OffsCodeSignOff = $3f0;
-ValCodeSignOff = $c4d0;
+  ValString0=$00000077;
+  ValString1=$000002EC;
+  ValString2=$000002B4;
+  ValString3=$2F7;
+  ValString4=$2E2;
+  ValString5=$2CB;
+  ValString17=$2B5;
+  ValString6=$2A0;
+  ValString7=$27B;
+  ValString8=$268;
+  ValString9=$257;
+  ValString10=$23F;
+  ValString11=$223;
+  ValString12=$1E2;
+  ValString13=$1CF;
+  ValString14=$1B3;
+  ValString15=$1A6;
+  ValString16=$128;
 
 
 const locNone=0;
-      locPushX0=1;
-      locPopX0=2;
-      locPopX1=3;
+      locPushEAX=1;
+      locPopEAX=2;
+      locPopEBX=3;
       locIMulEBX=4;
       locXorEDXEDX=5;
       locIDivEBX=6;
       locPushEDX=7;
-      locCmpX1X0=8;
+      locCmpEAXEBX=8;
       locMovzxEAXAL=9;
       locMovDWordPtrESPEAX=10;
       locJNZJNE0x03=11;
@@ -2129,7 +2649,7 @@ const locNone=0;
       locREPMOVSB=19;
       locTestEAXEAX=20;
       locNegDWordPtrESP=21;
-      locMovX0DWordPtrESP=22;
+      locMovEAXDWordPtrESP=22;
       locMovEBXDWordPtrFORStateCurrentValue=23;
       locCmpDWordPtrEBXEAX=24;
       locMovEAXDWordPtrFORStateDestValue=25;
@@ -2138,924 +2658,582 @@ const locNone=0;
 
 var LastOutputCodeValue,PC:integer;
 
-procedure OCPushX0;
+procedure OCPushEAX;
 begin
-  // WriteLn('str x0, [sp, #-16]!');
-  EmitByte($e0);   
-  EmitByte($0f);
-  EmitByte($1f);
-  EmitByte($f8); 
-  LastOutputCodeValue:=locPushX0;
+ if LastOutputCodeValue=locPopEAX then begin
+  if Code[PC]=OutputCodeDataSize then begin
+   Code[PC]:=Code[PC]-1;
+  end;
+  if OutputCodeDataSize>0 then begin
+   OutputCodeDataSize:=OutputCodeDataSize-1;
+  end;
+  LastOutputCodeValue:=locNone;
+ end else begin
+  EmitByte($50);
+  LastOutputCodeValue:=locPushEAX;
+ end;
 end;
 
-procedure OCPushX1;
+procedure OCPopEAX;
 begin
-  // WriteLn('str x1, [sp, #-16]!');
-  EmitByte($e1);   
-  EmitByte($0f);
-  EmitByte($1f);
-  EmitByte($f8); 
-  LastOutputCodeValue:=locPushX0;
+ if LastOutputCodeValue=locPushEAX then begin
+  if Code[PC]=OutputCodeDataSize then begin
+   Code[PC]:=Code[PC]-1;
+  end;
+  if OutputCodeDataSize>0 then begin
+   OutputCodeDataSize:=OutputCodeDataSize-1;
+  end;
+  LastOutputCodeValue:=locNone;
+ end else begin
+  EmitByte($58);
+  LastOutputCodeValue:=locPopEAX;
+ end;
 end;
 
-procedure OCPopX0;
+procedure OCPopEBX;
 begin
-  // WriteLn('ldr x0, [sp], #16');
-  EmitByte($e0);   
-  EmitByte($07);
-  EmitByte($41);
-  EmitByte($f8); 
-  LastOutputCodeValue:=locPopX0;
+ EmitByte($5b);
+ LastOutputCodeValue:=locPopEBX;
 end;
 
-procedure OCPopX1;
+procedure OCIMulEBX;
 begin
-  // WriteLn('ldr x1, [sp], #16');
- EmitByte($e1);   
- EmitByte($07);
- EmitByte($41);
- EmitByte($f8); 
- LastOutputCodeValue:=locPopX1;
+ EmitByte($48); EmitByte($f7); EmitByte($eb);
+ LastOutputCodeValue:=locIMulEBX;
 end;
 
-procedure OCPopX19;
+procedure OCXorEDXEDX;
 begin
- // WriteLn('ldr x19, [sp], #16');
- EmitByte($f3);   
- EmitByte($07);
- EmitByte($41);
- EmitByte($f8); 
- LastOutputCodeValue:=locPopESI;
-end;
-
-procedure OCXorX0X0;
-begin
- // WriteLn('eor x0, x0, x0');
- EmitByte($00);   
- EmitByte($00);
- EmitByte($00);
- EmitByte($ca); 
+ EmitByte($48); EmitByte($31); EmitByte($d2);
  LastOutputCodeValue:=locXorEDXEDX;
 end;
 
-procedure OCValToReg;
+procedure OCIDIVEBX;
 begin
- // WriteLn('mov x12, #1'); 
- EmitByte($2c);   
- EmitByte($00);
- EmitByte($80);
- EmitByte($d2);
-end;
-
-procedure OCNop;
-begin
-  // nop
-  EmitInt32($D503201F);
-end;
-
-procedure OCIDIVX1;
-begin
- // WriteLn('sdiv x0, x0, x1');
- EmitByte($00);   
- EmitByte($0c);
- EmitByte($c1);
- EmitByte($9a); 
+ EmitByte($48); EmitByte($f7); EmitByte($fb);
  LastOutputCodeValue:=locIDivEBX;
 end;
 
-procedure OCUdivMsub;
+procedure OCPushEDX;
 begin
-  // udiv x2, x0, x1
-  EmitByte($02);
-  EmitByte($08);
-  EmitByte($C1);
-  EmitByte($9A);
-  // msub x0, x2, x1, x0
-  EmitByte($40);
-  EmitByte($80);
-  EmitByte($01);
-  EmitByte($9B);
+ EmitByte($52);
+ LastOutputCodeValue:=locPushEDX;
 end;
 
-procedure OCCmpX1X0;
+procedure OCCmpEAXEBX;
 begin
- // WriteLn('cmp x1, x0');
- EmitByte($3f);   
- EmitByte($00);
- EmitByte($00);
- EmitByte($eb); 
- LastOutputCodeValue:=locCmpX1X0;
+ EmitByte($48); EmitByte($39); EmitByte($d8);
+ LastOutputCodeValue:=locCmpEAXEBX;
 end;
 
-procedure OCMovDWordPtrX1X0;
+procedure OCMovzxEAXAL;
 begin
- // WriteLn('str x0, [x1]');
- EmitByte($20);   
- EmitByte($00);
- EmitByte($00);
- EmitByte($f9); 
+ EmitByte($48); EmitByte($0f); EmitByte($b6); EmitByte($c0);
+ LastOutputCodeValue:=locMovzxEAXAL;
+end;
+
+{!}
+procedure OCJNZJNE0x03;
+begin
+ EmitByte($75); EmitByte($03); {jnz $+0x5, not 0x03}
+ LastOutputCodeValue:=locJNZJNE0x03;
+end;
+
+{new}
+{{http://stackoverflow.com/questions/20730731/syntax-of-short-jmp-instruction}
+procedure OCJNZJNE0x06;
+begin
+ EmitByte($75); EmitByte($04); {jmp $+0x6}
+ LastOutputCodeValue:=locJNZJNE0x06;
+end;
+
+procedure OCMovDWordPtrESPEAX;
+begin
+ EmitByte($48); EmitByte($89); EmitByte($04); EmitByte($24);
+ LastOutputCodeValue:=locMovDWordPtrESPEAX;
+end;
+
+procedure OCMovDWordPtrEBXEAX;
+begin
+ EmitByte($48); EmitByte($89); EmitByte($03);
  LastOutputCodeValue:=locMovDWordPtrEBXEAX;
+end;
+
+procedure OCJmpDWordPtrESIOfs(Ofs:integer);
+begin
+ EmitByte($ff); EmitByte($66); EmitByte(Ofs);
+ LastOutputCodeValue:=locJmpDWordPtrESIOfs;
+end;
+
+procedure OCCallDWordPtrESIOfs(Ofs:integer);
+begin
+ EmitByte($ff); EmitByte($56); EmitByte(Ofs);
+ LastOutputCodeValue:=locCallDWordPtrESIOfs;
+end;
+
+procedure OCXChgEDXESI;
+begin
+ EmitByte($48); EmitByte($87); EmitByte($d6);
+ LastOutputCodeValue:=locXChgEDXESI;
+end;
+
+procedure OCPopESI;
+begin
+ EmitByte($5e);
+ LastOutputCodeValue:=locPopESI;
+end;
+
+procedure OCMovECXImm(Value:integer);
+begin
+ EmitByte($48); EmitByte($c7); EmitByte($c1); EmitInt32(Value);
+ LastOutputCodeValue:=locMovECXImm;
+end;
+
+procedure OCCLD;
+begin
+ EmitByte($fc);
+ LastOutputCodeValue:=locCLD;
+end;
+
+procedure OCREPMOVSB;
+begin
+ EmitByte($f3); EmitByte($a4);
+ LastOutputCodeValue:=locREPMOVSB;
+end;
+
+procedure OCTestEAXEAX;
+begin
+ EmitByte($48); EmitByte($85); EmitByte($c0); {{ TEST EAX,EAX }
+ LastOutputCodeValue:=locTestEAXEAX;
 end;
 
 procedure OCNegDWordPtrESP;
 begin
-  OCPopX0;
-  // WriteLn('mvn x0, x0');
-  EmitByte($e0);   
-  EmitByte($03);
-  EmitByte($20);
-  EmitByte($aa); 
-  OCPushX0;
+ EmitByte($48); EmitByte($f7); EmitByte($1c); EmitByte($24); (* NEG DWORD PTR {ESP} *)
  LastOutputCodeValue:=locNegDWordPtrESP;
 end;
 
-procedure OCMovX0DWordPtrESP;
+procedure OCMovEAXDWordPtrESP;
 begin
- // WriteLn('ldr x0, [sp]'); (* MOV X0,DWORD PTR {ESP} *)
- EmitByte($e0);   
- EmitByte($03);
- EmitByte($40);
- EmitByte($f9); 
- LastOutputCodeValue:=locMovX0DWordPtrESP;
+ EmitByte($48); EmitByte($8b); EmitByte($04); EmitByte($24); (* MOV EAX,DWORD PTR {ESP} *)
+ LastOutputCodeValue:=locMovEAXDWordPtrESP;
 end;
 
-
-procedure OCXChgX4X19;
+{-}
+procedure OCMovEBXDWordPtrFORStateCurrentValue;
 begin
- // writeLn('mov x8, x4');
- EmitByte($e8);   
- EmitByte($03);
- EmitByte($04);
- EmitByte($aa); 
- // writeLn('mov x4, x19');
- EmitByte($e4);   
- EmitByte($03);
- EmitByte($13);
- EmitByte($aa); 
- // writeLn('mov x19, x8');
- EmitByte($f3);   
- EmitByte($03);
- EmitByte($08);
- EmitByte($aa); 
- LastOutputCodeValue:=locXChgEDXESI;
+ EmitByte($8b); EmitByte($5d); EmitByte($04); {mov    eax,DWORD PTR [ebp+0x4]}
+ LastOutputCodeValue:=locMovEBXDWordPtrFORStateCurrentValue;
 end;
-//TODO
-procedure OCREPMOVSB;
+
+procedure OCCmpDWordPtrEBXEAX;
 begin
-  // Предполагаем, что:
-  // x1 = адрес назначения (rbx)
-  // x2 = адрес источника (rcx)
-  // x3 = количество байт для копирования (rdx)
-  WriteLn('cmp x3, #0');      
-  WriteLn('beq end_ocrepmovsb'); 
-  WriteLn('rep_movsb_loop:');
-  WriteLn('ldrb w4, [x2], #1'); 
-  WriteLn('strb w4, [x1], #1 ');     
-  WriteLn('subs x3, x3, #1 ');
-  WriteLn('bne rep_movsb_loop');  
-  WriteLn('end_ocrepmovsb:');
-  WriteLn('ret'); 
-
- LastOutputCodeValue:=locREPMOVSB;
+ EmitByte($48); EmitByte($39); EmitByte($03);
+ LastOutputCodeValue:=locCmpDWordPtrEBXEAX;
 end;
 
-function BitwiseOr(a, b: Integer): Integer;
-var
-  result, bitPosition: Integer;
+{-}
+procedure OCMovEAXDWordPtrFORStateDestValue;
 begin
-  result := 0;
-  bitPosition := 1;
-  while (a > 0) or (b > 0) do
-  begin
-    if (a mod 2 > 0) or (b mod 2 > 0) then
-      result := result + bitPosition;
-    a := a div 2;
-    b := b div 2;
-    bitPosition := bitPosition * 2;
-  end;
-  BitwiseOr := result;
-end;
-
-function LeftShift(a: Integer; shiftCount: Integer): Integer;
-var
-  i: Integer;
-  result: Integer;
-begin
-  result := a;
-  for i := 1 to shiftCount do
-  begin
-    result := result * 2;
-  end;
-  LeftShift := result;
-end;
-
-function GetLower16Bits(Value: Integer): Integer;
-var
-  result: Integer;
-begin
-  // Извлечение младших 16 бит
-  result := Value mod 65536;
-  GetLower16Bits := result;  
-end;
-
-function GetUpper16Bits(Value: Integer): Integer;
-var
-  result: Integer;
-begin
-  // Извлечение старших 16 бит
-  result := Value div 65536;
-  GetUpper16Bits := result;
-end;
-
-procedure OCB(offs : integer);
-var mask, i: integer;
-begin 
-  // writeln(offs);
-  offs := (offs - 1) div 4;
-  //writeln('OCB(', offs, ')');
-  // 47 80 00 14
-  mask := $14000000;
-  for i := 1 to 4 do
-  begin
-    // writeln('aaaa', mask, ' ', offs, ' ', mask mod 256, ' ', offs mod 256);
-    // writeln(BitwiseOr(mask  mod 256, offs mod 256));
-    EmitByte(BitwiseOr(mask  mod 256, offs mod 256));
-    mask := mask div 256;
-    offs := offs div 256;
-  end;
-end;
-
-procedure OCBEq(offs : integer);
-var mask, i: integer;
-begin 
-  offs := (offs - 1) div 4;
-  mask := $54000000;
-  offs := LeftShift(offs, 5);
-  EmitByte(BitwiseOr(mask mod 256, offs mod 256));
-  mask := mask div 256;
-  offs := offs div 256;
-  for i := 1 to 3 do
-  begin
-    EmitByte(BitwiseOr(mask  mod 256, offs mod 256));
-    mask := mask div 256;
-    offs := offs div 256;
-  end;
-end;
-
-procedure OCMovValueX6(Value:integer);
-var val, result, mask, i, flag : integer;
-begin
-  flag := 0;
-  if (Value < 0 ) then begin
-    flag := 1;
-    Value := Value * (-1);
-  end;
- // MOVZ x6, #Value, lsl #16
- // MOVK x6, #Value, lsl #0
-  // EmitInt32(BitwiseOr($D2A00006, LeftShift(GetUpper16Bits(Value), 5)));
-  // EmitInt32(BitwiseOr($F2A00006, LeftShift(GetLower16Bits(Value), 5)));
-  mask := $D2A00006; 
-  val := LeftShift(GetUpper16Bits(Value), 5);
-  EmitByte(BitwiseOr(mask mod 256, val mod 256));
-  mask := mask div 256;
-  val := val div 256;
-  for i := 1 to 3 do
-  begin
-    EmitByte(BitwiseOr(mask  mod 256, val mod 256));
-   // writeln(BitwiseOr(mask mod 256, val mod 256), ' bitOr');
-    mask := mask div 256;
-    val := val div 256;
-  end;
-
-  mask := $F2800006; 
-  val := LeftShift(GetLower16Bits(Value), 5);
-  EmitByte(BitwiseOr(mask mod 256, val mod 256));
-  mask := mask div 256;
-  val := val div 256;
-  for i := 1 to 3 do
-  begin
-    EmitByte(BitwiseOr(mask  mod 256, val mod 256));
-    //writeln(BitwiseOr(mask mod 256, val mod 256), ' bitOr');
-    mask := mask div 256;
-    val := val div 256;
-  end;
-  if (flag = 1) then 
-    begin
-     //sub x6, xzr, x6 E6 03 06 CB	
-      EmitByte($E6);
-      EmitByte($03);
-      EmitByte($06);
-      EmitByte($CB);
-    end;
-end;
-
-procedure OCMovValueX0(Value:integer);
-var val, result, mask, i, flag: integer;
-begin
- // MOVZ x0, #Value, lsl #16
- // MOVK x0, #Value, lsl #0
-  flag := 0;
-  if (Value < 0 ) then begin
-    flag := 1;
-    Value := Value * (-1);
-  end;
-  mask := $D2A00000; 
-  val := LeftShift(GetUpper16Bits(Value), 5);
-  EmitByte(BitwiseOr(mask mod 256, val mod 256));
-  mask := mask div 256;
-  val := val div 256;
-  for i := 1 to 3 do
-  begin
-    EmitByte(BitwiseOr(mask  mod 256, val mod 256));
-    // writeln(BitwiseOr(mask mod 256, val mod 256), ' bitOr');
-    mask := mask div 256;
-    val := val div 256;
-  end;
-
-  mask := $F2800000; 
-  val := LeftShift(GetLower16Bits(Value), 5);
-  EmitByte(BitwiseOr(mask mod 256, val mod 256));
-  mask := mask div 256;
-  val := val div 256;
-  for i := 1 to 3 do
-  begin
-    EmitByte(BitwiseOr(mask  mod 256, val mod 256));
-    //writeln(BitwiseOr(mask mod 256, val mod 256), ' bitOr');
-    mask := mask div 256;
-    val := val div 256;
-  end;
-  if (flag = 1) then 
-    begin
-     //sub x0, xzr, x0 E0 03 00 CB
-      EmitByte($E0);
-      EmitByte($03);
-      EmitByte($00);
-      EmitByte($CB);
-    end;
-
-end;
-
-//TODO
-procedure OCMovX2Imm(Value:integer);
-begin
-//MOV RCX, Value
- OCMovValueX6(Value);
- LastOutputCodeValue:=locMovECXImm;
-end;
-
-
-procedure OCCallDWordPtrX19Ofs(Ofs:integer);
-begin
- // mov x6, #Value
- OCMovValueX6(Ofs);
- //add x6, x6, x19
- EmitByte($c6);
- EmitByte($00);
- EmitByte($13);
- EmitByte($8b);
- // ldr x6, [x6]
- EmitByte($C6);
- EmitByte($00);
- EmitByte($40);
- EmitByte($F9);
- // adr x30, .+8
- EmitByte($5e);
- EmitByte($00);
- EmitByte($00);
- EmitByte($10);
- // br x6  
- EmitByte($c0);
- EmitByte($00);
- EmitByte($1F);
- EmitByte($D6);
- LastOutputCodeValue:=locCallDWordPtrESIOfs;
+ EmitByte($8b); EmitByte($45); EmitByte($08); {mov    eax,DWORD PTR [ebp+0x8]}
+ LastOutputCodeValue:=locMovEAXDWordPtrFORStateDestValue;
 end;
 
 var JumpTable:array[1:MaximalCodeSize] of integer;
-
-procedure EmitFromJmpTable(CountJumps: integer);
-var Index, JmpAddr, OpCodeValue, OpCode, PrevOutputCodeDataSize : integer;
-begin
-    for Index:=1 to CountJumps do begin
- 	    JmpAddr := JumpTable[Index];
-      OpCode := OutputCodeGetInt32(JmpAddr);
-      OpCodeValue := OutputCodeGetInt32(JmpAddr + 4);
-      PrevOutputCodeDataSize := OutputCodeDataSize;
-      if (OpCode = OPJmp) then
-      begin
-        OutputCodeDataSize := JmpAddr - 1;
-        OCB(Code[OpCodeValue] - JmpAddr + 4);
-        OCNop;
-        OutputCodeDataSize := PrevOutputCodeDataSize;
-      end;
-  	  if (OpCode = OPJZ) then
-      begin
-        OutputCodeDataSize := JmpAddr - 1;
-        OCBEq(Code[OpCodeValue] - JmpAddr + 4);
-        OCNop;
-        OutputCodeDataSize := PrevOutputCodeDataSize;
-      end;
-      //OutputCodePutInt32(JmpAddr,(   (   Code[OutputCodeGetInt32(JmpAddr)] - JmpAddr) - 3));
-    end;
-end;
 
 procedure AssembleAndLink;
 var
    InjectionSize,
    CountJumps,Opcode,Value,Index,PEEXECodeSize,PEEXESectionVirtualSize,
-   PEEXESectionAlignment, PEEXECodeStart, iter :integer;
+   PEEXESectionAlignment,PEEXECodeStart,iter:integer;
 begin
+ OCB(-16);
  EmitStubCode;
  PEEXECodeStart:=OutputCodeDataSize;
  LastOutputCodeValue:=locNone;
- 
  PC:=0;
  CountJumps:=0;
-//  writeln('5 mod 2=  ', 5 mod 2);
-//  writeln('6 mod 2=  ', 6 mod 2);
-//  writeln('7 mod 2=  ', 7 mod 2);
 
  while PC<CodePosition do begin
   Opcode:=Code[PC];
-  // WriteLn('l_', Opcode, ':');
   Value:=Code[PC+1];
   Code[PC]:=OutputCodeDataSize;
-
   case Opcode of
    OPAdd:begin
-    OCPopX0;
-    OCPopX1;
-    // WriteLn('add x0, x0, x1');
-    EmitByte($00);   
-    EmitByte($00);
-    EmitByte($01);
-    EmitByte($8b); 
-    // WriteLn('str x0, [sp, #-16]!');
-    EmitByte($e0);   
-    EmitByte($0f);
-    EmitByte($1f);
-    EmitByte($f8); 
+    OCPopEAX;
+    EmitByte($48); EmitByte($01); EmitByte($04); EmitByte($24); (* ADD DWORD PTR {ESP},EAX *)
     LastOutputCodeValue:=locNone;
    end;
    OPNeg:begin
     OCNegDWordPtrESP;
    end;
    OPMul:begin
-    OCPopX1;
-    OCPopX0;
-    // WriteLn('mul x0, x0, x1');
-    EmitByte($00);   
-    EmitByte($7c);
-    EmitByte($01);
-    EmitByte($9b); 
-    OCPushX0;
+    OCPopEBX;
+    OCPopEAX;
+    OCIMulEBX;
+    OCPushEAX;
    end;
    OPDivD:begin
-    OCPopX1;
-    OCPopX0;
-    OCIDIVX1;
-    OCPushX0;
+    OCPopEBX;
+    OCPopEAX;
+    OCXorEDXEDX;
+    OCIDIVEBX;
+    OCPushEAX;
    end;
    OPRemD:begin
-    OCPopX1;
-    OCPopX0;
-    OCUdivMsub;
-    OCPushX0;
+    OCPopEBX;
+    OCPopEAX;
+    OCXorEDXEDX;
+    OCIDIVEBX;
+    OCPushEDX;
    end;
    OPDiv2:begin
-    // WriteLn('asr x0, x0, #2');
-    EmitByte($00);   
-    EmitByte($fc);
-    EmitByte($42);
-    EmitByte($93); 
+    EmitByte($48); EmitByte($d1); EmitByte($3c); EmitByte($24); (* SAR DWORD PTR {ESP},1 *)
     LastOutputCodeValue:=locNone;
    end;
    OPRem2:begin
-    OCPopX1;
-    OCPopX0;
-    OCXorX0X0;
-    OCIDIVX1;
-    OCPushX0;
+    OCPopEAX;
+    EmitByte($48); EmitByte($8b); EmitByte($d8); { MOV EBX,EAX }
+    {?}
+    {eax even => eax=0; eax odd => eax=1}
+    EmitByte($25); EmitByte($01); EmitByte($00); EmitByte($00); EmitByte($80); { AND EAX,$80000001 }
+    {7905 = jns $+0x7 = 2 itself + 5 next bytes}
+    {790a = jns $+0xC = 2 itself + 10 next bytes}
+    EmitByte($79); EmitByte($0a); { JNS +$0xC }
+    EmitByte($48); EmitByte($ff); EmitByte($c8); { DEC EAX }
+    EmitByte($48); EmitByte($83); EmitByte($c8); EmitByte($fe); { OR EAX,BYTE -$02 }
+    EmitByte($48); EmitByte($ff); EmitByte($c0); { INC EAX }
+    LastOutputCodeValue:=locNone;
+    OCIMulEBX;
+    OCPushEAX;
    end;
    OPEqlI:begin
-    OCPopX1;
-    OCPopX0;
-    OCCmpX1X0;
-    OCValToReg;
-    // WriteLn('csel x0, xzr, x12, ne');
-    EmitByte($e0);   
-    EmitByte($13);
-    EmitByte($8c);
-    EmitByte($9a);
+    OCPopEBX;
+    OCPopEAX;
+    OCCmpEAXEBX;
+    EmitByte($0f); EmitByte($94); EmitByte($d0); // SETE AL
     LastOutputCodeValue:=locNone;
-    OCPushX0;
+    OCMovzxEAXAL;
+    OCPushEAX;
    end;
    OPNEqI:begin
-    OCPopX1;
-    OCPopX0;
-    OCCmpX1X0;
-    OCValToReg;
-    // WriteLn('csel x0, xzr, x12, eq');
-    EmitByte($e0);   
-    EmitByte($03);
-    EmitByte($8c);
-    EmitByte($9a);
+    OCPopEBX;
+    OCPopEAX;
+    OCCmpEAXEBX;
+    EmitByte($0f); EmitByte($95); EmitByte($d0); // SETNE AL
     LastOutputCodeValue:=locNone;
-    OCPushX0;
+    OCMovzxEAXAL;
+    OCPushEAX;
    end;
    OPLssI:begin
-    OCPopX1;
-    OCPopX0;
-    OCCmpX1X0;
-    OCValToReg;
-    // WriteLn('csel x0, xzr, x12, lt');
-    EmitByte($e0);   
-    EmitByte($b3);
-    EmitByte($8c);
-    EmitByte($9a);
+    OCPopEBX;
+    OCPopEAX;
+    OCCmpEAXEBX;
+    EmitByte($0f); EmitByte($9c); EmitByte($d0); // SETL AL
     LastOutputCodeValue:=locNone;
-    OCPushX0;
+    OCMovzxEAXAL;
+    OCPushEAX;
    end;
    OPLeqI:begin
-    OCPopX1;
-    OCPopX0;
-    OCCmpX1X0;
-    OCValToReg;
-    // WriteLn('csel x0, xzr, x12, le');
-    EmitByte($e0);   
-    EmitByte($d3);
-    EmitByte($8c);
-    EmitByte($9a);
+    OCPopEBX;
+    OCPopEAX;
+    OCCmpEAXEBX;
+    EmitByte($0f); EmitByte($9e); EmitByte($d0); // SETLE AL
     LastOutputCodeValue:=locNone;
-    OCPushX0;
+    OCMovzxEAXAL;
+    OCPushEAX;
    end;
    OPGtrI:begin
-    OCPopX1;
-    OCPopX0;
-    OCCmpX1X0;
-    OCValToReg;
-    // WriteLn('csel x0, xzr, x12, gt');
-    EmitByte($e0);   
-    EmitByte($c3);
-    EmitByte($8c);
-    EmitByte($9a);
+    OCPopEBX;
+    OCPopEAX;
+    OCCmpEAXEBX;
+    EmitByte($0f); EmitByte($9f); EmitByte($d0); // SETG AL
     LastOutputCodeValue:=locNone;
-    OCPushX0;
+    OCMovzxEAXAL;
+    OCPushEAX;
    end;
    OPGEqi:begin
-    OCPopX1;
-    OCPopX0;
-    OCCmpX1X0;
-    OCValToReg;
-    // WriteLn('csel x0, xzr, x12, ge');
-    EmitByte($e0);   
-    EmitByte($a3);
-    EmitByte($8c);
-    EmitByte($9a);
+    OCPopEBX;
+    OCPopEAX;
+    OCCmpEAXEBX;
+    EmitByte($0f); EmitByte($9d); EmitByte($d0); // SETGE AL
     LastOutputCodeValue:=locNone;
-    OCPushX0;
+    OCMovzxEAXAL;
+    OCPushEAX;
    end;
    OPDupl:begin
-    OCPopX0;
-    OCPushX0;
-    OCPushX0;
+    EmitByte($ff); EmitByte($34); EmitByte($24); // PUSH DWORD PTR [ESP]
     LastOutputCodeValue:=locNone;
    end;
    OPSwap:begin
-    OCPopX1;
-    OCPopX0;
-    OCPushX1;
+    OCPopEBX;
+    OCPopEAX;
+    EmitByte($53); { PUSH EBX }
     LastOutputCodeValue:=locNone;
-    OCPushX0;
+    OCPushEAX;
    end;
    OPAndB:begin
-    OCPopX0;
-    OCPopX1;
-    // WriteLn('cmp x1, 0');
-    EmitByte($3f);   
-    EmitByte($00);
-    EmitByte($00);
-    EmitByte($f1);
-    // WriteLn('csel x0, xzr, x0, eq');
-    EmitByte($e0);   
-    EmitByte($03);
-    EmitByte($80);
-    EmitByte($9a);
-    OCPushX0;
+    OCPopEAX;
+    OCTestEAXEAX;
+    {originally it was skipping 3 bytes + 2 itself. now 4 bytes + 2 itself}
+    OCJNZJNE0x06;
+    OCMovDWordPtrESPEAX;
     LastOutputCodeValue:=locNone;
    end;
    OPOrB:begin
-    OCPopX0;
-    OCPopX1;
-    // WriteLn('cmp x1, 1');
-    EmitByte($3f);   
-    EmitByte($04);
-    EmitByte($00);
-    EmitByte($f1);
-    OCValToReg;
-    // WriteLn('csel x0, x12, x0, eq');
-    EmitByte($80);   
-    EmitByte($01);
-    EmitByte($80);
-    EmitByte($9a);
-    OCPushX0;
+    OCPopEAX;
+    EmitByte($48); EmitByte($83); EmitByte($f8); EmitByte($01);  { CMP EAX,1 }
+    LastOutputCodeValue:=locNone;
+    OCJNZJNE0x06;
+    OCMovDWordPtrESPEAX;
     LastOutputCodeValue:=locNone;
    end;
    OPLoad:begin
-    OCPopX0;
-    // WriteLn('ldr x1, [x0]');
-    EmitByte($01);   
-    EmitByte($00);
-    EmitByte($40);
-    EmitByte($f9);
-    OCPushX1;
+    OCPopEAX;
+    EmitByte($ff); EmitByte($30); { PUSH DWORD PTR [EAX] }
+    LastOutputCodeValue:=locNone;
    end;
    OPStore:begin
-    OCPopX1;
-    OCPopX0;
-    OCMovDWordPtrX1X0;
+    OCPopEBX;
+    OCPopEAX;
+    OCMovDWordPtrEBXEAX;
    end;
    OPHalt:begin
-    OCCallDWordPtrX19Ofs(0);   
+    OCJmpDWordPtrESIOfs(0);
    end;
    OPWrI:begin
-    OCCallDWordPtrX19Ofs(16);
+    OCCallDWordPtrESIOfs(16);
    end;
    OPWrC:begin
-    OCCallDWordPtrX19Ofs(8);
+    OCCallDWordPtrESIOfs(8);
    end;
    OPWrL:begin
-    OCCallDWordPtrX19Ofs(24);
+    OCCallDWordPtrESIOfs(24);
    end;
    OPRdI:begin
-    OCPopX1;
-    OCCallDWordPtrX19Ofs(40);
-    OCMovDWordPtrX1X0;
+    OCPopEBX;
+    OCCallDWordPtrESIOfs(40);
+    OCMovDWordPtrEBXEAX;
    end;
    OPRdC:begin
-    OCPopX1;
-    OCCallDWordPtrX19Ofs(32);
-    OCMovDWordPtrX1X0;
+    OCPopEBX;
+    OCCallDWordPtrESIOfs(32);
+    OCMovzxEAXAL;
+    OCMovDWordPtrEBXEAX;
    end;
    OPRdL:begin
-    OCCallDWordPtrX19Ofs(48);
+    OCCallDWordPtrESIOfs(48);
    end;
    OPEOF:begin
-    OCCallDWordPtrX19Ofs(56);
-    OCPushX0;
+    OCCallDWordPtrESIOfs(56);
+    OCPushEAX;
    end;
    OPEOL:begin
-    OCCallDWordPtrX19Ofs(64);
-    OCPushX0;
+    OCCallDWordPtrESIOfs(64);
+    OCPushEAX;
    end;
    OPLdC:begin
-    // WriteLn('mov x0, #', Value);
-    OCMovValueX0(Value);
-    OCPushX0;
+    if (Value>=-128) and (Value<=127) then begin
+     EmitByte($6a); EmitByte(Value); { PUSH BYTE Value }
+    end else begin
+     EmitByte($68); EmitInt32(Value); { PUSH DWORD Value }
+    end;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPLdA:begin
-    Value := Value * 4;
-    if Value = 0 then begin
-        // WriteLn('mov x0, x27');
-        EmitByte($e0);   
-        EmitByte($03);
-        EmitByte($1b);
-        EmitByte($aa);
-    end else begin
-        OCMovValueX6(Value);
-        // WriteLn('add x0, x27, x6');
-        EmitByte($60);   
-        EmitByte($03);
-        EmitByte($06);
-        EmitByte($8b);
-    end;
-    LastOutputCodeValue := locNone;
-    OCPushX0;
-    PC := PC + 1;
-   end;
-   OPLdLA:begin
-    Value := Value * 4;
+    Value:=Value*2;
     if Value=0 then begin
-      // WriteLn('mov x0, sp');
-      EmitByte($e0);   
-      EmitByte($03);
-      EmitByte($00);
-      EmitByte($91);
+     EmitByte($48); EmitByte($89); EmitByte($e8); { MOV EAX,EBP }
+    end else if (Value>=-128) and (Value<=127) then begin
+     EmitByte($48); EmitByte($8d); EmitByte($45); EmitByte(Value); { LEA EAX,[EBP+BYTE Value] }
     end else begin
-      OCMovValueX6(Value);
-      // WriteLn('add x0, sp, x6');
-      EmitByte($e0);   
-      EmitByte($63);
-      EmitByte($26);
-      EmitByte($8b);
+     EmitByte($48); EmitByte($8d); EmitByte($85); EmitInt32(Value); { LEA EAX,[EBP+DWORD Value] }
     end;
     LastOutputCodeValue:=locNone;
-    OCPushX0;
+    OCPushEAX;
+    PC:=PC+1;
+   end;
+   OPLdLA:begin
+    Value:=Value*2;
+    if Value=0 then begin
+     EmitByte($48); EmitByte($89); EmitByte($e0); { MOV EAX,ESP }
+    end else if (Value>=-128) and (Value<=127) then begin
+     EmitByte($48); EmitByte($8d); EmitByte($44); EmitByte($24); EmitByte(Value);
+      { LEA EAX,[ESP+BYTE Value] }
+    end else begin
+     EmitByte($48); EmitByte($8d); EmitByte($84); EmitByte($24); EmitInt32(Value);
+      { LEA EAX,[ESP+DWORD Value] }
+    end;
+    LastOutputCodeValue:=locNone;
+    OCPushEAX;
     PC:=PC+1;
    end;
    OPLdL:begin
-    Value:=Value*4;
+    Value:=Value*2;
     if Value=0 then begin
-     OCMovX0DWordPtrESP;
+     OCMovEAXDWordPtrESP;
+    end else if (Value>=-128) and (Value<=127) then begin
+     EmitByte($48); EmitByte($8b); EmitByte($44); EmitByte($24); EmitByte(Value);
+      { MOV EAX,DWORD PTR [ESP+BYTE Value] }
     end else begin
-      OCMovValueX6(Value);
-      // WriteLn('ldr x0, [sp, x6]');
-      EmitByte($e0);   
-      EmitByte($6b);
-      EmitByte($66);
-      EmitByte($f8);
+     EmitByte($48); EmitByte($8b); EmitByte($84); EmitByte($24); EmitInt32(Value);
+      { MOV EAX,DWORD PTR [ESP+DWORD Value] }
     end;
-    OCPushX0;
+    OCPushEAX;
     PC:=PC+1;
    end;
    OPLdG:begin
-    Value:=Value*4;
-    OCMovValueX6(Value);
-    // WriteLn('ldr x0, [x27, x6]');
-    EmitByte($60);   
-    EmitByte($6b);
-    EmitByte($66);
-    EmitByte($f8);
-    OCPushX0;
+    Value:=Value*2;
+    if (Value>=-128) and (Value<=127) then begin
+     EmitByte($48); EmitByte($8b); EmitByte($45); EmitByte(Value); { MOV EAX,DWORD PTR [EBP+BYTE Value] }
+    end else begin
+     EmitByte($48); EmitByte($8b); EmitByte($85); EmitInt32(Value);
+      { MOV EAX,DWORD PTR [EBP+DWORD Value] }
+    end;
     LastOutputCodeValue:=locNone;
+    OCPushEAX;
     PC:=PC+1;
    end;
    OPStL:begin
-    OCPopX0;
-    Value:=Value-8;
-    Value:=Value*4;
+    OCPopEAX;
+    Value:=Value-4;
+    Value:=Value*2;
     if Value=0 then begin
-      // WriteLn('str x0, [sp]'); { MOV DWORD PTR [ESP],X0 }
-      EmitByte($e0);   
-      EmitByte($03);
-      EmitByte($00);
-      EmitByte($f9);
+     EmitByte($48); EmitByte($89); EmitByte($04); EmitByte($24); { MOV DWORD PTR [ESP],EAX }
     end else if (Value>=-128) and (Value<=127) then begin
-     OCMovValueX6(Value);
-     // WriteLn('str x0, [sp, x6]'); { MOV DWORD PTR [ESP+BYTE Value],X0 }
-     EmitByte($e0);   
-     EmitByte($6b);
-     EmitByte($26);
-     EmitByte($f8);
+     EmitByte($48); EmitByte($89); EmitByte($44); EmitByte($24); EmitByte(Value);
+      { MOV DWORD PTR [ESP+BYTE Value],EAX }
     end else begin
-      OCMovValueX6(Value);
-      // WriteLn('ldr x0, [sp, x6]'); { MOV X0,DWORD PTR [ESP+DWORD Value] }\
-      EmitByte($e0);   
-      EmitByte($6b);
-      EmitByte($66);
-      EmitByte($f8);
+     EmitByte($48); EmitByte($89); EmitByte($84); EmitByte($24); EmitInt32(Value);
+      { MOV EAX,DWORD PTR [ESP+DWORD Value] }
     end;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPStG:begin
-    OCPopX0;
-    Value:=Value*(4);
-    OCMovValueX6(Value);
-    //sub x6, xzr, x6        E6 03 06 CB
-    // EmitByte($E6);   
-    // EmitByte($03);
-    // EmitByte($06);
-    // EmitByte($CB);
-    //WriteLn('str x0, [x27, x6]');
-    EmitByte($60);   
-    EmitByte($6b);
-    EmitByte($26);
-    EmitByte($f8);
+    OCPopEAX;
+    Value:=Value*2;
+    if (Value>=-128) and (Value<=127) then begin
+     EmitByte($48); EmitByte($89); EmitByte($45); EmitByte(Value); { MOV DWORD PTR [EBP+BYTE Value],EAX }
+    end else begin
+     EmitByte($48); EmitByte($89); EmitByte($85); EmitInt32(Value);
+      {mistake in comment: MOV EAX,DWORD PTR [EBP+DWORD Value] }
+     {!}{changed to actual code: mov    QWORD PTR [rbp+0x12345678],rax}
+    end;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPMove:begin
-    // EDX = rdi = x4 ESI = rsi = x19 (пусть будет так) x14 = edi
-    OCXChgX4X19;
-    // EmitByte($5f); { POP EDI }
-    //writeLn('ldr x14, [sp], #16');
+    OCXChgEDXESI;
+    EmitByte($5f); { POP EDI }
     LastOutputCodeValue:=locNone;
-    OCPopX19;
-    Value:=Value*4;
-    OCMovX2Imm(Value);
+    OCPopESI;
+    Value:=Value*2;
+    OCMovECXImm(Value);
+    OCCLD;
     OCREPMOVSB;
-    OCXChgX4X19;
+    OCXChgEDXESI;
     PC:=PC+1;
    end;
    OPCopy:begin
-    OCXChgX4X19;
-    OCPopX19;
-    Value:=Value*4;
-    OCMovX2Imm(Value);
-    // EmitByte($48); EmitByte($29); EmitByte($cc); { SUB ESP,ECX }
-    writeLn('sub sp, sp, x2');
-    // EmitByte($48); EmitByte($89); EmitByte($e7); { MOV EDI,ESP }
-    writeLn('mov x14, sp');
+    OCXChgEDXESI;
+    OCPopESI;
+    Value:=Value*2;
+    OCMovECXImm(Value);
+    EmitByte($48); EmitByte($29); EmitByte($cc); { SUB ESP,ECX }
+    EmitByte($48); EmitByte($89); EmitByte($e7); { MOV EDI,ESP }
     LastOutputCodeValue:=locNone;
+    OCCLD;
     OCREPMOVSB;
-    OCXChgX4X19;
+    OCXChgEDXESI;
     PC:=PC+1;
    end;
    OPAddC:begin
-    OCPopX0;
-    OCMovValueX6(Value);
-    // WriteLn('add x0, x0, x6');
-    EmitByte($00);   
-    EmitByte($00);
-    EmitByte($06);
-    EmitByte($8b);
-    OCPushX0;
+    if (Value>=-128) and (Value<=127) then begin
+     EmitByte($48); EmitByte($83); EmitByte($04); EmitByte($24); EmitByte(Value);
+      { ADD DWORD PTR [ESP],BYTE Value }
+    end else begin
+     EmitByte($48); EmitByte($81); EmitByte($04); EmitByte($24); EmitInt32(Value);
+      { ADD DWORD PTR [ESP],DWORD Value }
+    end;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPMulC:begin
-    OCPopX0;
-    OCMovValueX6(Value);
-    // WriteLn('mov x1, x6');
-    EmitByte($e1);   
-    EmitByte($03);
-    EmitByte($06);
-    EmitByte($aa);
-    // WriteLn('mul x0, x0, x1');
-    EmitByte($00);   
-    EmitByte($7c);
-    EmitByte($01);
-    EmitByte($9b);
-    OCPushX0;
+    if Value=(-1) then begin
+     OCNegDWordPtrESP;
+    end else if (Value>=-128) and (Value<=127) then begin
+     OCPopEAX;
+     EmitByte($48); EmitByte($6b); EmitByte($c0); EmitByte(Value); { IMUL EAX,BYTE s }
+     LastOutputCodeValue:=locNone;
+     OCPushEAX;
+    end else begin
+     OCPopEAX;
+     EmitByte($48); EmitByte($69); EmitByte($c0); EmitInt32(Value); { IMUL EAX,DWORD s }
+     LastOutputCodeValue:=locNone;
+     OCPushEAX;
+    end;
     PC:=PC+1;
    end;
    OPJmp:begin
     if Value<>(PC+2) then begin
-      CountJumps:=CountJumps+1;
-      JumpTable[CountJumps]:=OutputCodeDataSize+1;
-
-      EmitInt32(OPJmp);
-      EmitInt32(Value);
-    end; 
+     CountJumps:=CountJumps+1;
+     EmitByte($e9); { JMP Value }
+     JumpTable[CountJumps]:=OutputCodeDataSize+1;
+     EmitInt32(Value);
+    end;
     PC:=PC+1;
     LastOutputCodeValue:=locNone;
    end;
    OPJZ:begin
     CountJumps:=CountJumps+1;
-    OCPopX0;
-    
-    // WriteLn('cmp x0, xzr');
-    EmitByte($1f);   
-    EmitByte($00);
-    EmitByte($1f);
-    EmitByte($eb);
-
-    CountJumps := CountJumps + 1;
-    JumpTable[CountJumps]:=OutputCodeDataSize + 1;
-
-    EmitInt32(OPJZ);
+    OCPopEAX;
+    OCTestEAXEAX;
+    EmitByte($0f); EmitByte($84); { JZ Value }
+    JumpTable[CountJumps]:=OutputCodeDataSize+1;
     EmitInt32(Value);
-
-    for Index:=1 to 8 do begin
-      EmitByte($1F);
-      EmitByte($20);
-      EmitByte($03);
-      EmitByte($D5);
-    end;
-
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPCall:begin
     CountJumps:=CountJumps+1;
-    //WriteLn('bl l_', Value);
-    JumpTable[CountJumps]:= PC;
+    EmitByte($e8); { CALL Value }
+    JumpTable[CountJumps]:=OutputCodeDataSize+1;
+    EmitInt32(Value);
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPAdjS:begin
-    // if (Value < 0) then 
-    //   begin
-    Value := Value * (-4);
-    OCMovValueX6(Value);
-    // WriteLn('sub sp, sp, x6');
-    EmitByte($ff);   
-    EmitByte($63);
-    EmitByte($26);
-    EmitByte($cb);
+    Value:=Value*2;
+    if Value>0 then begin
+     if (Value>=-128) and (Value<=127) then begin
+      EmitByte($48); EmitByte($83); EmitByte($c4); EmitByte(Value); { ADD ESP,BYTE Value }
+     end else begin
+      EmitByte($48); EmitByte($81); EmitByte($c4); EmitInt32(Value); { ADD ESP,DWORD Value }
+     end;
+    end else if Value<0 then begin
+     Value:=-Value;
+     if (Value>=-128) and (Value<=127) then begin
+      EmitByte($48); EmitByte($83); EmitByte($ec); EmitByte(Value); { SUB ESP,BYTE Value }
+     end else begin
+      EmitByte($48); EmitByte($81); EmitByte($ec); EmitInt32(Value); { SUB ESP,DWORD Value }
+     end;
+    end;
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
    OPExit:begin
-    Value:= Value-4;
-    Value:= Value*4;
+    Value:=Value-4;
+    Value:=Value*2;
     if Value>0 then begin
-      //WriteLn('add sp, sp, #', Value);
-      EmitInt32(BitwiseOr($3FF00019, LeftShift(Value, 10)));
-      // WriteLn('ret');
-      EmitByte($c0);   
-      EmitByte($03);
-      EmitByte($5f);
-      EmitByte($d6);
+     {EmitByte($c2); EmitInt16(Value); }{ RET Value }
+     {add rsp, int16_Value, 0, 0; RET}
+     EmitByte($c2); EmitInt16(Value);
+     {EmitByte($48); EmitByte($48); EmitByte($48); EmitByte($48); EmitInt16(Value); EmitInt16(0);
+     EmitByte($c3);}
     end else if Value=0 then begin
-     // WriteLn('ret'); { RET }
-     EmitByte($c0);   
-     EmitByte($03);
-     EmitByte($5f);
-     EmitByte($d6);
+     EmitByte($c3); { RET }
     end else begin
      Error(145);
     end;
@@ -3065,6 +3243,14 @@ begin
   end;
   PC:=PC+1;
  end;
+
+
+  { Patch jumps + calls }
+  for Index:=1 to CountJumps do begin
+ 	Value:=JumpTable[Index];
+ 	{jump relative for x64 is limited to 32bit value}
+  	OutputCodePutInt32(Value,(   (   Code[OutputCodeGetInt32(Value)] - Value) - 3));
+  end;
 
 {	function to it's offset in x64 and x32 mapping }
 { func 	    x64		x32
@@ -3079,45 +3265,63 @@ begin
 	EOLN 	40		20
 }
 
-  EmitFromJmpTable(CountJumps);
+  {injecting}
+  InjectionSize:=OutputCodeDataSize-PEEXECodeStart;
 
   {injecting}
-  InjectionSize:=OutputCodeDataSize-StartStubSize; 
-  iter := InjectionSize mod 16384;
-  while iter <= 16383 do
-  begin
-    EmitByte(0);
-    iter := iter + 1;   
+  for iter:=(InjectionSize mod 4096) to 4095 do begin
+    EmitByte($90);
   end;
 
   {new}
   EmitEndingStub;
 
   {injecting}
-  InjectionSize:=OutputCodeDataSize-EndStubSize-StartStubSize; // всегда кратен 16384
+  InjectionSize:=OutputCodeDataSize-EndStubSize-PEEXECodeStart;
 
-  {__PAS}
-  OutputCodePutInt32(OffsSegPasVMSize + $1, InjectionSize);
-  OutputCodePutInt32(OffsSegPasFileSize + $1, InjectionSize);
-  OutputCodePutInt32(OffsSectPasSize + $1, InjectionSize);
-  
+  {__TEXT}
+  OutputCodePutInt32(OffsSegTextVMSize + $1, 		  ValSegTextVMSize + InjectionSize);
+  OutputCodePutInt32(OffsSegTextFileSize + $1, 		  ValSegTextFileSize + InjectionSize);
+  {__text}
+  OutputCodePutInt32(OffsSectTextSize + $1, 		  ValSectTextSize + InjectionSize);
+  {__DATA}
+  OutputCodePutInt32(OffsSegDataVMAddr + $1, 		  ValSegDataVMAddr + InjectionSize);
+  OutputCodePutInt32(OffsSegDataOffs + $1, 		  ValSegDataOffs + InjectionSize);
+  {__data}
+  OutputCodePutInt32(OffsSectDataVMAddr + $1, 		  ValSectDataVMAddr + InjectionSize);
+  OutputCodePutInt32(OffsSectDataOffs + $1, 		  ValSectDataOffs + InjectionSize);
   {__LINKEDIT}
-  OutputCodePutInt32(OffsSegLinkVMAddr + $1, ValSegLinkVMAddr + InjectionSize - $4000);
-  OutputCodePutInt32(OffsSegLinkOffs + $1, 	 ValSegLinkOffs + InjectionSize - $4000);
-
-  {LC_DYLD_INFO_ONLY}
-  OutputCodePutInt32(OffsComRebaseOff + $1,  ValComRebaseOff + InjectionSize - $4000);
-  OutputCodePutInt32(OffsComExportOff + $1,  ValComExportOff + InjectionSize  - $4000);
-  
+  OutputCodePutInt32(OffsSegLinkVMAddr + $1, 		  ValSegLinkVMAddr + InjectionSize);
+  OutputCodePutInt32(OffsSegLinkOffs + $1, 		  ValSegLinkOffs + InjectionSize);
   {SYMTAB_OFFSETS}
-  OutputCodePutInt32(OffsSymTabOffs + $1, 	 ValSymTabOffs + InjectionSize  - $4000);
-  OutputCodePutInt32(OffsStrTabOffs + $1, 	 ValStrTabOffs + InjectionSize  - $4000);
-  
-  {LC_FUNCTION_STARTS}
-  OutputCodePutInt32(OffsComDataOff + $1, 	 ValComDataOff + InjectionSize  - $4000);
-  
-  {LC_CODE_SIGNATURE}
-  OutputCodePutInt32(OffsCodeSignOff + $1, 	 ValCodeSignOff + InjectionSize - $4000);
+  OutputCodePutInt32(OffsSymTabOffs + $1, 		  ValSymTabOffs + InjectionSize);
+  OutputCodePutInt32(OffsStrTabOffs + $1, 		  ValStrTabOffs + InjectionSize);
+  {SYMTAB_DATA}
+  OutputCodePutInt32(OffsData0 + InjectionSize + $1, 		  ValData0 + InjectionSize);
+  OutputCodePutInt32(OffsData1 + InjectionSize + $1, 		  ValData1 + InjectionSize);
+  OutputCodePutInt32(OffsData2 + InjectionSize + $1, 		  ValData2 + InjectionSize);
+  OutputCodePutInt32(OffsData3 + InjectionSize + $1, 		  ValData3 + InjectionSize);
+  OutputCodePutInt32(OffsData4 + InjectionSize + $1, 		  ValData4 + InjectionSize);
+  OutputCodePutInt32(OffsData5 + InjectionSize + $1, 		  ValData5 + InjectionSize);
+  {GOT}
+  OutputCodePutInt32(OffsStrings0 + $3 + $1, 		  ValString0 + InjectionSize);
+  OutputCodePutInt32(OffsStrings1 + $3 + $1, 		  ValString1 + InjectionSize);
+  OutputCodePutInt32(OffsStrings2 + $3 + $1, 		  ValString2 + InjectionSize);
+  OutputCodePutInt32(OffsStrings3 + $3 + $1, 		  ValString3 + InjectionSize);
+  OutputCodePutInt32(OffsStrings4 + $3 + $1, 		  ValString4 + InjectionSize);
+  OutputCodePutInt32(OffsStrings5 + $3 + $1, 		  ValString5 + InjectionSize);
+  OutputCodePutInt32(OffsStrings6 + $3 + $1, 		  ValString6 + InjectionSize);
+  OutputCodePutInt32(OffsStrings7 + $3 + $1, 		  ValString7 + InjectionSize);
+  OutputCodePutInt32(OffsStrings8 + $3 + $1, 		  ValString8 + InjectionSize);
+  OutputCodePutInt32(OffsStrings9 + $3 + $1, 		  ValString9 + InjectionSize);
+  OutputCodePutInt32(OffsStrings10 + $3 + $1, 		  ValString10 + InjectionSize);
+  OutputCodePutInt32(OffsStrings11 + $3 + $1, 		  ValString11 + InjectionSize);
+  OutputCodePutInt32(OffsStrings12 + $3 + $1, 		  ValString12 + InjectionSize);
+  OutputCodePutInt32(OffsStrings13 + $3 + $1, 		  ValString13 + InjectionSize);
+  OutputCodePutInt32(OffsStrings14 + $3 + $1, 		  ValString14 + InjectionSize);
+  OutputCodePutInt32(OffsStrings15 + $3 + $1, 		  ValString15 + InjectionSize);
+  OutputCodePutInt32(OffsStrings16 + $3 + $1, 		  ValString16 + InjectionSize);
+  OutputCodePutInt32(OffsStrings17 + $3 + $1, 		  ValString17 + InjectionSize);
 
  WriteOutputCode;
 end;

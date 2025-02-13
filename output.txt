@@ -1,0 +1,119 @@
+fd       3
+file     target/rtl64macOS
+size     0x8500
+humansz  33.2K
+mode     r-x
+format   mach064
+iorw     false
+block    0x100
+type     Executable file
+arch     arm
+baddr    0x100000000
+binsz    34048
+bintype  mach0
+bits     64
+canary   false
+injprot  false
+class    MACH064
+compiler clang
+crypto   false
+endian   little
+havecode true
+intrp    /usr/lib/dyld
+laddr    0x0
+lang     c
+linenum  false
+lsyms    false
+machine  all
+nx       false
+os       macos
+pic      true
+relocs   false
+sanitize false
+static   false
+stripped false
+subsys   darwin
+va       true
+[Main]
+vaddr=0x100003c84 paddr=0x100003c84
+[Sections]
+
+nth paddr        size vaddr        vsize perm type    name
+――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+0   0x00003c84  0x37c 0x100003c84  0x37c -r-x REGULAR 0.__TEXT.__text
+1   0x00004000   0xa8 0x100004000   0xa8 -rw- REGULAR 1.__DATA.__data
+
+[Symbols]
+nth paddr      vaddr       bind   type size lib name                            demangled
+―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+0   0x00000000 0x100000000 GLOBAL FUNC 0        __mh_execute_header
+1   0x00003c84 0x100003c84 GLOBAL FUNC 0        _main
+2   0x00003c88 0x100003c88 LOCAL  FUNC 0        RTLWriteChar
+3   0x00003ce0 0x100003ce0 LOCAL  FUNC 0        RTLWriteInteger
+4   0x00003d04 0x100003d04 LOCAL  FUNC 0        RTLWriteIntegerNotSigned
+5   0x00003d10 0x100003d10 LOCAL  FUNC 0        RTLWriteIntegerPreCheckLoop
+6   0x00003d28 0x100003d28 LOCAL  FUNC 0        RTLWriteIntegerPreCheckLoopDone
+7   0x00003d4c 0x100003d4c LOCAL  FUNC 0        RTLWriteIntegerPaddingLoop
+8   0x00003d60 0x100003d60 LOCAL  FUNC 0        RTLWriteIntegerNotPadding
+9   0x00003d74 0x100003d74 LOCAL  FUNC 0        RTLWriteIntegerLoop
+10  0x00003dd8 0x100003dd8 LOCAL  FUNC 0        RTLWriteLn
+11  0x00003dec 0x100003dec LOCAL  FUNC 0        ReadCharEx
+12  0x00003e68 0x100003e68 LOCAL  FUNC 0        ReadCharInit
+13  0x00003e90 0x100003e90 LOCAL  FUNC 0        ReadInitDone
+14  0x00003e94 0x100003e94 LOCAL  FUNC 0        RTLReadChar
+15  0x00003eac 0x100003eac LOCAL  FUNC 0        RTLReadInteger
+16  0x00003ed8 0x100003ed8 LOCAL  FUNC 0        ReadIntegerSkipWhiteSpace
+17  0x00003f08 0x100003f08 LOCAL  FUNC 0        ReadIntegerSkipWhiteSpaceDone
+18  0x00003f24 0x100003f24 LOCAL  FUNC 0        ReadIntegerNotSigned
+19  0x00003f24 0x100003f24 LOCAL  FUNC 0        ReadIntegerLoop
+20  0x00003f50 0x100003f50 LOCAL  FUNC 0        ReadIntegerDone
+21  0x00003f78 0x100003f78 LOCAL  FUNC 0        RTLReadLn
+22  0x00003fac 0x100003fac LOCAL  FUNC 0        ReadLnDone
+23  0x00003fb0 0x100003fb0 LOCAL  FUNC 0        RTLEOF
+24  0x00003fc4 0x100003fc4 LOCAL  FUNC 0        RTLEOLN
+25  0x00003fe0 0x100003fe0 LOCAL  FUNC 0        RTLHalt
+26  0x00003ff4 0x100003ff4 LOCAL  FUNC 0        StubEntryPoint
+27  0x00004000 0x100004000 LOCAL  FUNC 0        ProgramEntryPoint
+28  0x00004000 0x100004000 LOCAL  FUNC 0        RTLWriteIntegerBuffer
+29  0x00004040 0x100004040 LOCAL  FUNC 0        ReadCharBuffer
+30  0x00004048 0x100004048 LOCAL  FUNC 0        ReadCharInited
+31  0x00004050 0x100004050 LOCAL  FUNC 0        IsEOF
+32  0x00004060 0x100004060 LOCAL  FUNC 0        RTLFunctionTable
+33  0x000040a8 0x1000040a8 LOCAL  FUNC 0        Copyright
+34  0x00003c84 0x100003c84 LOCAL  FUNC 0        func.100003c84
+35  0x00003c88 0x100003c88 LOCAL  FUNC 0        func.100003c88
+36  0x00003ce0 0x100003ce0 LOCAL  FUNC 0        func.100003ce0
+37  0x00003d04 0x100003d04 LOCAL  FUNC 0        func.100003d04
+38  0x00003d10 0x100003d10 LOCAL  FUNC 0        func.100003d10
+39  0x00003d28 0x100003d28 LOCAL  FUNC 0        func.100003d28
+40  0x00003d4c 0x100003d4c LOCAL  FUNC 0        func.100003d4c
+41  0x00003d60 0x100003d60 LOCAL  FUNC 0        func.100003d60
+42  0x00003d74 0x100003d74 LOCAL  FUNC 0        func.100003d74
+43  0x00003dd8 0x100003dd8 LOCAL  FUNC 0        func.100003dd8
+44  0x00003dec 0x100003dec LOCAL  FUNC 0        func.100003dec
+45  0x00003e68 0x100003e68 LOCAL  FUNC 0        func.100003e68
+46  0x00003e90 0x100003e90 LOCAL  FUNC 0        func.100003e90
+47  0x00003e94 0x100003e94 LOCAL  FUNC 0        func.100003e94
+48  0x00003eac 0x100003eac LOCAL  FUNC 0        func.100003eac
+49  0x00003ed8 0x100003ed8 LOCAL  FUNC 0        func.100003ed8
+50  0x00003f08 0x100003f08 LOCAL  FUNC 0        func.100003f08
+51  0x00003f24 0x100003f24 LOCAL  FUNC 0        func.100003f24
+52  0x00003f50 0x100003f50 LOCAL  FUNC 0        func.100003f50
+53  0x00003f78 0x100003f78 LOCAL  FUNC 0        func.100003f78
+54  0x00003fac 0x100003fac LOCAL  FUNC 0        func.100003fac
+55  0x00003fb0 0x100003fb0 LOCAL  FUNC 0        func.100003fb0
+56  0x00003fc4 0x100003fc4 LOCAL  FUNC 0        func.100003fc4
+57  0x00003fe0 0x100003fe0 LOCAL  FUNC 0        func.100003fe0
+58  0x00003ff4 0x100003ff4 LOCAL  FUNC 0        func.100003ff4
+[Imports]
+nth vaddr bind type lib name
+――――――――――――――――――――――――――――
+
+[Exports]
+nth paddr      vaddr       bind   type size lib name                demangled
+―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+0   0x00000000 0x100000000 GLOBAL FUNC 0        __mh_execute_header
+1   0x00003c84 0x100003c84 GLOBAL FUNC 0        _main
+[Strings]
+nth paddr vaddr len size section type string
+――――――――――――――――――――――――――――――――――――――――――――
