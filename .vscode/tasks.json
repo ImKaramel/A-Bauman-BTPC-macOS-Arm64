@@ -17,7 +17,8 @@
                 "-c",
                 "mkdir -p target && ./btpc64macOS < dummy.pas > target/dummyX86Exec && chmod +x target/dummyX86Exec"
             ],
-            "type": "shell"
+            "type": "shell",
+            "problemMatcher": []
         },
         {
             "label": "Run dummy code built for x86",
@@ -95,7 +96,6 @@
             "args": [
                 "-c",
                 "mkdir -p target && cd RtlConverter && as rtl64macOS.s -o ../target/rtl64macOS.o &&  ld -o ../target/rtl64macOS ../target/rtl64macOS.o -no_compact_unwind  -no_fixup_chains  -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -segprot __PAS rwx rx &&  chmod +x ../target/rtl64macOS"
-
             ],
             "type": "shell",
             "problemMatcher": []
@@ -109,7 +109,7 @@
             ],
             "type": "shell",
             "dependsOn": [
-                "Build rtl64macOS binary",
+                "Build rtl64macOS binary"
             ],
             "problemMatcher": []
         },
@@ -118,11 +118,11 @@
             "command": "/bin/bash",
             "args": [
                 "-c",
-                "mkdir -p target && cp btpc64macOS.pas target/btpc64macOS.full.pas && RtlConverter/replace_stub.sh target/btpc64macOS.full.pas target/stub.txt && ./btpc64macOS < target/btpc64macOS.full.pas > target/btpc64macosaarch64 && chmod +x target/btpc64macosaarch64",
+                "mkdir -p target && cp btpc64macOS.pas target/btpc64macOS.full.pas && RtlConverter/replace_stub.sh target/btpc64macOS.full.pas target/stub.txt && ./btpc64macOS < target/btpc64macOS.full.pas > target/btpc64macosaarch64 && chmod +x target/btpc64macosaarch64"
             ],
             "type": "shell",
             "dependsOn": [
-                "Generate stub.txt using RtlConverter",
+                "Generate stub.txt using RtlConverter"
             ],
             "problemMatcher": []
         }

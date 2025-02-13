@@ -2260,14 +2260,15 @@ end;
 procedure OCNegDWordPtrESP;
 begin
   OCPopX0;
-  // WriteLn('mvn x0, x0');
+  // WriteLn('neg x0, x0');
   EmitByte($e0);   
   EmitByte($03);
-  EmitByte($20);
-  EmitByte($aa); 
+  EmitByte($00);
+  EmitByte($cb); 
   OCPushX0;
  LastOutputCodeValue:=locNegDWordPtrESP;
 end;
+
 
 procedure OCMovX0DWordPtrESP;
 begin
