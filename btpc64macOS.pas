@@ -2226,6 +2226,20 @@ begin
  LastOutputCodeValue:=locIDivEBX;
 end;
 
+procedure OCUdivMsub;
+begin
+  // udiv x2, x0, x1
+  EmitByte($02);
+  EmitByte($08);
+  EmitByte($C1);
+  EmitByte($9A);
+  // msub x0, x2, x1, x0
+  EmitByte($40);
+  EmitByte($80);
+  EmitByte($01);
+  EmitByte($9B);
+end;
+
 procedure OCCmpX1X0;
 begin
  // WriteLn('cmp x1, x0');
@@ -2608,8 +2622,7 @@ begin
    OPRemD:begin
     OCPopX1;
     OCPopX0;
-    OCXorX0X0;
-    OCIDIVX1;
+    OCUdivMsub;
     OCPushX0;
    end;
    OPDiv2:begin
