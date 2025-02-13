@@ -90,7 +90,8 @@ RTLWriteInteger:
     ldr x1, [sp, #0]         
     ldr x0, [sp, #16]         
     cmp x0, #0  
-
+    mov x5, #1
+    mov x6, #0
     b.ge RTLWriteIntegerNotSigned   
     // Обработка отрицательного числа
     neg x0, x0                
@@ -98,6 +99,8 @@ RTLWriteInteger:
     add x4, x4, RTLWriteIntegerBuffer@PAGEOFF
     mov x1, #0
     mov x1, #'-'
+    mov x5, #0
+    mov x6, #1
     strb w1, [x4]  
 
  
@@ -113,8 +116,6 @@ RTLWriteInteger:
         mov x8, #10              
         udiv x0, x0, x8         
         b RTLWriteIntegerPreCheckLoop   
-
-
     RTLWriteIntegerPreCheckLoopDone:
         cmp x2, #0                
         cset x3, eq              // x3 = (x2 == 0) ? 1 : 0
@@ -125,7 +126,7 @@ RTLWriteInteger:
         adrp x4, RTLWriteIntegerBuffer@PAGE   
         add x4, x4, RTLWriteIntegerBuffer@PAGEOFF
         add x4, x4, x2            
-        //sub x4, x4, #1            
+        sub x4, x4, x5           
         str x2, [sp, #-16]!       
     
     RTLWriteIntegerLoop:
@@ -142,7 +143,8 @@ RTLWriteInteger:
         b.ne RTLWriteIntegerLoop
 
     ldr x2, [sp], #16        // Восстанавливаем счетчик цифр
-
+ 
+    add x2, x2, x6
     mov x16, #4              // syscall 4 == write
     mov x0, #1               // file descriptor: stdout
     mov x2, x2
