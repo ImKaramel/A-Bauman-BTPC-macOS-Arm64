@@ -2158,6 +2158,26 @@ begin
   LastOutputCodeValue:=locPushX0;
 end;
 
+procedure OCPushX9;
+begin
+  // WriteLn('str x9, [sp, #-16]!');
+  EmitByte($e9);   
+  EmitByte($0f);
+  EmitByte($1f);
+  EmitByte($f8); 
+  LastOutputCodeValue:=locPushX0;
+end;
+
+procedure OCPopX30;
+begin
+  // WriteLn('ldr x30, [sp], #16');
+  EmitByte($FE);   
+  EmitByte($07);
+  EmitByte($41);
+  EmitByte($F8); 
+  LastOutputCodeValue:=locPopX0;
+end;
+
 procedure OCPopX0;
 begin
   // WriteLn('ldr x0, [sp], #16');
@@ -2573,7 +2593,12 @@ begin
         OCNop;
         OutputCodeDataSize := PrevOutputCodeDataSize;
       end;
-      //OutputCodePutInt32(JmpAddr,(   (   Code[OutputCodeGetInt32(JmpAddr)] - JmpAddr) - 3));
+      if (OpCode = OPCall) then
+      begin
+        OutputCodeDataSize := JmpAddr - 1;
+        OCMovValueX6(Code[OpCodeValue]);
+        OutputCodeDataSize := PrevOutputCodeDataSize;
+      end;
     end;
 end;
 
@@ -2801,6 +2826,7 @@ begin
    end;
    OPWrC:begin
     OCCallDWordPtrX19Ofs(8);
+    OCPopX0;
    end;
    OPWrL:begin
     OCCallDWordPtrX19Ofs(24);
@@ -3037,10 +3063,45 @@ begin
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
-   OPCall:begin
-    CountJumps:=CountJumps+1;
-    //WriteLn('bl l_', Value);
-    JumpTable[CountJumps]:= PC;
+   OPCall:begin    
+    //MOV X9, #0x100000000
+    EmitByte($29);
+    EmitByte($00);
+    EmitByte($c0);
+    EmitByte($d2);
+
+    CountJumps := CountJumps + 1;
+    JumpTable[CountJumps]:=OutputCodeDataSize + 1;
+
+    // Will be replaced with real mov
+    EmitInt32(OPCall);
+    EmitInt32(Value);
+
+    for Index:=1 to 8 do begin
+      OCNop;
+    end;
+
+    // add x6,x6,x9
+    EmitByte($C6);
+    EmitByte($00);
+    EmitByte($09);
+    EmitByte($8b);
+
+    //adr x9, .+12
+    EmitByte($69);
+    EmitByte($00);
+    EmitByte($00);
+    EmitByte($10);
+
+    // push return code
+    OCPushX9;
+
+    // br x6
+    EmitByte($C0);
+    EmitByte($00);
+    EmitByte($1F);
+    EmitByte($D6);
+
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
@@ -3058,25 +3119,11 @@ begin
     PC:=PC+1;
    end;
    OPExit:begin
-    Value:= Value-4;
-    Value:= Value*4;
-    if Value>0 then begin
-      //WriteLn('add sp, sp, #', Value);
-      EmitInt32(BitwiseOr($3FF00019, LeftShift(Value, 10)));
-      // WriteLn('ret');
-      EmitByte($c0);   
-      EmitByte($03);
-      EmitByte($5f);
-      EmitByte($d6);
-    end else if Value=0 then begin
-     // WriteLn('ret'); { RET }
-     EmitByte($c0);   
-     EmitByte($03);
-     EmitByte($5f);
-     EmitByte($d6);
-    end else begin
-     Error(145);
-    end;
+    OCPopX30;
+    EmitByte($c0);   
+    EmitByte($03);
+    EmitByte($5f);
+    EmitByte($d6);
     LastOutputCodeValue:=locNone;
     PC:=PC+1;
    end;
