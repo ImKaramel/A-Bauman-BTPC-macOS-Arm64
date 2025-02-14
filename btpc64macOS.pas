@@ -2823,6 +2823,8 @@ begin
    end;
    OPWrI:begin
     OCCallDWordPtrX19Ofs(16);
+    OCPopX0;
+    OCPopX0;
    end;
    OPWrC:begin
     OCCallDWordPtrX19Ofs(8);
@@ -2830,6 +2832,7 @@ begin
    end;
    OPWrL:begin
     OCCallDWordPtrX19Ofs(24);
+    OCPopX0;
    end;
    OPRdI:begin
     OCPopX1;
