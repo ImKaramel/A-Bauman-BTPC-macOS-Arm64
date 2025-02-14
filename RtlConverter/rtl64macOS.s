@@ -6,7 +6,7 @@
 RTLWriteIntegerBuffer:
     .space 64  
 
-
+ 
 .align 3
 ReadCharBuffer:
     .byte 0x3c   
@@ -14,6 +14,8 @@ ReadCharBuffer:
 .align 3 
 ReadCharInited: 
     .byte 0x00 
+    .byte 32
+    .byte 10
 
 .align 3       
 IsEOF:
@@ -158,10 +160,15 @@ RTLWriteInteger:
 // ------------------------------------------    
 RTLWriteLn: 
     // #13 == 0xD == CR
-    mov x8, #13 
-    bl RTLWriteChar
-    mov x8, #10
-    bl RTLWriteChar
+    pushall
+    adrp x1, ReadCharInited@PAGE   
+    add x1, x1, ReadCharInited@PAGEOFF
+    add x1, x1, #1
+    mov x16, #4              // syscall 4 == write
+    mov x0, #1               // file descriptor: stdout
+    mov x2, #2
+    svc #0   
+    popall   
     ret
 
 
@@ -208,14 +215,26 @@ ReadInitDone:
     ret
 
 RTLReadChar:
-    bl ReadCharInit           
-    adrp x8, ReadCharBuffer@PAGE
-    add x8, x8, ReadCharBuffer@PAGEOFF
-    ldrb w0, [x8]            // Загружаем символ из буфера
+    pushall
+    mov x0, #0                       
+    adrp x1, ReadCharBuffer@PAGE     
+    add x1, x1, ReadCharBuffer@PAGEOFF
+    mov x2, #1                       
+    mov x16, #3             
+    svc #0                           
 
-    bl ReadCharEx            // Читаем следующий символ
-    ret
+   
+    cmp x0, #0
+   // b.lt error                       
+    popall
+ 
+    adrp x5, ReadCharBuffer@PAGE    
+    add x5, x5, ReadCharBuffer@PAGEOFF
+    ldr x0, [x5]                   
+    ret                            
 
+ 
+ 
 
 // ------------------------------------------
 // --------------RTLReadInteger--------------
@@ -226,8 +245,8 @@ RTLReadChar:
 
 
 RTLReadInteger:
-    bl ReadCharInit          
-    pushall                  
+    pushall  
+    bl ReadCharInit                  
     mov x0, #0                
     mov x2, #1               //  (x2 = 1, положительное число)
 
@@ -291,7 +310,6 @@ RTLReadInteger:
 // ------------------------------------------   
 RTLReadLn:
     bl ReadCharInit
-
     // Проверяем флаг EOF
     adrp x8, IsEOF@PAGE             
     add x8, x8, IsEOF@PAGEOFF
