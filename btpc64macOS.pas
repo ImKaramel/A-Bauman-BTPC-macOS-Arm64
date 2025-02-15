@@ -2666,18 +2666,27 @@ begin
     OCPushX0;
    end;
    OPDiv2:begin
-    // WriteLn('asr x0, x0, #2');
-    EmitByte($00);   
-    EmitByte($fc);
-    EmitByte($42);
-    EmitByte($93); 
-    LastOutputCodeValue:=locNone;
+    OCPopX0;
+
+    // mov x1, #2
+    EmitByte($41);
+    EmitByte($00);
+    EmitByte($80);
+    EmitByte($d2);
+
+    OCIDIVX1;
+    OCPushX0;
    end;
    OPRem2:begin
-    OCPopX1;
     OCPopX0;
-    OCXorX0X0;
-    OCIDIVX1;
+
+    // mov x1, #2
+    EmitByte($41);
+    EmitByte($00);
+    EmitByte($80);
+    EmitByte($d2);
+
+    OCUdivMsub;
     OCPushX0;
    end;
    OPEqlI:begin
